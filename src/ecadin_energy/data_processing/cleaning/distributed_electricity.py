@@ -11,15 +11,11 @@ explicit as a blank value. This module never imputes or forecasts data.
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
-import re
 from collections import defaultdict
-from dataclasses import dataclass
 from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 from pathlib import Path
-from typing import Iterable
 
 from ecadin_energy.config import PATHS
 from ecadin_energy.data_processing.harmonization.regions import (
@@ -42,182 +38,24 @@ NATIONAL_TOTAL_TOLERANCE_GWH = Decimal("0.02")
 LARGE_YOY_WARNING_THRESHOLD_PCT = Decimal("35")
 
 
-@dataclass(frozen=True)
-class ParsedSourceFile:
-    path: Path
-    year: int
-    file_sha256: str
-    source_rows: int
-    missing_source_values: int
-    reported_indonesia_total_gwh: Decimal
-    values_by_region_id: dict[str, Decimal]
-    source_contributors_by_region_id: dict[str, int]
-
-
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def _parse_decimal(value: str, *, context: str) -> Decimal | None:
-    text = value.strip()
-    if text in {"", "-", "–", "—"}:
-        return None
-
-    try:
-        parsed = Decimal(text)
-    except InvalidOperation as exc:
-        raise ValueError(f"Invalid numeric value {text!r} at {context}.") from exc
-
-    if not parsed.is_finite() or parsed < 0:
-        raise ValueError(f"Invalid non-finite/negative value {text!r} at {context}.")
-    return parsed
-
-
-def _extract_filename_year(path: Path) -> int:
-    match = re.search(r"(19\d{2}|20\d{2})(?=\.csv$)", path.name)
-    if match is None:
-        raise ValueError(f"Cannot detect year from filename: {path.name}")
-    return int(match.group(1))
+from ecadin_energy.data_processing.cleaning.annual_province_series import (
+    ParsedAnnualProvinceFile as ParsedSourceFile,
+    extract_filename_year as _extract_filename_year,
+    format_decimal as _format_decimal,
+    parse_decimal as _parse_decimal,
+    read_annual_province_file,
+    read_existing_csv as _read_existing_csv,
+    replace_dataset_rows as _replace_dataset_rows,
+    sha256_file as _sha256_file,
+    write_csv as _write_csv,
+)
 
 
 def _read_source_file(path: Path) -> ParsedSourceFile:
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        rows = list(csv.reader(handle))
-
-    if len(rows) < 4:
-        raise ValueError(f"Source file is too short: {path}")
-
-    if len(rows[2]) < 2:
-        raise ValueError(f"Source year row is malformed: {path}")
-
-    try:
-        content_year = int(rows[2][1].strip())
-    except ValueError as exc:
-        raise ValueError(f"Invalid source year in {path}: {rows[2]}") from exc
-
-    filename_year = _extract_filename_year(path)
-    if content_year != filename_year:
-        raise ValueError(
-            f"Filename year {filename_year} does not match content year "
-            f"{content_year}: {path.name}"
-        )
-
-    values_by_region_id: dict[str, Decimal] = defaultdict(lambda: Decimal("0"))
-    contributors_by_region_id: dict[str, int] = defaultdict(int)
-    source_names: set[str] = set()
-    reported_total: Decimal | None = None
-    source_rows = 0
-    missing_source_values = 0
-
-    for line_number, row in enumerate(rows[3:], start=4):
-        if len(row) < 2:
-            raise ValueError(f"Malformed row {line_number} in {path.name}: {row}")
-
-        source_name = row[0].strip()
-        if not source_name:
-            raise ValueError(f"Blank province at row {line_number} in {path.name}.")
-        if source_name in source_names:
-            raise ValueError(
-                f"Duplicate source province {source_name!r} in {path.name}."
-            )
-        source_names.add(source_name)
-
-        value = _parse_decimal(
-            row[1],
-            context=f"{path.name} row {line_number} ({source_name})",
-        )
-
-        if source_name.upper() == "INDONESIA":
-            if value is None:
-                raise ValueError(f"Indonesia total is blank in {path.name}.")
-            reported_total = value
-            continue
-
-        source_rows += 1
-        match = resolve_region(
-            source_name,
-            source_scope="population_pdrb_and_modern_province_sources",
-        )
-
-        if value is None:
-            missing_source_values += 1
-            continue
-
-        values_by_region_id[match.region_id] += value
-        contributors_by_region_id[match.region_id] += 1
-
-    if source_rows != EXPECTED_SOURCE_PROVINCE_ROWS:
-        raise ValueError(
-            f"Expected {EXPECTED_SOURCE_PROVINCE_ROWS} province rows in "
-            f"{path.name}, found {source_rows}."
-        )
-    if reported_total is None:
-        raise ValueError(f"Indonesia total row is missing in {path.name}.")
-
-    region_ids = set(load_regions())
-    unknown = set(values_by_region_id) - region_ids
-    if unknown:
-        raise ValueError(f"Unknown canonical region IDs in {path.name}: {unknown}")
-
-    # A canonical model region may legitimately have a blank source value.
-    # Known example: Kalimantan Utara in 2011–2012. The missing value is
-    # preserved and validated later against EXPECTED_SOURCE_VALUE_GAPS.
-
-    return ParsedSourceFile(
-        path=path,
-        year=content_year,
-        file_sha256=_sha256_file(path),
-        source_rows=source_rows,
-        missing_source_values=missing_source_values,
-        reported_indonesia_total_gwh=reported_total,
-        values_by_region_id=dict(values_by_region_id),
-        source_contributors_by_region_id=dict(contributors_by_region_id),
+    return read_annual_province_file(
+        path,
+        expected_source_rows=EXPECTED_SOURCE_PROVINCE_ROWS,
     )
-
-
-def _write_csv(
-    path: Path,
-    rows: list[dict[str, object]],
-    fieldnames: list[str],
-) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
-
-
-def _read_existing_csv(path: Path) -> list[dict[str, str]]:
-    if not path.is_file():
-        return []
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        return list(csv.DictReader(handle))
-
-
-def _replace_dataset_rows(
-    path: Path,
-    *,
-    dataset_id: str,
-    new_rows: list[dict[str, object]],
-    fieldnames: list[str],
-) -> None:
-    existing = [
-        row
-        for row in _read_existing_csv(path)
-        if row.get("dataset_id") != dataset_id
-    ]
-    combined: list[dict[str, object]] = [*existing, *new_rows]
-    _write_csv(path, combined, fieldnames)
-
-
-def _format_decimal(value: Decimal | None) -> str:
-    if value is None:
-        return ""
-    return format(value.quantize(Decimal("0.01")), "f")
 
 
 def _build_quality_flags(

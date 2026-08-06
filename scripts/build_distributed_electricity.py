@@ -9,7 +9,7 @@ def main() -> int:
     summary = build_distributed_electricity()
     print("ECADIN DISTRIBUTED ELECTRICITY BUILD: COMPLETED")
     print(f"Source files       : {summary['source_files']}")
-    print(f"Source years       : {summary['source_years'][0]}-{summary['source_years'][-1]}")
+    print("Source coverage    : 2011-2015, 2017-2024")
     print(f"Missing source year: {summary['missing_source_years']}")
     print(f"Model regions      : {summary['model_regions']}")
     print(f"Canonical rows     : {summary['canonical_rows']}")
