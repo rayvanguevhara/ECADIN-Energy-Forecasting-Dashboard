@@ -1,0 +1,43 @@
+{
+  "schema_version": "ecadin_reference_layer_v1",
+  "modeling_geography": "34_harmonized_modeling_regions",
+  "region_count": 34,
+  "alias_count": 58,
+  "coordinate_count": 34,
+  "identity_key": "region_id",
+  "canonical_row_key": [
+    "region_id",
+    "year"
+  ],
+  "aggregation_policy": {
+    "PAPUA BARAT DAYA": "PAPUA BARAT",
+    "PAPUA PEGUNUNGAN": "PAPUA",
+    "PAPUA SELATAN": "PAPUA",
+    "PAPUA TENGAH": "PAPUA"
+  },
+  "geometry_policy": {
+    "canonical_identity_source": "regions.csv",
+    "geometry_is_presentation_only": true,
+    "bubble_only_regions": [
+      "KU",
+      "KR",
+      "SR"
+    ],
+    "multi_feature_regions": [
+      "PA"
+    ]
+  },
+  "master_policy": {
+    "one_row_represents": "one model region and one year",
+    "repeated_source_metadata_in_master": false,
+    "quality_flags_stored_separately": true,
+    "lineage_stored_separately": true,
+    "model_features_stored_in_modeling_panel": true
+  },
+  "file_hashes": {
+    "regions.csv": "a4e4e520cec5b743d52e452b97fa0cf5315f6f66b0719cc4875fa98e9a07a4cc",
+    "region_aliases.csv": "b88ad081af389ee083e018d920bc82511dba274ed21aed1de1a2d6cf1cf223a8",
+    "region_coordinates.csv": "77f1b8f9b830d90b3c59780f1d70e4171392db46806e68c489e627e45095361a",
+    "variable_dictionary.csv": "5e39d1ead2c22dfe8ad21e2b27be70dd1e1115af3ae779d48610561d747a4583"
+  }
+}

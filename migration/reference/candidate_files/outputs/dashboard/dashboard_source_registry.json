@@ -1,0 +1,61 @@
+{
+  "dashboard_stage_version": "dashboard_harmonized_v1",
+  "status": "production",
+  "source_contract": {
+    "name": "supply_demand_gap_combined_v1",
+    "period": [
+      2011,
+      2030
+    ],
+    "geography": "34_harmonized_modeling_regions",
+    "combined_file": "D:\\ECADIN Project\\outputs\\gap\\phase3h_combined_v1\\supply_demand_gap_combined_v1_2011_2030.csv",
+    "combined_sha256": "1a07054ee3470044fa04b84be23196bc9a53169f1bfd7600f38453a548666eb8",
+    "national_file": "D:\\ECADIN Project\\outputs\\gap\\phase3h_combined_v1\\supply_demand_gap_combined_v1_national_2011_2030.csv",
+    "national_sha256": "2ef83e926fbc6def7472965a1ba9f920cb6e42e5daad9333da10bfdd7d735ba5",
+    "phase3h_metadata_file": "D:\\ECADIN Project\\outputs\\gap\\phase3h_combined_v1\\supply_demand_gap_combined_v1_metadata.json",
+    "phase3h_metadata_sha256": "cd08301b31e6afd76f52fd1d271be1b3686532542c8bfc58568312fb7657c1b4",
+    "phase3h_ready_for_dashboard": true
+  },
+  "active_models": {
+    "demand": {
+      "name": "drift",
+      "status": "production"
+    },
+    "supply": {
+      "name": "drift",
+      "version": "supply_production_drift_v1",
+      "status": "production"
+    }
+  },
+  "legacy_ridge_used": false,
+  "regional_uncertainty_display_allowed": false,
+  "canonical_dashboard_files_modified": true,
+  "promotion_version": "dashboard_phase3j_promotion_v1",
+  "promoted_at_utc": "2026-08-03T07:11:53.053401+00:00",
+  "canonical_directory": "D:\\ECADIN Project\\outputs\\dashboard",
+  "archive_directory": "D:\\ECADIN Project\\outputs\\dashboard\\archive\\pre_phase3j_20260803-071153",
+  "archive_manifest": "D:\\ECADIN Project\\outputs\\dashboard\\archive\\pre_phase3j_20260803-071153\\dashboard_pre_phase3j_archive_manifest.csv",
+  "disabled_legacy_artifacts": [
+    "dashboard_model_performance.csv",
+    "dashboard_feature_importance.csv"
+  ],
+  "canonical_files": {
+    "dashboard_kpi_yearly.csv": "92a11d34924dbbf1a0161bfa48ee3f03badeaab3f9f12fd5b12da96add42cdd8",
+    "dashboard_kpi_latest.csv": "597c1cf4130e0ee84778a1f22ea188a080d72c555a2e67566fe1cdf5e925e648",
+    "dashboard_national_timeseries.csv": "029bf722cf5b1c0b6be1fb4403d73d33dc07e981ba75257e3c9bc71b37f9734e",
+    "dashboard_category_summary.csv": "45edc50f772646df9fa02c7f1760f8a74db524bb5843bb54aa7f810eb4df56de",
+    "dashboard_category_summary_all_years.csv": "0ddb5b9e0443860ad2818d8171fd38ce1eda267326dacfd88c224a88ad7e82e5",
+    "dashboard_map_province.csv": "7da7c1d540ba0a5a1d6d4da73c0f65e8e95fd684b992b798c04099de3cb088b2",
+    "dashboard_map_province_enriched.csv": "27cf82e8d3114adb8688938c9c4e0a4b306cbd36ba74bcf08e295467cfc3235d",
+    "dashboard_ranking_deficit.csv": "13d778395a405b9d16ec7429342dadc54f3f29453cb5266db022b1c4e1068f0d",
+    "dashboard_ranking_surplus.csv": "b17fbde57efd37a501149d9925e94813edf04d6bf84f2fea84c333eb0837f5a8",
+    "dashboard_province_detail.csv": "d5c6f4a5bc9e0cbd01aaa47798292450cc04f477cdf8490c384b4a7932c21a00",
+    "dashboard_province_latest.csv": "9393a825c90286cba31b1736df366e11896554a0bb6359ba3bc93e91237a299a",
+    "dashboard_model_summary.csv": "5b26ce4c6168ec00b68fea63d2b07d5380dde306d2dbbbf6390d97b1a6fd8a64",
+    "dashboard_data_quality_summary.csv": "f6eda5b5df8836a2879ee59df4f43b4a1519dcce503ecfeacd284dc71665c401",
+    "dashboard_data_quality_by_province.csv": "35cc855e74eec493d627557008814d862a9868c99a21143ffb4cc7aae2a42548",
+    "dashboard_attention_list.csv": "49921d356429b94f5dd1a4f096c9a7d6993e435f4e519464b2116009b348f6b1",
+    "dashboard_metadata.csv": "d45ba5c3b3922a56bd14c27da0260b5c8d73d693794d54a6381c3176dee13275",
+    "dashboard_metadata_v2.csv": "18921ee488e70addf257a0ecfafb1bfb6e64252f009fb43ff7180ec4e35005b6"
+  }
+}
