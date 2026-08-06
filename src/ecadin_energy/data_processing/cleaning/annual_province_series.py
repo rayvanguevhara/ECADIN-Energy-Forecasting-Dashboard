@@ -35,9 +35,14 @@ class ParsedAnnualProvinceFile:
     file_sha256: str
     source_rows: int
     missing_source_names: tuple[str, ...]
-    reported_indonesia_total_gwh: Decimal
+    reported_indonesia_total: Decimal
     values_by_region_id: dict[str, Decimal]
     source_contributors_by_region_id: dict[str, int]
+
+    @property
+    def reported_indonesia_total_gwh(self) -> Decimal:
+        """Backward-compatible alias for existing electricity cleaners."""
+        return self.reported_indonesia_total
 
     @property
     def missing_source_values(self) -> int:
@@ -168,7 +173,7 @@ def read_annual_province_file(
         file_sha256=sha256_file(path),
         source_rows=source_rows,
         missing_source_names=tuple(missing_source_names),
-        reported_indonesia_total_gwh=reported_total,
+        reported_indonesia_total=reported_total,
         values_by_region_id=dict(values_by_region_id),
         source_contributors_by_region_id=dict(contributors_by_region_id),
     )

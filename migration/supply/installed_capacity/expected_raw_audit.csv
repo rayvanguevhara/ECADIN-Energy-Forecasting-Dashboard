@@ -1,0 +1,14 @@
+﻿year,source_file,source_file_sha256,source_province_rows,source_missing_values,structural_papua_missing_values,canonical_regions_with_value,reported_indonesia_total_mw,calculated_canonical_total_mw,difference_mw,total_check_status
+2011,"Installed Capacity by Province , 2011.csv",af1af2cee885da37bdd8ccc88b48d3490c93296535d92b3e9dfd8fdc8fb86909,38,4,4,34,35596.74,35596.74,0.00,valid
+2012,"Installed Capacity by Province , 2012.csv",49fbbdc18c09e63b012ff326b3afe165da91fb6bcddc27e2e4d52dbeebc2f499,38,4,4,34,44841.54,44841.54,0.00,valid
+2013,"Installed Capacity by Province , 2013.csv",58f68bc84f5eee06a8297a80d7e6007f62a51a6db724eb17220568ac338fd16a,38,4,4,34,45476.31,45467.31,-9.00,warning_source_total_mismatch
+2014,"Installed Capacity by Province , 2014.csv",de3393910a85ac67b0c6d8986340d28d83fbb20ab48ab05622186901de68ac44,38,4,4,34,53015.70,53015.70,0.00,valid
+2015,"Installed Capacity by Province , 2015.csv",2002efa9238ec416b6c3853fdeab4183e6095f47dd8fedb3011b6a6ce383c0fc,38,4,4,34,54400.17,54400.17,0.00,valid
+2017,"Installed Capacity by Province , 2017.csv",8d2061044b2749a542d1da7c1d8523f4db2d62182753b5e3732ed293d4fc2fd0,38,5,4,33,58163.33,56892.91,-1270.42,warning_source_total_mismatch
+2018,"Installed Capacity by Province , 2018.csv",c5c0e0070c720e7f88a2a6842fa4a12cc5fc9804b9c70d387b6d9615b5d9582b,38,5,4,33,63746.79,63746.78,-0.01,valid_with_rounding_difference
+2019,"Installed Capacity by Province , 2019.csv",4616debf985d534a7efff84b94b6cf0113f5a59efe9c7ea76a1d071fad545724,38,5,4,33,64842.53,64842.52,-0.01,valid_with_rounding_difference
+2020,"Installed Capacity by Province , 2020.csv",95c0fd64a6ccb5efa7dbc6dc81a05c412c0970ef076369a17207abda6c988ebf,38,5,4,33,65235.81,65235.80,-0.01,valid_with_rounding_difference
+2021,"Installed Capacity by Province , 2021.csv",602b95d1624f2bf7f42ec3feb8ea53c54b70d511f7c587541f119c874a593ad7,38,4,4,34,66514.31,66514.31,0.00,valid
+2022,"Installed Capacity by Province , 2022.csv",7eb9d156308007fcf5401e20936ba13f17e39561141ce9e8615f8c7c9d038a3c,38,4,4,34,74218.45,74218.49,0.04,valid_with_rounding_difference
+2023,"Installed Capacity by Province , 2023.csv",638460aa2a640a9a7462104f779e481e93e4d139894a2fcbdf991a541a7e7408,38,0,0,34,73460.81,73460.81,0.00,valid
+2024,"Installed Capacity by Province , 2024.csv",1f12806fbe1fd116212c1dfd5222de5abd3076c510b31c04584f03a3b2c7de9c,38,0,0,34,75936.46,75936.46,0.00,valid
