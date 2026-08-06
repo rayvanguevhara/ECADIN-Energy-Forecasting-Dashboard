@@ -68,3 +68,4 @@ migration/backups/
 
 # Frontend generated artifacts
 frontend-dashboard/.vercel/
+outputs/dashboard/
