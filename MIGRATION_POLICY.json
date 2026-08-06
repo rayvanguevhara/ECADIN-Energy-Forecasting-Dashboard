@@ -1,0 +1,11 @@
+{
+  "legacy_project": "D:\\ECADIN Project",
+  "clean_project": "D:\\ECADIN_Project_Clean",
+  "policy": "copy_selectively",
+  "legacy_project_mutation_allowed": false,
+  "copy_node_modules": false,
+  "copy_build_outputs": false,
+  "copy_python_cache": false,
+  "copy_archives": false,
+  "frontend_source_policy": "copy final source only; regenerate dependencies and build"
+}

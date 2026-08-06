@@ -1,0 +1,2 @@
+# Dependencies will be migrated from the validated legacy project
+# after the canonical production modules are selected.
