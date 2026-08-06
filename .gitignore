@@ -45,3 +45,6 @@ data/processed/**
 Thumbs.db
 .vscode/
 .idea/
+
+# Raw source files are local and tracked through SHA-256 manifests
+data/raw/**
