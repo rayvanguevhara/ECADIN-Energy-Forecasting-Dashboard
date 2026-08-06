@@ -29,7 +29,7 @@ from ecadin_energy.data_processing.harmonization.regions import (
 
 DATASET_ID = "demand_distributed_electricity"
 VARIABLE_NAME = "distributed_electricity_gwh"
-PARSER_VERSION = "distributed_electricity_cleaner_v1"
+PARSER_VERSION = "distributed_electricity_cleaner_v1.1"
 
 EXPECTED_START_YEAR = 2011
 EXPECTED_END_YEAR = 2024
@@ -443,7 +443,6 @@ def build_distributed_electricity(
                 "total_difference": _format_decimal(difference),
                 "unit": "GWh",
                 "parser_version": PARSER_VERSION,
-                "processing_timestamp_utc": processing_time,
                 "status": status,
             }
         )
@@ -482,7 +481,6 @@ def build_distributed_electricity(
         "total_difference",
         "unit",
         "parser_version",
-        "processing_timestamp_utc",
         "status",
     ]
     _replace_dataset_rows(
