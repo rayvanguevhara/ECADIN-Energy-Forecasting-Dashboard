@@ -1,0 +1,6 @@
+﻿customer_group_id,customer_group_name,modeling_order,source_label
+social,Social,1,Social
+households,Households,2,Households
+business,Business,3,Bussiness
+industry,Industry,4,Industry
+public,Public,5,Public
