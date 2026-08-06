@@ -1,0 +1,29 @@
+{
+  "active_model": {
+    "name": "drift",
+    "version": "supply_production_drift_v1",
+    "status": "production",
+    "forecast_start_year": 2025,
+    "forecast_end_year": 2030,
+    "geography": "34_harmonized_modeling_regions",
+    "forecast_file": "supply_production_drift_v1_forecast_2025_2030.csv",
+    "national_file": "supply_production_drift_v1_national_2025_2030.csv",
+    "promoted_at_utc": "2026-08-02T11:42:51.341294+00:00",
+    "canonical_forecast_file": "supply_forecast_2025_2030.csv",
+    "canonical_national_file": "supply_forecast_nasional_2025_2030.csv",
+    "canonical_ranking_file": "supply_forecast_ranking_provinsi_2025_2030.csv",
+    "canonical_forecast_sha256": "959be9c3d612527484e71ca42464ed48c1c4b2161dcf94fe903ae0a6b4dffcea",
+    "canonical_national_sha256": "7fe914c7ba04a1ef7e0c275cd6e1afd0907d23e73b7877506f922fd76f42a771",
+    "canonical_ranking_sha256": "f1749f0a0e2be6c25a68065730610ba81463aa741f2d08e85e8ace07e6663262"
+  },
+  "legacy_model": {
+    "name": "ridge_regression",
+    "status": "archived",
+    "archive_folder": "archive/legacy_ridge_v1_20260802"
+  },
+  "research_challenger": {
+    "name": "nested_drift_residual_v1",
+    "status": "not_promoted"
+  },
+  "registry_updated_at_utc": "2026-08-02T11:42:51.341294+00:00"
+}

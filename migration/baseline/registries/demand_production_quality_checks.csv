@@ -1,0 +1,13 @@
+﻿check,passed,severity,observed,expected
+model_region_count,True,error,34,34
+forecast_years,True,error,"[2025, 2026, 2027, 2028, 2029, 2030]","[2025, 2026, 2027, 2028, 2029, 2030]"
+forecast_row_count,True,error,204,204
+no_duplicate_region_year,True,error,0,0
+no_missing_forecast,True,error,0,0
+nonnegative_forecast,True,error,0,0
+single_production_model,True,error,['drift'],['drift']
+single_selected_decision,True,error,1,1
+decision_selects_drift,True,error,['drift'],['drift']
+national_sum_matches_forecast,True,error,all years,all years
+ranking_row_count,True,error,204,204
+panel_region_count,True,error,34,34

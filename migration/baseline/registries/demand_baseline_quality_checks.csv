@@ -1,0 +1,12 @@
+﻿check,passed,severity,observed,expected
+model_region_count,True,error,34,34
+backtest_years,True,error,"[2019, 2020, 2021, 2022, 2023, 2024]","[2019, 2020, 2021, 2022, 2023, 2024]"
+one_step_prediction_count,True,error,816,816
+recursive_prediction_count,True,error,1632,1632
+no_missing_predictions,True,error,0,0
+nonnegative_predictions,True,error,0,0
+training_precedes_forecast,True,error,all rows,training_last_year < forecast_year and <= origin_year
+validation_targets_observed_only,True,error,0,0
+metrics_summary_rows,True,error,8,8
+all_models_ranked,True,error,"['average_growth_3', 'drift', 'moving_average_3', 'naive_lag1']","['average_growth_3', 'drift', 'moving_average_3', 'naive_lag1']"
+single_recommended_baseline,True,error,1,1
