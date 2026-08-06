@@ -55,3 +55,6 @@ migration/**/reference_layer_package/
 migration/**/*_files.zip
 migration/**/*_bundle.zip
 migration/**/*.xlsx
+
+# Python package build metadata
+*.egg-info/
