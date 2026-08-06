@@ -1,0 +1,5 @@
+rule_id,scope,condition,action,canonical_modified,rationale
+interpolate_2016,demand and supply modeling panels,year == 2016 and both 2015 and 2017 exist,linear interpolation for modeling only,False,Preserves the validated legacy production behavior while keeping source missingness explicit in the canonical master.
+exclude_early_ki_ku,Kalimantan Timur and Kalimantan Utara,year < 2013,exclude from training and backtest eligibility,False,Avoids geography-boundary inconsistency.
+other_missing_values,all other source gaps,value is missing,retain missing; no silent fill,False,Prevents unsupported imputation.
+recursive_history,recursive multi-step backtest,after forecast origin,"append predictions, never append future actual values",False,Prevents target leakage.

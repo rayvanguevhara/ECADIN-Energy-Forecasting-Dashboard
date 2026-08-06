@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "history_start_year": 2011,
+  "history_end_year": 2024,
+  "forecast_start_year": 2025,
+  "forecast_end_year": 2030,
+  "expected_regions": 34,
+  "baseline_models": [
+    "naive_lag1",
+    "drift",
+    "moving_average_3",
+    "average_growth_3"
+  ],
+  "reference_baseline": "drift",
+  "one_step_target_years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "recursive_origins": [
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "recursive_max_horizon": 3,
+  "missing_data": {
+    "interpolate_years": [
+      2016
+    ],
+    "exclude_pre_year_regions": [
+      "KI",
+      "KU"
+    ],
+    "exclude_before_year": 2013,
+    "allow_silent_fill": false
+  },
+  "demand": {
+    "target_column": "distributed_electricity_gwh",
+    "dataset_id": "demand_distributed_electricity",
+    "production_model_id": "demand_production_drift",
+    "model_label": "Drift",
+    "output_value_column": "forecast_distributed_electricity_gwh"
+  },
+  "supply": {
+    "target_column": "local_generation_gwh",
+    "dataset_id": "supply_local_generation",
+    "production_model_id": "supply_production_drift_v1",
+    "model_label": "Drift",
+    "output_value_column": "forecast_local_generation_gwh"
+  },
+  "accounting_difference_label": "local_generation_minus_distributed_electricity",
+  "accounting_disclaimer": "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy."
+}

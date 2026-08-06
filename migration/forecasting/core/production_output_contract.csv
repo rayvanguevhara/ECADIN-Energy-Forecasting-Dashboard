@@ -1,0 +1,12 @@
+artifact_id,relative_path,expected_rows,primary_key,role,deterministic
+demand_modeling_panel,data/processed/modeling/demand_modeling_panel.csv,476,region_id + year,Model-ready demand history,True
+supply_modeling_panel,data/processed/modeling/supply_modeling_panel.csv,476,region_id + year,Model-ready local-generation history,True
+demand_backtest_predictions,outputs/production/backtests/demand_predictions.csv,2448,protocol + model + region_id + origin_year + forecast_year + horizon,Rolling and recursive baseline predictions,True
+supply_backtest_predictions,outputs/production/backtests/supply_predictions.csv,2436,protocol + model + region_id + origin_year + forecast_year + horizon,Rolling and recursive baseline predictions,True
+demand_forecast,outputs/production/forecasts/demand_forecast.csv,204,region_id + year,"Production demand forecast, 2025–2030",True
+supply_forecast,outputs/production/forecasts/supply_forecast.csv,204,region_id + year,"Production supply forecast and intervals, 2025–2030",True
+accounting_difference,outputs/production/accounting/accounting_difference.csv,204,region_id + year,Local generation minus distributed electricity; not adequacy,True
+combined_history_forecast,outputs/production/combined/regional_energy_history_forecast.csv,680,region_id + year,476 historical + 204 forecast rows,True
+production_model_summary,outputs/production/metrics/production_model_summary.csv,4,domain + protocol,Selected Drift production metrics,True
+production_contract_checks,outputs/production/reports/production_contract_checks.csv,6,check_id,Machine-readable production validator results,True
+production_run_summary,outputs/production/reports/production_run_summary.json,,,Run metadata; timestamp is intentionally non-deterministic,False

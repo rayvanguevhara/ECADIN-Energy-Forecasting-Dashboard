@@ -1,0 +1,59 @@
+package_path,category,line_count,responsibility
+src/ecadin_energy/forecasting/__init__.py,forecasting_module,8,Forecasting core support
+src/ecadin_energy/forecasting/accounting/__init__.py,forecasting_module,0,Forecasting core support
+src/ecadin_energy/forecasting/backtesting/__init__.py,forecasting_module,0,Split generation and shared backtest runner
+src/ecadin_energy/forecasting/backtesting/runner.py,forecasting_module,86,Split generation and shared backtest runner
+src/ecadin_energy/forecasting/backtesting/splits.py,forecasting_module,55,Split generation and shared backtest runner
+src/ecadin_energy/forecasting/common/__init__.py,forecasting_module,0,Forecasting core support
+src/ecadin_energy/forecasting/configuration.py,forecasting_module,188,Forecasting core support
+src/ecadin_energy/forecasting/contracts.py,forecasting_module,55,Forecasting core support
+src/ecadin_energy/forecasting/data/__init__.py,forecasting_module,0,"Canonical loading, panel construction, and validation"
+src/ecadin_energy/forecasting/data/loaders.py,forecasting_module,112,"Canonical loading, panel construction, and validation"
+src/ecadin_energy/forecasting/data/panels.py,forecasting_module,197,"Canonical loading, panel construction, and validation"
+src/ecadin_energy/forecasting/data/validation.py,forecasting_module,94,"Canonical loading, panel construction, and validation"
+src/ecadin_energy/forecasting/demand/__init__.py,forecasting_module,0,Forecasting core support
+src/ecadin_energy/forecasting/evaluation/__init__.py,forecasting_module,0,"Metrics, aggregation, and model comparison"
+src/ecadin_energy/forecasting/evaluation/aggregation.py,forecasting_module,103,"Metrics, aggregation, and model comparison"
+src/ecadin_energy/forecasting/evaluation/challenger.py,forecasting_module,63,"Metrics, aggregation, and model comparison"
+src/ecadin_energy/forecasting/evaluation/metrics.py,forecasting_module,106,"Metrics, aggregation, and model comparison"
+src/ecadin_energy/forecasting/exceptions.py,forecasting_module,14,Forecasting core support
+src/ecadin_energy/forecasting/features/__init__.py,forecasting_module,0,Leakage-safe lag and supervised features
+src/ecadin_energy/forecasting/features/lags.py,forecasting_module,112,Leakage-safe lag and supervised features
+src/ecadin_energy/forecasting/models/__init__.py,forecasting_module,0,Stateless model implementations and registry
+src/ecadin_energy/forecasting/models/base.py,forecasting_module,17,Stateless model implementations and registry
+src/ecadin_energy/forecasting/models/baselines.py,forecasting_module,62,Stateless model implementations and registry
+src/ecadin_energy/forecasting/models/drift.py,forecasting_module,45,Stateless model implementations and registry
+src/ecadin_energy/forecasting/models/drift_v1.py,forecasting_module,10,Stateless model implementations and registry
+src/ecadin_energy/forecasting/models/registry.py,forecasting_module,33,Stateless model implementations and registry
+src/ecadin_energy/forecasting/production/__init__.py,forecasting_module,0,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/accounting.py,forecasting_module,173,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/artifacts.py,forecasting_module,42,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/common.py,forecasting_module,55,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/demand.py,forecasting_module,79,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/supply.py,forecasting_module,312,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/production/validation.py,forecasting_module,237,"Domain forecasts, intervals, artifacts, and contracts"
+src/ecadin_energy/forecasting/strategies/__init__.py,forecasting_module,0,One-step and recursive forecast strategies
+src/ecadin_energy/forecasting/strategies/one_step.py,forecasting_module,69,One-step and recursive forecast strategies
+src/ecadin_energy/forecasting/strategies/recursive.py,forecasting_module,122,One-step and recursive forecast strategies
+src/ecadin_energy/forecasting/supply/__init__.py,forecasting_module,0,Forecasting core support
+src/ecadin_energy/forecasting/validation/__init__.py,forecasting_module,0,Forecasting core support
+src/ecadin_energy/pipeline/production.py,pipeline_or_cli,347,Single production orchestration entry point
+src/ecadin_energy/pipeline/validation.py,pipeline_or_cli,27,Validation of already-written production outputs
+src/ecadin_energy/cli.py,pipeline_or_cli,99,Stable project CLI commands
+configs/forecasting/production.json,config_or_script,,Central forecasting configuration
+scripts/run_production_forecast.py,config_or_script,61,Thin executable wrappers
+scripts/validate_production_forecast.py,config_or_script,33,Thin executable wrappers
+scripts/compare_legacy_forecasting_baseline.py,config_or_script,233,Thin executable wrappers
+requirements_forecasting.txt,config_or_script,,Forecasting core support
+tests/unit/test_forecasting_panels.py,forecasting_test,70,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/test_lag_features.py,forecasting_test,39,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/test_drift_models.py,forecasting_test,31,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/test_backtest_splits.py,forecasting_test,32,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/test_recursive_forecast.py,forecasting_test,31,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/test_metrics.py,forecasting_test,29,"Unit, integration, leakage, parity, and output-contract tests"
+tests/integration/test_production_forecasting_pipeline.py,forecasting_test,26,"Unit, integration, leakage, parity, and output-contract tests"
+tests/contracts/test_forecasting_output_contract.py,forecasting_test,26,"Unit, integration, leakage, parity, and output-contract tests"
+tests/__init__.py,test_package,0,"Unit, integration, leakage, parity, and output-contract tests"
+tests/unit/__init__.py,test_package,0,"Unit, integration, leakage, parity, and output-contract tests"
+tests/integration/__init__.py,test_package,0,"Unit, integration, leakage, parity, and output-contract tests"
+tests/contracts/__init__.py,test_package,0,"Unit, integration, leakage, parity, and output-contract tests"
