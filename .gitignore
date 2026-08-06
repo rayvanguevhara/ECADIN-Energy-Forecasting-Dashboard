@@ -58,3 +58,7 @@ migration/**/*.xlsx
 
 # Python package build metadata
 *.egg-info/
+
+# Temporary migration installation packages and raw audit archives
+migration/**/phase*_package/
+migration/**/*_raw.zip
