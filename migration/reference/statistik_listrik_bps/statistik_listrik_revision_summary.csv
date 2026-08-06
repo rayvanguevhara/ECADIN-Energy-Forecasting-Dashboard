@@ -1,0 +1,16 @@
+﻿variable_name,year,comparisons,exact_match,revision_candidate,canonical_missing_pdf_zero,other_status,max_absolute_revision_difference,signed_revision_difference_sum,recommended_action
+distributed_electricity_gwh,2020,34,34,0,0,0,0.00,0.00,no_action
+distributed_electricity_gwh,2021,34,34,0,0,0,0.00,0.00,no_action
+distributed_electricity_gwh,2022,34,34,0,0,0,0.00,0.00,no_action
+distributed_electricity_gwh,2023,34,34,0,0,0,0.00,0.00,no_action
+distributed_electricity_gwh,2024,34,34,0,0,0,0.00,0.00,no_action
+installed_capacity_mw,2020,34,33,0,1,0,0.00,0.00,manual_revision_review
+installed_capacity_mw,2021,34,12,22,0,0,4763.18,6379.29,manual_revision_review
+installed_capacity_mw,2022,34,33,1,0,0,0.03,-0.03,manual_revision_review
+installed_capacity_mw,2023,34,34,0,0,0,0.00,0.00,no_action
+installed_capacity_mw,2024,34,34,0,0,0,0.00,0.00,no_action
+local_generation_gwh,2020,34,26,7,1,0,2202.90,3444.94,manual_revision_review
+local_generation_gwh,2021,34,34,0,0,0,0.00,0.00,no_action
+local_generation_gwh,2022,34,34,0,0,0,0.00,0.00,no_action
+local_generation_gwh,2023,34,34,0,0,0,0.00,0.00,no_action
+local_generation_gwh,2024,34,34,0,0,0,0.00,0.00,no_action

@@ -1,0 +1,16 @@
+﻿comparison_scope,variable_name,unit,publication_filename,pdf_page,year,region_id,region_name,pdf_reported_total,pdf_aggregated_34_total,pdf_aggregation_difference,canonical_34_total,canonical_minus_pdf_reported,canonical_status,canonical_nonmissing_regions,action
+national_total,installed_capacity_mw,MW,statistik-listrik-2020-2024.pdf,31,2020,ID,Indonesia,65235.81,65235.80,-0.01,65235.80,-0.01,rounding_match,33,no_action
+national_total,installed_capacity_mw,MW,statistik-listrik-2020-2024.pdf,31,2021,ID,Indonesia,72893.60,72893.60,0.00,66514.31,-6379.29,revision_candidate,34,manual_source_revision_review
+national_total,installed_capacity_mw,MW,statistik-listrik-2020-2024.pdf,31,2022,ID,Indonesia,74218.45,74218.46,0.01,74218.49,0.04,rounding_match,34,no_action
+national_total,installed_capacity_mw,MW,statistik-listrik-2020-2024.pdf,31,2023,ID,Indonesia,73460.81,73460.81,0.00,73460.81,0.00,rounding_match,34,no_action
+national_total,installed_capacity_mw,MW,statistik-listrik-2020-2024.pdf,31,2024,ID,Indonesia,75936.46,75936.46,0.00,75936.46,0.00,rounding_match,34,no_action
+national_total,local_generation_gwh,GWh,statistik-listrik-2020-2024.pdf,42,2020,ID,Indonesia,279044.73,279044.74,0.01,275599.80,-3444.93,revision_candidate,33,manual_source_revision_review
+national_total,local_generation_gwh,GWh,statistik-listrik-2020-2024.pdf,42,2021,ID,Indonesia,296811.95,296811.94,-0.01,296811.94,-0.01,rounding_match,34,no_action
+national_total,local_generation_gwh,GWh,statistik-listrik-2020-2024.pdf,42,2022,ID,Indonesia,319677.71,319677.73,0.02,319677.73,0.02,rounding_match,34,no_action
+national_total,local_generation_gwh,GWh,statistik-listrik-2020-2024.pdf,42,2023,ID,Indonesia,325855.69,325855.72,0.03,325855.72,0.03,rounding_match,34,no_action
+national_total,local_generation_gwh,GWh,statistik-listrik-2020-2024.pdf,42,2024,ID,Indonesia,343891.75,343891.80,0.05,343891.80,0.05,rounding_match,34,no_action
+national_total,distributed_electricity_gwh,GWh,statistik-listrik-2020-2024.pdf,60,2020,ID,Indonesia,241405.61,241405.61,0.00,241405.61,0.00,rounding_match,34,no_action
+national_total,distributed_electricity_gwh,GWh,statistik-listrik-2020-2024.pdf,60,2021,ID,Indonesia,257634.26,257634.26,0.00,257634.26,0.00,rounding_match,34,no_action
+national_total,distributed_electricity_gwh,GWh,statistik-listrik-2020-2024.pdf,60,2022,ID,Indonesia,273761.48,273761.48,0.00,273761.48,0.00,rounding_match,34,no_action
+national_total,distributed_electricity_gwh,GWh,statistik-listrik-2020-2024.pdf,60,2023,ID,Indonesia,288435.75,288435.75,0.00,288435.75,0.00,rounding_match,34,no_action
+national_total,distributed_electricity_gwh,GWh,statistik-listrik-2020-2024.pdf,60,2024,ID,Indonesia,306219.42,306219.42,0.00,306219.42,0.00,rounding_match,34,no_action
