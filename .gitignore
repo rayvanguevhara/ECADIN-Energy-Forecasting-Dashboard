@@ -62,3 +62,6 @@ migration/**/*.xlsx
 # Temporary migration installation packages and raw audit archives
 migration/**/phase*_package/
 migration/**/*_raw.zip
+
+# Temporary migration installer backups
+migration/backups/
