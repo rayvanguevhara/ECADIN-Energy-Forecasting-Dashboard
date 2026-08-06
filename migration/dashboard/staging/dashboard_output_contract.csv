@@ -1,0 +1,11 @@
+artifact_id,relative_path,expected_rows,primary_key,role,deterministic
+dashboard_province_detail,outputs/dashboard/production/dashboard_province_detail.csv,680,region_id + year,Region Detail and common dashboard source,True
+dashboard_national_timeseries,outputs/dashboard/production/dashboard_national_timeseries.csv,20,year,National Overview series using complete pairs,True
+dashboard_map_timeseries,outputs/dashboard/production/dashboard_map_timeseries.csv,680,region_id + year,Indonesia Energy Map staging,True
+dashboard_regional_ranking,outputs/dashboard/production/dashboard_regional_ranking.csv,680,region_id + year,Regional Difference Ranking staging,True
+dashboard_model_summary,outputs/dashboard/production/dashboard_model_summary.csv,2,side,Production Models registry,True
+dashboard_data_quality_summary,outputs/dashboard/production/dashboard_data_quality_summary.csv,variable,year + quality,Data Quality summary,True
+dashboard_data_quality_review,outputs/dashboard/production/dashboard_data_quality_review.csv,variable,region_id + year,Data Quality review rows,True
+dashboard_methodology,outputs/dashboard/production/dashboard_methodology.json,,,Methodology metadata and caveats,True
+dashboard_source_registry,outputs/dashboard/production/dashboard_source_registry.json,,,Production source hashes and status,True
+frontend_dataset,frontend-dashboard/src/data/dashboard-production.json,680,province code + year,Only mutable frontend data file,True

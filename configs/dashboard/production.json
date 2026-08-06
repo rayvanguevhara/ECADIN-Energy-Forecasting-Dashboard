@@ -1,0 +1,40 @@
+{
+    "schema_version":  "dashboard_production_v1",
+    "frontend_schema_version":  "ecadin_dashboard_dataset_v1",
+    "source_dashboard_stage":  "clean_dashboard_production_v1",
+    "history_start_year":  2011,
+    "history_end_year":  2024,
+    "forecast_start_year":  2025,
+    "forecast_end_year":  2030,
+    "expected_regions":  34,
+    "modeling_geography":  "34_harmonized_modeling_regions",
+    "staging_directory":  "outputs/dashboard/staging",
+    "production_directory":  "outputs/dashboard/production",
+    "reports_directory":  "outputs/dashboard/reports",
+    "frontend_directory":  "frontend-dashboard",
+    "frontend_dataset_path":  "src/data/dashboard-production.json",
+    "frontend_geojson_path":  "src/data/indonesia-provinces.json",
+    "regional_uncertainty_display_allowed":  false,
+    "legacy_model_reused":  false,
+    "population_available":  false,
+    "category_thresholds_percent":  {
+                                        "far_above":  20.0,
+                                        "above":  5.0,
+                                        "below":  -5.0,
+                                        "far_below":  -20.0
+                                    },
+    "accounting_disclaimer":  "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy.",
+    "allowed_frontend_mutations":  [
+                                       "src/data/dashboard-production.json"
+                                   ],
+    "excluded_frontend_snapshot_directories":  [
+                                                   "node_modules",
+                                                   "dist",
+                                                   "build",
+                                                   ".output",
+                                                   ".vite",
+                                                   ".cache",
+                                                   "coverage",
+                                                   ".git"
+                                               ]
+}

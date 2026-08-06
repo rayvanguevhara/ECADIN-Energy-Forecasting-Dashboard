@@ -1,0 +1,35 @@
+{
+  "schema_version": "dashboard_methodology_v1",
+  "definitions": {
+    "demand": "Annual distributed electricity within a harmonized modeling region (GWh).",
+    "supply": "Annual local electricity generation within the same harmonized region (GWh).",
+    "accounting_difference": "Local generation minus distributed electricity."
+  },
+  "production_models": {
+    "demand": "Drift",
+    "supply": "Drift V1",
+    "frequency": "annual",
+    "historical_period": "2011-2024",
+    "forecast_period": "2025-2030"
+  },
+  "validation": {
+    "rolling_one_step_targets": "2019-2024",
+    "recursive_origins": "2018-2021",
+    "recursive_max_horizon": 3,
+    "metrics": [
+      "macro_sMAPE",
+      "macro_MASE",
+      "micro_RMSE",
+      "aggregate_bias",
+      "challenger_win_rate_vs_Drift"
+    ]
+  },
+  "data_treatment": {
+    "year_2016": "Interpolated in modeling history only; not an observed validation target.",
+    "other_missing": "Preserved as missing; never converted to zero.",
+    "population": "Backlog; not integrated into the production dashboard data contract.",
+    "ruptl": "Benchmark and scenario reference only; not a production target."
+  },
+  "geography": "34_harmonized_modeling_regions",
+  "accounting_disclaimer": "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy."
+}

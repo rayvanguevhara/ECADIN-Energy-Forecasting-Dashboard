@@ -1,0 +1,35 @@
+package_path,line_count,responsibility
+configs/dashboard/production.json,,Dashboard documentation or config
+docs/dashboard/dashboard_pipeline.md,,Dashboard documentation or config
+scripts/build_dashboard_staging.py,39,Staging orchestration
+scripts/refresh_frontend_data.py,37,Thin executable wrapper
+scripts/run_dashboard_pipeline.py,38,Thin executable wrapper
+scripts/validate_dashboard_staging.py,29,Staging orchestration
+src/ecadin_energy/cli.py,104,Project orchestration or CLI
+src/ecadin_energy/dashboard/__init__.py,1,Dashboard documentation or config
+src/ecadin_energy/dashboard/configuration.py,132,Dashboard configuration and contracts
+src/ecadin_energy/dashboard/contracts.py,58,Dashboard configuration and contracts
+src/ecadin_energy/dashboard/data_quality.py,30,Data quality staging
+src/ecadin_energy/dashboard/energy_map.py,13,Energy map staging
+src/ecadin_energy/dashboard/frontend_payload.py,107,Frontend JSON contract
+src/ecadin_energy/dashboard/frontend_refresh.py,125,Safe frontend refresh
+src/ecadin_energy/dashboard/loaders.py,42,Dashboard documentation or config
+src/ecadin_energy/dashboard/methodology.py,66,Methodology metadata
+src/ecadin_energy/dashboard/national_overview.py,36,National overview aggregation
+src/ecadin_energy/dashboard/production_models.py,38,Production model registry
+src/ecadin_energy/dashboard/promotion.py,48,Controlled promotion
+src/ecadin_energy/dashboard/region_detail.py,117,Region detail dataset
+src/ecadin_energy/dashboard/regional_ranking.py,24,Regional ranking staging
+src/ecadin_energy/dashboard/serializers.py,78,Frontend-safe serialization and hashing
+src/ecadin_energy/dashboard/staging.py,130,Staging orchestration
+src/ecadin_energy/dashboard/validation.py,107,Dashboard validation
+src/ecadin_energy/pipeline/dashboard.py,36,Project orchestration or CLI
+tests/__init__.py,0,Automated verification
+tests/contracts/__init__.py,0,Automated verification
+tests/contracts/test_dashboard_output_contract.py,23,Automated verification
+tests/integration/__init__.py,0,Automated verification
+tests/integration/test_dashboard_pipeline.py,19,Automated verification
+tests/unit/__init__.py,0,Automated verification
+tests/unit/test_dashboard_frontend_payload.py,25,Frontend JSON contract
+tests/unit/test_dashboard_national.py,28,Automated verification
+tests/unit/test_dashboard_region_detail.py,37,Region detail dataset

@@ -1,0 +1,9 @@
+check_id,passed,new_value,legacy_value,tolerance,note
+region_rows,True,680,680,exact,Same frontend region-year coverage.
+region_count,True,34,34,exact,Same harmonized modeling geography.
+complete_pairs,True,671,671,exact,Same complete accounting-pair count.
+demand_values,True,680 matched,680 rows,1e-8,Maximum absolute difference below 3e-11.
+supply_values,True,680 matched,680 rows,1e-8,Maximum absolute difference below 2e-11.
+accounting_values,True,680 matched,680 rows,1e-8,"Gap, percent, and ratio all matched."
+population_contract,True,null / backlog,legacy projections present,intentional policy change,Production contract explicitly defers population and per-capita.
+frontend_source,True,seeded from finalized legacy frontend,current finalized source,SHA-256 exact per file,Refresh mutates only dashboard-production.json.

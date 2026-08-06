@@ -1,0 +1,9 @@
+test_group,passed,total,status,evidence
+Python compilation,1,1,PASSED,Dashboard modules and scripts compiled.
+Focused dashboard tests,6,6,PASSED,"Unit, integration, and output-contract tests."
+Full clean-project tests,53,53,PASSED,All existing and dashboard tests passed.
+Dashboard staging contracts,9,9,PASSED,"Rows, models, nulls, categories, interpretation, and backlog contracts."
+Dashboard production contracts,9,9,PASSED,Promoted outputs validated.
+Frontend source safety,3,3,PASSED,Dataset hash matched; 81 nondata files unchanged; payload contract passed.
+Deterministic dashboard outputs,11,11,PASSED,"Staging, production, and frontend JSON hashes identical after rerun."
+Frontend npm build in packaging sandbox,0,1,DEFERRED,Sandbox npm mirror lacked zod 3.25.76; source and package-lock were not modified. Run npm ci and npm run build on Windows.

@@ -1,0 +1,18 @@
+{
+  "schema_version": "dashboard_source_registry_v1",
+  "status": "production",
+  "production_ready": true,
+  "source_dashboard_stage": "clean_dashboard_production_v1",
+  "source_hashes": {
+    "outputs/production/combined/regional_energy_history_forecast.csv": "17C6EE2F794022D054D826B9202C2C2F6CA5C9B57CD8C2A5232560A73D70EA64",
+    "outputs/production/metrics/production_model_summary.csv": "9382C3CD9FBDA6033F0D971C7169CC2E8400B12FB2CE53261728B2A1F0097561",
+    "data/reference/regions.csv": "A4E4E520CEC5B743D52E452B97FA0CF5315F6F66B0719CC4875FA98E9A07A4CC",
+    "data/processed/master/data_quality_flags.csv": "B7C12BADA6B928193D03ED073CAB0C89D12DB762AA8BFEB06A824F272BF93A2A",
+    "outputs/production/reports/production_contract_checks.csv": "24F9985F0FF343B0B5E0CF17DB727D9C6FB4E417B19ADC2BB6B2590735718411"
+  },
+  "canonical_master_modified": false,
+  "frontend_source_modified": false,
+  "population_status": "backlog_not_integrated",
+  "ruptl_role": "benchmark_scenario_only",
+  "accounting_disclaimer": "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy."
+}

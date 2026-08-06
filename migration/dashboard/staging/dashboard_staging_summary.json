@@ -1,0 +1,30 @@
+{
+  "schema_version": "dashboard_staging_summary_v1",
+  "status": "completed",
+  "processed_at_utc": "2026-08-06T08:45:36+00:00",
+  "region_rows": 680,
+  "national_rows": 20,
+  "regions": 34,
+  "years": [
+    2011,
+    2030
+  ],
+  "complete_pairs": 671,
+  "historical_incomplete_pairs": 9,
+  "forecast_incomplete_pairs": 0,
+  "canonical_master_modified": false,
+  "frontend_source_modified": false,
+  "deterministic_output_hashes": {
+    "dashboard_province_detail.csv": "74B9157D1968AF774F6BC0062FDDE56FBE892E2F4C595F3E1CC0814C6744AEC7",
+    "dashboard_national_timeseries.csv": "EAA8737FA53666143B8CCE9D38420EBFA0B5C6FFB1E5F27012A15CE36C26D6E9",
+    "dashboard_map_timeseries.csv": "F0D574435907611736DDED9D4626CF7089DB2C3FEBC5CFC7B165C607D741BE7F",
+    "dashboard_regional_ranking.csv": "78772AE7B0016E62E924ABECA279AB02B5DDEADB61624FADD19BD81CD4600F1E",
+    "dashboard_model_summary.csv": "547EA7461E7C80CC8971302D3B57DFEF834BA3B7231217F6AFB9364660651368",
+    "dashboard_data_quality_summary.csv": "5EA60D38A73BBED3F1DE1D41D09EC6846857BE33C6980F4B0701E21843B64257",
+    "dashboard_data_quality_review.csv": "04C891A7BCB4053E001703D1BB51EFC835381393E273E8EA268B967C4E6807EE",
+    "dashboard_methodology.json": "02E23C46A6D2ACFE85536DDABF7C937D12BD076E2B78CB388D7F5D0ED2C3CAD3",
+    "dashboard_source_registry.json": "36BF4430F62277CA6077ADD5C126FE9D0573DCCD62164B47D925B458A6FFA73C",
+    "dashboard-production.json": "D2836E410AFBB50AB1D881AF3286E4FC423850E6B19451140A611491BB7CFE22",
+    "dashboard_input_hashes.csv": "FB13749D26273812D17774550FF723FAAE47704CE89D0AFB29253672562FD368"
+  }
+}

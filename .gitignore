@@ -65,3 +65,6 @@ migration/**/*_raw.zip
 
 # Temporary migration installer backups
 migration/backups/
+
+# Frontend generated artifacts
+frontend-dashboard/.vercel/
