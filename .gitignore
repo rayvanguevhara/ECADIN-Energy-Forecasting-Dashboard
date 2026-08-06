@@ -69,3 +69,8 @@ migration/backups/
 # Frontend generated artifacts
 frontend-dashboard/.vercel/
 outputs/dashboard/
+.env.*
+!.env.example
+frontend-dashboard/.env
+frontend-dashboard/.env.*
+!frontend-dashboard/.env.example
