@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 from ecadin_energy.forecasting.configuration import load_production_config
 from ecadin_energy.forecasting.data.loaders import (
@@ -16,9 +17,14 @@ from ecadin_energy.forecasting.data.panels import (
 class ForecastingPanelsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.config = load_production_config()
-        master = load_regional_master()
-        regions = load_regions()
+        root = Path(__file__).resolve().parents[2]
+        cls.config = load_production_config(project_root=root)
+        master = load_regional_master(
+            project_root=root,
+            path=root
+            / "tests/fixtures/forecasting/regional_energy_master.csv",
+        )
+        regions = load_regions(project_root=root)
         cls.demand = build_demand_panel(master, regions, cls.config)
         cls.supply = build_supply_panel(master, regions, cls.config)
 

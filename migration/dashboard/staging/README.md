@@ -11,7 +11,7 @@ paths use stable functional names.
 - refreshes exactly one frontend file atomically;
 - seeds the finalized React frontend into the clean project only when files are
   missing;
-- never runs or installs the legacy `run_phase3l_frontend_integration.py` script.
+- never runs or installs the legacy frontend integration script.
 
 ## Install
 
@@ -87,10 +87,10 @@ Dashboard staging contracts     9/9 PASSED
 Dashboard production contracts  9/9 PASSED
 Frontend source safety           3/3 PASSED
 Deterministic dashboard outputs 11/11 PASSED
-Full clean-project tests        53/53 PASSED
+Full clean-project tests        56/56 PASSED
 ```
 
-The packaging sandbox could not execute `npm ci` because its internal registry
-lacked the locked `zod@3.25.76` tarball. The package lock was intentionally not
-modified. The finalized frontend source is unchanged and the production build
-must be verified on the Windows project using the commands above.
+The Windows verification completed the TanStack Start/Nitro production build
+using the Vercel preset and generated `.vercel/output`. The tracked frontend
+payload and dashboard staging evidence use the stable
+`ecadin_dashboard_dataset_v1` schema.

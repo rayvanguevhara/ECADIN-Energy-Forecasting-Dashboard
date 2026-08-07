@@ -6,7 +6,10 @@ from pathlib import Path
 import pandas as pd
 
 from ecadin_energy.dashboard.configuration import load_dashboard_config
-from ecadin_energy.dashboard.region_detail import build_region_detail, classify_accounting_difference
+from ecadin_energy.dashboard.region_detail import (
+    build_region_detail,
+    classify_accounting_difference,
+)
 
 
 class DashboardRegionDetailTest(unittest.TestCase):
@@ -16,14 +19,33 @@ class DashboardRegionDetailTest(unittest.TestCase):
         cls.config = load_dashboard_config(project_root=cls.root)
 
     def test_category_boundaries(self) -> None:
-        self.assertEqual(classify_accounting_difference(20.0, self.config), "surplus_tinggi")
-        self.assertEqual(classify_accounting_difference(5.0, self.config), "surplus_moderat")
-        self.assertEqual(classify_accounting_difference(-5.0, self.config), "defisit_moderat")
-        self.assertEqual(classify_accounting_difference(-20.0, self.config), "defisit_tinggi")
-        self.assertEqual(classify_accounting_difference(None, self.config), "tidak_tersedia")
+        self.assertEqual(
+            classify_accounting_difference(20.0, self.config),
+            "surplus_tinggi",
+        )
+        self.assertEqual(
+            classify_accounting_difference(5.0, self.config),
+            "surplus_moderat",
+        )
+        self.assertEqual(
+            classify_accounting_difference(-5.0, self.config),
+            "defisit_moderat",
+        )
+        self.assertEqual(
+            classify_accounting_difference(-20.0, self.config),
+            "defisit_tinggi",
+        )
+        self.assertEqual(
+            classify_accounting_difference(None, self.config),
+            "tidak_tersedia",
+        )
 
     def test_detail_contract(self) -> None:
-        combined = pd.read_csv(self.root / "outputs/production/combined/regional_energy_history_forecast.csv")
+        combined = pd.read_csv(
+            self.root
+            / "tests/fixtures/production/combined/"
+            "regional_energy_history_forecast.csv"
+        )
         regions = pd.read_csv(self.root / "data/reference/regions.csv")
         detail = build_region_detail(combined, regions, self.config)
         self.assertEqual(len(detail), 680)

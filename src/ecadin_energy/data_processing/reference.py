@@ -1,0 +1,113 @@
+from __future__ import annotations
+
+import csv
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+from ecadin_energy.config import PATHS
+
+
+EXPECTED_REGION_COUNT = 34
+
+
+def _root(project_root: str | Path | None) -> Path:
+    return Path(project_root).resolve() if project_root else PATHS.root
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def validate_reference_layer(
+    *,
+    project_root: str | Path | None = None,
+) -> dict[str, Any]:
+    root = _root(project_root)
+    reference = root / "data/reference"
+
+    regions_path = reference / "regions.csv"
+    aliases_path = reference / "region_aliases.csv"
+    coordinates_path = reference / "region_coordinates.csv"
+    variables_path = reference / "variable_dictionary.csv"
+    contract_path = reference / "reference_layer_contract.json"
+
+    paths = [
+        regions_path,
+        aliases_path,
+        coordinates_path,
+        variables_path,
+        contract_path,
+    ]
+    missing = [str(path) for path in paths if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(
+            "Reference files are missing:\n- " + "\n- ".join(missing)
+        )
+
+    regions = _read_csv(regions_path)
+    aliases = _read_csv(aliases_path)
+    coordinates = _read_csv(coordinates_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+
+    failures: list[str] = []
+    region_ids = [row["region_id"] for row in regions]
+    region_id_set = set(region_ids)
+
+    if len(regions) != EXPECTED_REGION_COUNT:
+        failures.append(
+            f"Expected {EXPECTED_REGION_COUNT} regions, found {len(regions)}."
+        )
+    if len(region_id_set) != len(region_ids):
+        failures.append("Duplicate region_id detected.")
+    if len(coordinates) != EXPECTED_REGION_COUNT:
+        failures.append(
+            f"Expected {EXPECTED_REGION_COUNT} coordinates, found {len(coordinates)}."
+        )
+    if region_id_set != {row["region_id"] for row in coordinates}:
+        failures.append("Coordinate region set does not match regions.csv.")
+    if any(not row["normalized_alias"] for row in aliases):
+        failures.append("Blank normalized alias detected.")
+    if any(row["region_id"] not in region_id_set for row in aliases):
+        failures.append("Alias points to an unknown region_id.")
+
+    alias_keys: dict[tuple[str, str], str] = {}
+    for row in aliases:
+        key = (row["source_scope"], row["normalized_alias"])
+        previous = alias_keys.get(key)
+        if previous is not None and previous != row["region_id"]:
+            failures.append(f"Conflicting alias mapping: {key}.")
+        alias_keys[key] = row["region_id"]
+
+    for filename, expected_hash in contract["file_hashes"].items():
+        actual = sha256_file(reference / filename)
+        if actual != expected_hash:
+            failures.append(f"SHA-256 mismatch for {filename}.")
+
+    if failures:
+        raise ValueError(
+            "Reference layer validation failed:\n- " + "\n- ".join(failures)
+        )
+
+    bubble_only = [
+        row["canonical_region_name"]
+        for row in regions
+        if row["geometry_status"] == "bubble_only"
+    ]
+    return {
+        "regions": len(regions),
+        "aliases": len(aliases),
+        "coordinates": len(coordinates),
+        "bubble_only": bubble_only,
+        "canonical_key": "region_id + year",
+    }

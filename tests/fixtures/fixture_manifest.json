@@ -1,0 +1,55 @@
+{
+  "schema_version": "ecadin_portable_fixture_v1",
+  "purpose": "source-only automated contract testing",
+  "production_use_allowed": false,
+  "source_evidence": {
+    "relative_path": "migration/dashboard/staging/dashboard-production.json",
+    "sha256": "7E1B4DE643D63CBFBA4A5DDCCEC819D22767D9B2E14E1880FFA1F4C91E7058C3"
+  },
+  "expected_regions": 34,
+  "history_years": [
+    2011,
+    2024
+  ],
+  "forecast_years": [
+    2025,
+    2030
+  ],
+  "files": [
+    {
+      "relative_path": "tests/fixtures/README.md",
+      "size_bytes": 959,
+      "sha256": "E2C3D7D248484CBE5572391499B96FE139D4612CEBCBDA967EA4D5DA5A2E60A4"
+    },
+    {
+      "relative_path": "tests/fixtures/forecasting/regional_energy_master.csv",
+      "size_bytes": 11094,
+      "sha256": "65287440824314B4401D8BC3BBE6431055B7927D79F32064810A761AF9D53BD7"
+    },
+    {
+      "relative_path": "tests/fixtures/production/combined/regional_energy_history_forecast.csv",
+      "size_bytes": 272162,
+      "sha256": "CE020C9A08C59362237CE699AC71CFC34B9E3A5C1BC9F0538393EFA2CB6762B9"
+    },
+    {
+      "relative_path": "tests/fixtures/production/forecasts/demand_forecast.csv",
+      "size_bytes": 40860,
+      "sha256": "2B0CB167EE86D9B15B0D7A73857C1F83246690C7F82C43612C562EAC603B79AD"
+    },
+    {
+      "relative_path": "tests/fixtures/production/forecasts/supply_forecast.csv",
+      "size_bytes": 71941,
+      "sha256": "8E596C6A1A416A032C3AAC4A852FD294996D4126ADDA9A2E4A4E2272FF92B6A0"
+    },
+    {
+      "relative_path": "tests/fixtures/production/metrics/production_model_summary.csv",
+      "size_bytes": 1099,
+      "sha256": "9382C3CD9FBDA6033F0D971C7169CC2E8400B12FB2CE53261728B2A1F0097561"
+    },
+    {
+      "relative_path": "tests/fixtures/production/reports/production_contract_checks.csv",
+      "size_bytes": 802,
+      "sha256": "24F9985F0FF343B0B5E0CF17DB727D9C6FB4E417B19ADC2BB6B2590735718411"
+    }
+  ]
+}

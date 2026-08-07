@@ -1,2 +1,2 @@
-# Dependencies will be migrated from the validated legacy project
-# after the canonical production modules are selected.
+numpy>=1.26,<3
+pandas>=2.2,<4

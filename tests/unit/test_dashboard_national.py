@@ -14,7 +14,11 @@ class DashboardNationalTest(unittest.TestCase):
     def test_national_uses_complete_pairs(self) -> None:
         root = Path(__file__).resolve().parents[2]
         config = load_dashboard_config(project_root=root)
-        combined = pd.read_csv(root / "outputs/production/combined/regional_energy_history_forecast.csv")
+        combined = pd.read_csv(
+            root
+            / "tests/fixtures/production/combined/"
+            "regional_energy_history_forecast.csv"
+        )
         regions = pd.read_csv(root / "data/reference/regions.csv")
         detail = build_region_detail(combined, regions, config)
         national = build_national_timeseries(detail, 34)

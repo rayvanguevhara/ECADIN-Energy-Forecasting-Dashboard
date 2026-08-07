@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-import tempfile
 import unittest
-from pathlib import Path
-import shutil
 
 from ecadin_energy.pipeline.production import run_production_pipeline
+from tests.helpers.project_fixture import PortableProject
 
 
 class ProductionForecastingPipelineTest(unittest.TestCase):
     def test_full_contract(self) -> None:
-        project_root = Path(__file__).resolve().parents[2]
-        result = run_production_pipeline(project_root=project_root)
+        with PortableProject(seed_production=False) as project_root:
+            result = run_production_pipeline(project_root=project_root)
         summary = result["summary"]
         self.assertEqual(summary["demand_forecast_rows"], 204)
         self.assertEqual(summary["supply_forecast_rows"], 204)

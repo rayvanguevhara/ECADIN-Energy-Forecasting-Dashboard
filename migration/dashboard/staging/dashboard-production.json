@@ -1,5 +1,5 @@
 {
-  "schema_version": "phase3l_frontend_dataset_v1",
+  "schema_version": "ecadin_dashboard_dataset_v1",
   "generated_at_utc": null,
   "source_dashboard_stage": "clean_dashboard_production_v1",
   "source_registry_status": "production",

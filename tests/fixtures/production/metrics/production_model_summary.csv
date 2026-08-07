@@ -1,0 +1,5 @@
+domain,production_model_id,model_label,protocol,prediction_count,macro_smape_percent,macro_mase,micro_rmse_gwh,aggregate_bias_percent,selected_for_production,selection_note
+demand,demand_production_drift,Drift,recursive_multi_step,408,8.135140479553375,1.2557687612026864,1329.6746979478087,-0.03925128527594257,True,Validated production contract; challengers remain experiments and are not auto-promoted.
+demand,demand_production_drift,Drift,rolling_one_step,204,5.8347579446196995,0.8936212684542528,856.9236009749776,-0.27346876260005254,True,Validated production contract; challengers remain experiments and are not auto-promoted.
+supply,supply_production_drift_v1,Drift,recursive_multi_step,406,56.23625677858716,12.057703332041237,3731.858418745767,-0.81625994348241,True,Validated production contract; challengers remain experiments and are not auto-promoted.
+supply,supply_production_drift_v1,Drift,rolling_one_step,203,29.514841695575804,4.638559719618273,2065.4274738923827,-0.10489359131452008,True,Validated production contract; challengers remain experiments and are not auto-promoted.

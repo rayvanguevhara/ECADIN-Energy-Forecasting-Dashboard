@@ -1,0 +1,205 @@
+region_id,region_name,modeling_order,year,forecast_gwh,raw_prediction_gwh,model_id,model_label,model_version,forecast_type,origin_year,horizon,was_clipped_nonnegative,history_first_year,history_last_year,history_first_gwh,history_last_gwh,drift_slope_gwh_per_year
+AC,ACEH,1,2025,3858.937692307692,3858.937692307692,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,1579.77,3696.14,162.7976923076923
+AC,ACEH,1,2026,4021.735384615384,4021.735384615384,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,1579.77,3696.14,162.7976923076923
+AC,ACEH,1,2027,4184.533076923077,4184.533076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,1579.77,3696.14,162.7976923076923
+AC,ACEH,1,2028,4347.330769230769,4347.330769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,1579.77,3696.14,162.7976923076923
+AC,ACEH,1,2029,4510.128461538461,4510.128461538461,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,1579.77,3696.14,162.7976923076923
+AC,ACEH,1,2030,4672.926153846153,4672.926153846153,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,1579.77,3696.14,162.7976923076923
+BA,BALI,2,2025,7615.007692307692,7615.007692307692,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,3223.94,7301.36,313.6476923076923
+BA,BALI,2,2026,7928.655384615385,7928.655384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,3223.94,7301.36,313.6476923076923
+BA,BALI,2,2027,8242.303076923077,8242.303076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,3223.94,7301.36,313.6476923076923
+BA,BALI,2,2028,8555.950769230769,8555.950769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,3223.94,7301.36,313.6476923076923
+BA,BALI,2,2029,8869.59846153846,8869.59846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,3223.94,7301.36,313.6476923076923
+BA,BALI,2,2030,9183.246153846152,9183.246153846152,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,3223.94,7301.36,313.6476923076923
+BT,BANTEN,3,2025,29968.83846153846,29968.83846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BT,BANTEN,3,2026,31541.21692307692,31541.21692307692,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BT,BANTEN,3,2027,33113.595384615386,33113.595384615386,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BT,BANTEN,3,2028,34685.97384615385,34685.97384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BT,BANTEN,3,2029,36258.352307692316,36258.352307692316,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BT,BANTEN,3,2030,37830.73076923078,37830.73076923078,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,7955.54,28396.46,1572.3784615384614
+BE,BENGKULU,4,2025,1286.7376923076922,1286.7376923076922,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,493.95,1230.11,56.6276923076923
+BE,BENGKULU,4,2026,1343.3653846153845,1343.3653846153845,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,493.95,1230.11,56.6276923076923
+BE,BENGKULU,4,2027,1399.9930769230768,1399.9930769230768,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,493.95,1230.11,56.6276923076923
+BE,BENGKULU,4,2028,1456.6207692307692,1456.6207692307692,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,493.95,1230.11,56.6276923076923
+BE,BENGKULU,4,2029,1513.2484615384615,1513.2484615384615,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,493.95,1230.11,56.6276923076923
+BE,BENGKULU,4,2030,1569.8761538461538,1569.8761538461538,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,493.95,1230.11,56.6276923076923
+YO,DI YOGYAKARTA,5,2025,4046.6730769230767,4046.6730769230767,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,1869.77,3891.18,155.4930769230769
+YO,DI YOGYAKARTA,5,2026,4202.166153846154,4202.166153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,1869.77,3891.18,155.4930769230769
+YO,DI YOGYAKARTA,5,2027,4357.659230769231,4357.659230769231,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,1869.77,3891.18,155.4930769230769
+YO,DI YOGYAKARTA,5,2028,4513.152307692308,4513.152307692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,1869.77,3891.18,155.4930769230769
+YO,DI YOGYAKARTA,5,2029,4668.6453846153845,4668.6453846153845,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,1869.77,3891.18,155.4930769230769
+YO,DI YOGYAKARTA,5,2030,4824.138461538461,4824.138461538461,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,1869.77,3891.18,155.4930769230769
+JK,DKI JAKARTA,6,2025,38439.68769230769,38439.68769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,35061.38,38198.38,241.30769230769232
+JK,DKI JAKARTA,6,2026,38680.99538461539,38680.99538461539,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,35061.38,38198.38,241.30769230769232
+JK,DKI JAKARTA,6,2027,38922.30307692308,38922.30307692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,35061.38,38198.38,241.30769230769232
+JK,DKI JAKARTA,6,2028,39163.61076923078,39163.61076923078,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,35061.38,38198.38,241.30769230769232
+JK,DKI JAKARTA,6,2029,39404.91846153847,39404.91846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,35061.38,38198.38,241.30769230769232
+JK,DKI JAKARTA,6,2030,39646.22615384617,39646.22615384617,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,35061.38,38198.38,241.30769230769232
+GO,GORONTALO,7,2025,812.0384615384614,812.0384615384614,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,236.52,770.93,41.10846153846153
+GO,GORONTALO,7,2026,853.1469230769229,853.1469230769229,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,236.52,770.93,41.10846153846153
+GO,GORONTALO,7,2027,894.2553846153844,894.2553846153844,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,236.52,770.93,41.10846153846153
+GO,GORONTALO,7,2028,935.3638461538459,935.3638461538459,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,236.52,770.93,41.10846153846153
+GO,GORONTALO,7,2029,976.4723076923074,976.4723076923074,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,236.52,770.93,41.10846153846153
+GO,GORONTALO,7,2030,1017.5807692307689,1017.5807692307689,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,236.52,770.93,41.10846153846153
+JA,JAMBI,8,2025,2635.383846153846,2635.383846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,1054.17,2522.44,112.94384615384615
+JA,JAMBI,8,2026,2748.3276923076924,2748.3276923076924,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,1054.17,2522.44,112.94384615384615
+JA,JAMBI,8,2027,2861.2715384615385,2861.2715384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,1054.17,2522.44,112.94384615384615
+JA,JAMBI,8,2028,2974.2153846153847,2974.2153846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,1054.17,2522.44,112.94384615384615
+JA,JAMBI,8,2029,3087.159230769231,3087.159230769231,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,1054.17,2522.44,112.94384615384615
+JA,JAMBI,8,2030,3200.103076923077,3200.103076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,1054.17,2522.44,112.94384615384615
+JB,JAWA BARAT,9,2025,63759.306153846155,63759.306153846155,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,34053.6,61637.47,2121.836153846154
+JB,JAWA BARAT,9,2026,65881.14230769231,65881.14230769231,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,34053.6,61637.47,2121.836153846154
+JB,JAWA BARAT,9,2027,68002.97846153847,68002.97846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,34053.6,61637.47,2121.836153846154
+JB,JAWA BARAT,9,2028,70124.81461538463,70124.81461538463,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,34053.6,61637.47,2121.836153846154
+JB,JAWA BARAT,9,2029,72246.6507692308,72246.6507692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,34053.6,61637.47,2121.836153846154
+JB,JAWA BARAT,9,2030,74368.48692307695,74368.48692307695,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,34053.6,61637.47,2121.836153846154
+JT,JAWA TENGAH,10,2025,31551.086923076924,31551.086923076924,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JT,JAWA TENGAH,10,2026,32710.743846153848,32710.743846153848,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JT,JAWA TENGAH,10,2027,33870.40076923077,33870.40076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JT,JAWA TENGAH,10,2028,35030.057692307695,35030.057692307695,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JT,JAWA TENGAH,10,2029,36189.71461538462,36189.71461538462,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JT,JAWA TENGAH,10,2030,37349.37153846154,37349.37153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,15315.89,30391.43,1159.6569230769232
+JI,JAWA TIMUR,11,2025,45872.85153846153,45872.85153846153,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,24018.69,44311.84,1561.0115384615383
+JI,JAWA TIMUR,11,2026,47433.863076923066,47433.863076923066,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,24018.69,44311.84,1561.0115384615383
+JI,JAWA TIMUR,11,2027,48994.8746153846,48994.8746153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,24018.69,44311.84,1561.0115384615383
+JI,JAWA TIMUR,11,2028,50555.886153846135,50555.886153846135,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,24018.69,44311.84,1561.0115384615383
+JI,JAWA TIMUR,11,2029,52116.89769230767,52116.89769230767,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,24018.69,44311.84,1561.0115384615383
+JI,JAWA TIMUR,11,2030,53677.909230769204,53677.909230769204,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,24018.69,44311.84,1561.0115384615383
+KB,KALIMANTAN BARAT,12,2025,3723.3430769230768,3723.3430769230768,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,1434.72,3559.87,163.4730769230769
+KB,KALIMANTAN BARAT,12,2026,3886.8161538461536,3886.8161538461536,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,1434.72,3559.87,163.4730769230769
+KB,KALIMANTAN BARAT,12,2027,4050.2892307692305,4050.2892307692305,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,1434.72,3559.87,163.4730769230769
+KB,KALIMANTAN BARAT,12,2028,4213.762307692307,4213.762307692307,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,1434.72,3559.87,163.4730769230769
+KB,KALIMANTAN BARAT,12,2029,4377.235384615385,4377.235384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,1434.72,3559.87,163.4730769230769
+KB,KALIMANTAN BARAT,12,2030,4540.708461538462,4540.708461538462,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,1434.72,3559.87,163.4730769230769
+KS,KALIMANTAN SELATAN,13,2025,4164.8546153846155,4164.8546153846155,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,1467.13,3972.16,192.69461538461536
+KS,KALIMANTAN SELATAN,13,2026,4357.549230769231,4357.549230769231,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,1467.13,3972.16,192.69461538461536
+KS,KALIMANTAN SELATAN,13,2027,4550.243846153847,4550.243846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,1467.13,3972.16,192.69461538461536
+KS,KALIMANTAN SELATAN,13,2028,4742.938461538462,4742.938461538462,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,1467.13,3972.16,192.69461538461536
+KS,KALIMANTAN SELATAN,13,2029,4935.633076923078,4935.633076923078,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,1467.13,3972.16,192.69461538461536
+KS,KALIMANTAN SELATAN,13,2030,5128.327692307694,5128.327692307694,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,1467.13,3972.16,192.69461538461536
+KT,KALIMANTAN TENGAH,14,2025,2080.976153846154,2080.976153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,649.95,1978.76,102.21615384615384
+KT,KALIMANTAN TENGAH,14,2026,2183.1923076923076,2183.1923076923076,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,649.95,1978.76,102.21615384615384
+KT,KALIMANTAN TENGAH,14,2027,2285.4084615384613,2285.4084615384613,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,649.95,1978.76,102.21615384615384
+KT,KALIMANTAN TENGAH,14,2028,2387.624615384615,2387.624615384615,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,649.95,1978.76,102.21615384615384
+KT,KALIMANTAN TENGAH,14,2029,2489.8407692307687,2489.8407692307687,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,649.95,1978.76,102.21615384615384
+KT,KALIMANTAN TENGAH,14,2030,2592.0569230769224,2592.0569230769224,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,649.95,1978.76,102.21615384615384
+KI,KALIMANTAN TIMUR,15,2025,6240.412727272727,6240.412727272727,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2013,2024,2731.58,5948.01,292.4027272727273
+KI,KALIMANTAN TIMUR,15,2026,6532.8154545454545,6532.8154545454545,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2013,2024,2731.58,5948.01,292.4027272727273
+KI,KALIMANTAN TIMUR,15,2027,6825.218181818182,6825.218181818182,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2013,2024,2731.58,5948.01,292.4027272727273
+KI,KALIMANTAN TIMUR,15,2028,7117.620909090909,7117.620909090909,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2013,2024,2731.58,5948.01,292.4027272727273
+KI,KALIMANTAN TIMUR,15,2029,7410.023636363636,7410.023636363636,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2013,2024,2731.58,5948.01,292.4027272727273
+KI,KALIMANTAN TIMUR,15,2030,7702.426363636363,7702.426363636363,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2013,2024,2731.58,5948.01,292.4027272727273
+KU,KALIMANTAN UTARA,16,2025,274.82090909090914,274.82090909090914,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2013,2024,180.73,266.98,7.8409090909090935
+KU,KALIMANTAN UTARA,16,2026,282.66181818181826,282.66181818181826,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2013,2024,180.73,266.98,7.8409090909090935
+KU,KALIMANTAN UTARA,16,2027,290.5027272727274,290.5027272727274,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2013,2024,180.73,266.98,7.8409090909090935
+KU,KALIMANTAN UTARA,16,2028,298.3436363636365,298.3436363636365,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2013,2024,180.73,266.98,7.8409090909090935
+KU,KALIMANTAN UTARA,16,2029,306.1845454545456,306.1845454545456,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2013,2024,180.73,266.98,7.8409090909090935
+KU,KALIMANTAN UTARA,16,2030,314.02545454545475,314.02545454545475,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2013,2024,180.73,266.98,7.8409090909090935
+BB,KEPULAUAN BANGKA BELITUNG,17,2025,1674.8761538461538,1674.8761538461538,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,535.61,1593.5,81.37615384615384
+BB,KEPULAUAN BANGKA BELITUNG,17,2026,1756.2523076923076,1756.2523076923076,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,535.61,1593.5,81.37615384615384
+BB,KEPULAUAN BANGKA BELITUNG,17,2027,1837.6284615384614,1837.6284615384614,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,535.61,1593.5,81.37615384615384
+BB,KEPULAUAN BANGKA BELITUNG,17,2028,1919.0046153846151,1919.0046153846151,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,535.61,1593.5,81.37615384615384
+BB,KEPULAUAN BANGKA BELITUNG,17,2029,2000.380769230769,2000.380769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,535.61,1593.5,81.37615384615384
+BB,KEPULAUAN BANGKA BELITUNG,17,2030,2081.7569230769227,2081.7569230769227,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,535.61,1593.5,81.37615384615384
+KR,KEPULAUAN RIAU,18,2025,4868.464615384616,4868.464615384616,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,2010.3,4664.31,204.1546153846154
+KR,KEPULAUAN RIAU,18,2026,5072.619230769232,5072.619230769232,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,2010.3,4664.31,204.1546153846154
+KR,KEPULAUAN RIAU,18,2027,5276.773846153847,5276.773846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,2010.3,4664.31,204.1546153846154
+KR,KEPULAUAN RIAU,18,2028,5480.928461538463,5480.928461538463,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,2010.3,4664.31,204.1546153846154
+KR,KEPULAUAN RIAU,18,2029,5685.083076923079,5685.083076923079,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,2010.3,4664.31,204.1546153846154
+KR,KEPULAUAN RIAU,18,2030,5889.2376923076945,5889.2376923076945,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,2010.3,4664.31,204.1546153846154
+LA,LAMPUNG,19,2025,6266.15076923077,6266.15076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,2425.94,5991.85,274.3007692307693
+LA,LAMPUNG,19,2026,6540.451538461539,6540.451538461539,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,2425.94,5991.85,274.3007692307693
+LA,LAMPUNG,19,2027,6814.752307692308,6814.752307692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,2425.94,5991.85,274.3007692307693
+LA,LAMPUNG,19,2028,7089.053076923077,7089.053076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,2425.94,5991.85,274.3007692307693
+LA,LAMPUNG,19,2029,7363.3538461538465,7363.3538461538465,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,2425.94,5991.85,274.3007692307693
+LA,LAMPUNG,19,2030,7637.654615384616,7637.654615384616,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,2425.94,5991.85,274.3007692307693
+MA,MALUKU,20,2025,695.746923076923,695.746923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,336.69,670.1,25.64692307692308
+MA,MALUKU,20,2026,721.3938461538461,721.3938461538461,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,336.69,670.1,25.64692307692308
+MA,MALUKU,20,2027,747.0407692307691,747.0407692307691,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,336.69,670.1,25.64692307692308
+MA,MALUKU,20,2028,772.6876923076921,772.6876923076921,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,336.69,670.1,25.64692307692308
+MA,MALUKU,20,2029,798.3346153846152,798.3346153846152,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,336.69,670.1,25.64692307692308
+MA,MALUKU,20,2030,823.9815384615382,823.9815384615382,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,336.69,670.1,25.64692307692308
+MU,MALUKU UTARA,21,2025,1445.2315384615383,1445.2315384615383,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,204.67,1356.62,88.61153846153844
+MU,MALUKU UTARA,21,2026,1533.8430769230768,1533.8430769230768,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,204.67,1356.62,88.61153846153844
+MU,MALUKU UTARA,21,2027,1622.4546153846152,1622.4546153846152,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,204.67,1356.62,88.61153846153844
+MU,MALUKU UTARA,21,2028,1711.0661538461536,1711.0661538461536,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,204.67,1356.62,88.61153846153844
+MU,MALUKU UTARA,21,2029,1799.677692307692,1799.677692307692,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,204.67,1356.62,88.61153846153844
+MU,MALUKU UTARA,21,2030,1888.2892307692305,1888.2892307692305,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,204.67,1356.62,88.61153846153844
+NB,NUSA TENGGARA BARAT,22,2025,3008.2038461538464,3008.2038461538464,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,837.17,2853.13,155.07384615384615
+NB,NUSA TENGGARA BARAT,22,2026,3163.2776923076926,3163.2776923076926,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,837.17,2853.13,155.07384615384615
+NB,NUSA TENGGARA BARAT,22,2027,3318.351538461539,3318.351538461539,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,837.17,2853.13,155.07384615384615
+NB,NUSA TENGGARA BARAT,22,2028,3473.425384615385,3473.425384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,837.17,2853.13,155.07384615384615
+NB,NUSA TENGGARA BARAT,22,2029,3628.4992307692314,3628.4992307692314,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,837.17,2853.13,155.07384615384615
+NB,NUSA TENGGARA BARAT,22,2030,3783.5730769230777,3783.5730769230777,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,837.17,2853.13,155.07384615384615
+NT,NUSA TENGGARA TIMUR,23,2025,1528.5423076923078,1528.5423076923078,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,486.91,1454.14,74.40230769230769
+NT,NUSA TENGGARA TIMUR,23,2026,1602.9446153846154,1602.9446153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,486.91,1454.14,74.40230769230769
+NT,NUSA TENGGARA TIMUR,23,2027,1677.346923076923,1677.346923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,486.91,1454.14,74.40230769230769
+NT,NUSA TENGGARA TIMUR,23,2028,1751.7492307692307,1751.7492307692307,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,486.91,1454.14,74.40230769230769
+NT,NUSA TENGGARA TIMUR,23,2029,1826.1515384615384,1826.1515384615384,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,486.91,1454.14,74.40230769230769
+NT,NUSA TENGGARA TIMUR,23,2030,1900.553846153846,1900.553846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,486.91,1454.14,74.40230769230769
+PA,PAPUA,24,2025,1506.1276923076923,1506.1276923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,522.8,1435.89,70.23769230769231
+PA,PAPUA,24,2026,1576.3653846153845,1576.3653846153845,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,522.8,1435.89,70.23769230769231
+PA,PAPUA,24,2027,1646.6030769230767,1646.6030769230767,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,522.8,1435.89,70.23769230769231
+PA,PAPUA,24,2028,1716.840769230769,1716.840769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,522.8,1435.89,70.23769230769231
+PA,PAPUA,24,2029,1787.0784615384612,1787.0784615384612,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,522.8,1435.89,70.23769230769231
+PA,PAPUA,24,2030,1857.3161538461534,1857.3161538461534,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,522.8,1435.89,70.23769230769231
+PB,PAPUA BARAT,25,2025,752.6061538461538,752.6061538461538,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,305.08,720.64,31.966153846153848
+PB,PAPUA BARAT,25,2026,784.5723076923076,784.5723076923076,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,305.08,720.64,31.966153846153848
+PB,PAPUA BARAT,25,2027,816.5384615384614,816.5384615384614,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,305.08,720.64,31.966153846153848
+PB,PAPUA BARAT,25,2028,848.5046153846152,848.5046153846152,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,305.08,720.64,31.966153846153848
+PB,PAPUA BARAT,25,2029,880.4707692307691,880.4707692307691,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,305.08,720.64,31.966153846153848
+PB,PAPUA BARAT,25,2030,912.4369230769229,912.4369230769229,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,305.08,720.64,31.966153846153848
+RI,RIAU,26,2025,9312.182307692308,9312.182307692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,2361.15,8815.68,496.50230769230774
+RI,RIAU,26,2026,9808.684615384616,9808.684615384616,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,2361.15,8815.68,496.50230769230774
+RI,RIAU,26,2027,10305.186923076924,10305.186923076924,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,2361.15,8815.68,496.50230769230774
+RI,RIAU,26,2028,10801.689230769232,10801.689230769232,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,2361.15,8815.68,496.50230769230774
+RI,RIAU,26,2029,11298.19153846154,11298.19153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,2361.15,8815.68,496.50230769230774
+RI,RIAU,26,2030,11794.693846153848,11794.693846153848,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,2361.15,8815.68,496.50230769230774
+SR,SULAWESI BARAT,27,2025,602.7184615384615,602.7184615384615,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,151.52,570.49,32.22846153846154
+SR,SULAWESI BARAT,27,2026,634.946923076923,634.946923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,151.52,570.49,32.22846153846154
+SR,SULAWESI BARAT,27,2027,667.1753846153845,667.1753846153845,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,151.52,570.49,32.22846153846154
+SR,SULAWESI BARAT,27,2028,699.403846153846,699.403846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,151.52,570.49,32.22846153846154
+SR,SULAWESI BARAT,27,2029,731.6323076923074,731.6323076923074,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,151.52,570.49,32.22846153846154
+SR,SULAWESI BARAT,27,2030,763.8607692307689,763.8607692307689,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,151.52,570.49,32.22846153846154
+SN,SULAWESI SELATAN,28,2025,9154.56,9154.56,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,3246.42,8732.55,422.00999999999993
+SN,SULAWESI SELATAN,28,2026,9576.57,9576.57,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,3246.42,8732.55,422.00999999999993
+SN,SULAWESI SELATAN,28,2027,9998.58,9998.58,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,3246.42,8732.55,422.00999999999993
+SN,SULAWESI SELATAN,28,2028,10420.59,10420.59,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,3246.42,8732.55,422.00999999999993
+SN,SULAWESI SELATAN,28,2029,10842.6,10842.6,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,3246.42,8732.55,422.00999999999993
+SN,SULAWESI SELATAN,28,2030,11264.61,11264.61,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,3246.42,8732.55,422.00999999999993
+ST,SULAWESI TENGAH,29,2025,1899.2284615384615,1899.2284615384615,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,574.71,1804.62,94.60846153846153
+ST,SULAWESI TENGAH,29,2026,1993.836923076923,1993.836923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,574.71,1804.62,94.60846153846153
+ST,SULAWESI TENGAH,29,2027,2088.4453846153847,2088.4453846153847,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,574.71,1804.62,94.60846153846153
+ST,SULAWESI TENGAH,29,2028,2183.0538461538463,2183.0538461538463,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,574.71,1804.62,94.60846153846153
+ST,SULAWESI TENGAH,29,2029,2277.662307692308,2277.662307692308,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,574.71,1804.62,94.60846153846153
+ST,SULAWESI TENGAH,29,2030,2372.2707692307695,2372.2707692307695,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,574.71,1804.62,94.60846153846153
+SG,SULAWESI TENGGARA,30,2025,1704.7415384615385,1704.7415384615385,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,441.08,1614.48,90.26153846153846
+SG,SULAWESI TENGGARA,30,2026,1795.003076923077,1795.003076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,441.08,1614.48,90.26153846153846
+SG,SULAWESI TENGGARA,30,2027,1885.2646153846156,1885.2646153846156,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,441.08,1614.48,90.26153846153846
+SG,SULAWESI TENGGARA,30,2028,1975.526153846154,1975.526153846154,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,441.08,1614.48,90.26153846153846
+SG,SULAWESI TENGGARA,30,2029,2065.7876923076924,2065.7876923076924,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,441.08,1614.48,90.26153846153846
+SG,SULAWESI TENGGARA,30,2030,2156.0492307692307,2156.0492307692307,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,441.08,1614.48,90.26153846153846
+SA,SULAWESI UTARA,31,2025,2254.7723076923075,2254.7723076923075,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,986.62,2164.19,90.58230769230771
+SA,SULAWESI UTARA,31,2026,2345.354615384615,2345.354615384615,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,986.62,2164.19,90.58230769230771
+SA,SULAWESI UTARA,31,2027,2435.9369230769225,2435.9369230769225,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,986.62,2164.19,90.58230769230771
+SA,SULAWESI UTARA,31,2028,2526.51923076923,2526.51923076923,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,986.62,2164.19,90.58230769230771
+SA,SULAWESI UTARA,31,2029,2617.1015384615375,2617.1015384615375,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,986.62,2164.19,90.58230769230771
+SA,SULAWESI UTARA,31,2030,2707.683846153845,2707.683846153845,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,986.62,2164.19,90.58230769230771
+SB,SUMATERA BARAT,32,2025,4075.3246153846153,4075.3246153846153,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,2403.1,3955.88,119.4446153846154
+SB,SUMATERA BARAT,32,2026,4194.7692307692305,4194.7692307692305,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,2403.1,3955.88,119.4446153846154
+SB,SUMATERA BARAT,32,2027,4314.213846153846,4314.213846153846,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,2403.1,3955.88,119.4446153846154
+SB,SUMATERA BARAT,32,2028,4433.658461538462,4433.658461538462,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,2403.1,3955.88,119.4446153846154
+SB,SUMATERA BARAT,32,2029,4553.103076923077,4553.103076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,2403.1,3955.88,119.4446153846154
+SB,SUMATERA BARAT,32,2030,4672.547692307693,4672.547692307693,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,2403.1,3955.88,119.4446153846154
+SS,SUMATERA SELATAN,33,2025,6785.470769230769,6785.470769230769,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,2978.86,6513.57,271.9007692307692
+SS,SUMATERA SELATAN,33,2026,7057.371538461539,7057.371538461539,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,2978.86,6513.57,271.9007692307692
+SS,SUMATERA SELATAN,33,2027,7329.2723076923085,7329.2723076923085,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,2978.86,6513.57,271.9007692307692
+SS,SUMATERA SELATAN,33,2028,7601.173076923078,7601.173076923078,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,2978.86,6513.57,271.9007692307692
+SS,SUMATERA SELATAN,33,2029,7873.073846153848,7873.073846153848,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,2978.86,6513.57,271.9007692307692
+SS,SUMATERA SELATAN,33,2030,8144.974615384617,8144.974615384617,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,2978.86,6513.57,271.9007692307692
+SU,SUMATERA UTARA,34,2025,13698.893076923077,13698.893076923077,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,1,False,2011,2024,7194.03,13234.26,464.63307692307694
+SU,SUMATERA UTARA,34,2026,14163.526153846155,14163.526153846155,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,2,False,2011,2024,7194.03,13234.26,464.63307692307694
+SU,SUMATERA UTARA,34,2027,14628.159230769232,14628.159230769232,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,3,False,2011,2024,7194.03,13234.26,464.63307692307694
+SU,SUMATERA UTARA,34,2028,15092.792307692309,15092.792307692309,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,4,False,2011,2024,7194.03,13234.26,464.63307692307694
+SU,SUMATERA UTARA,34,2029,15557.425384615386,15557.425384615386,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,5,False,2011,2024,7194.03,13234.26,464.63307692307694
+SU,SUMATERA UTARA,34,2030,16022.058461538463,16022.058461538463,demand_production_drift,Drift,demand_production_drift_v1,recursive_drift_forecast,2024,6,False,2011,2024,7194.03,13234.26,464.63307692307694
