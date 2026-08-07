@@ -52,9 +52,3 @@ python -m unittest discover -s ".\tests" -p "test_*.py" -v
 
 The deterministic files under `tests/fixtures` are test-only evidence. Real
 production runs continue to use local raw data and generated canonical masters.
-
-## Important migration rule
-
-The legacy project at `D:\ECADIN Project` remains read-only during migration.
-Files are copied selectively; the old project is never moved or deleted until
-the clean pipeline passes all production and frontend validation checks.

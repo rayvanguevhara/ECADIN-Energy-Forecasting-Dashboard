@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import shutil
 from datetime import datetime, timezone
@@ -22,7 +22,7 @@ def promote_dashboard_staging(
     archive: Path | None = None
     if paths.production.is_dir() and any(paths.production.iterdir()):
         stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
-        archive_root = paths.root / "migration/backups/dashboard_production"
+        archive_root = paths.root / "outputs/dashboard/backups/production"
         archive = archive_root / stamp
         counter = 1
         while archive.exists():

@@ -1,7 +1,0 @@
-test_group,passed,total,status,evidence
-Python compilation,1,1,PASSED,compileall completed without syntax errors.
-"Unit, integration, and contract tests",47,47,PASSED,All clean-project tests passed in the isolated project.
-Production output contracts,6,6,PASSED,"Rows, years, regions, completeness, and model IDs validated."
-Legacy baseline parity,6,6,PASSED,"Forecasts, intervals, and prediction files matched."
-Deterministic artifact hashes,24,24,PASSED,All deterministic outputs were identical after rerun.
-Canonical and quality outputs preserved,7,7,PASSED,No canonical master or source-quality file changed.

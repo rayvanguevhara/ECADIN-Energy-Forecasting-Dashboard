@@ -1,7 +1,0 @@
-check_id,passed,observed,expected,details
-canonical_modeling_panels,True,476/476,476/476,Demand and supply panels use the same 34-region annual key grid.
-demand_backtest_contract,True,2448,2448,Four baselines; rolling 2019-2024 and recursive origins 2018-2021.
-supply_backtest_contract,True,2436,2436,Missing observed DI Yogyakarta generation in 2020 is excluded from validation.
-production_forecasts,True,204/204,204/204,Demand Drift and supply Drift V1 forecasts for 2025-2030.
-accounting_difference,True,204,204,Accounting difference is local generation minus distributed electricity; it is not an adequacy indicator.
-combined_history_forecast,True,"rows=680, historical_missing=9, forecast_missing=0","rows=680, historical_missing=9, forecast_missing=0",476 historical rows plus 204 forecast rows.

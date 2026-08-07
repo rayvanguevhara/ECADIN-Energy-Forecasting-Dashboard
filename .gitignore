@@ -49,22 +49,8 @@ Thumbs.db
 # Raw source files are local and tracked through SHA-256 manifests
 data/raw/**
 
-# Temporary migration packages and copied legacy candidates
-migration/**/candidate_files/
-migration/**/reference_layer_package/
-migration/**/*_files.zip
-migration/**/*_bundle.zip
-migration/**/*.xlsx
-
 # Python package build metadata
 *.egg-info/
-
-# Temporary migration installation packages and raw audit archives
-migration/**/phase*_package/
-migration/**/*_raw.zip
-
-# Temporary migration installer backups
-migration/backups/
 
 # Frontend generated artifacts
 frontend-dashboard/.vercel/

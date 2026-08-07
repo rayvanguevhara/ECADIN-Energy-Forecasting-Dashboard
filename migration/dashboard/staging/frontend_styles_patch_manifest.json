@@ -1,8 +1,0 @@
-{
-  "patch_id": "ecadin_frontend_styles_v1",
-  "destination": "frontend-dashboard/src/styles.css",
-  "sha256": "D40D68D116CE6458C013A9C06D24FB7D1BECC0B0C0B75D23582B0195BDF56FC2",
-  "changes_tsx": false,
-  "changes_dashboard_json": false,
-  "changes_python_pipeline": false
-}

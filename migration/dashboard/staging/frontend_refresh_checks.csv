@@ -1,4 +1,0 @@
-check_id,passed,observed,expected
-frontend_dataset_hash,True,7E1B4DE643D63CBFBA4A5DDCCEC819D22767D9B2E14E1880FFA1F4C91E7058C3,7E1B4DE643D63CBFBA4A5DDCCEC819D22767D9B2E14E1880FFA1F4C91E7058C3
-frontend_nondata_source_unchanged,True,[],[]
-frontend_payload_contract,True,"[680, 34]","[680, 34]"

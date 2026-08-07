@@ -2,10 +2,6 @@
   "schema_version": "ecadin_portable_fixture_v1",
   "purpose": "source-only automated contract testing",
   "production_use_allowed": false,
-  "source_evidence": {
-    "relative_path": "migration/dashboard/staging/dashboard-production.json",
-    "sha256": "7E1B4DE643D63CBFBA4A5DDCCEC819D22767D9B2E14E1880FFA1F4C91E7058C3"
-  },
   "expected_regions": 34,
   "history_years": [
     2011,
@@ -51,5 +47,9 @@
       "size_bytes": 802,
       "sha256": "24F9985F0FF343B0B5E0CF17DB727D9C6FB4E417B19ADC2BB6B2590735718411"
     }
-  ]
+  ],
+  "provenance": {
+    "source_type": "historical dashboard snapshot",
+    "source_sha256": "7E1B4DE643D63CBFBA4A5DDCCEC819D22767D9B2E14E1880FFA1F4C91E7058C3"
+  }
 }

@@ -35,24 +35,10 @@ Dataset-specific responsibilities remain in their own modules:
 - 75% and 100 GWh year-on-year review thresholds;
 - supply-specific output and validation contract.
 
-## Compatibility contract
+## Validation
 
-The refactor must not alter these six outputs:
-
-```text
-data/processed/demand/distributed_electricity.csv
-data/processed/supply/local_generation.csv
-data/processed/master/data_lineage.csv
-data/processed/master/data_quality_flags.csv
-outputs/reports/data/distributed_electricity_raw_audit.csv
-outputs/reports/data/local_generation_raw_audit.csv
-```
-
-Run:
+Validate the current production data contracts with:
 
 ```powershell
-python .\scripts\verify_shared_cleaner_refactor.py
-```
-
-The verifier rebuilds demand first and supply second, then compares SHA-256 and
-file size against the pre-refactor baseline.
+python .\scripts\ecadin.py data validate
+python .\scripts\ecadin.py validate all
