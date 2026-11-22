@@ -4,68 +4,16 @@ import { AppShell } from "@/components/app-shell";
 import { Panel } from "@/components/panel";
 import { useFilters } from "@/lib/filter-context";
 import {
+  DATASET_INFO,
+  GAP_CATEGORY_META,
+  GAP_CATEGORY_ORDER,
+  GapCategory,
   PROVINCE_DATA,
-  fmt,
-  fmtPercent,
+  attentionLabel,
   classifyGap,
+  formatSignedEnergy,
+  formatSignedPercent,
 } from "@/lib/energy-data";
-
-type CategoryKey = ReturnType<typeof classifyGap>;
-
-type CategoryMeta = {
-  shortLabel: string;
-  fullLabel: string;
-  color: string;
-  comparison: string;
-};
-
-const CATEGORY_ORDER: CategoryKey[] = [
-  "surplus_tinggi",
-  "surplus_moderat",
-  "relatif_seimbang",
-  "defisit_moderat",
-  "defisit_tinggi",
-  "tidak_tersedia",
-];
-
-const CATEGORY_META: Record<CategoryKey, CategoryMeta> = {
-  surplus_tinggi: {
-    shortLabel: "Far Above",
-    fullLabel: "Far Above Distributed Electricity",
-    color: "#2563EB",
-    comparison: "Distributed electricity comparison",
-  },
-  surplus_moderat: {
-    shortLabel: "Above",
-    fullLabel: "Above Distributed Electricity",
-    color: "#38BDF8",
-    comparison: "Distributed electricity comparison",
-  },
-  relatif_seimbang: {
-    shortLabel: "Balanced",
-    fullLabel: "Relatively Balanced",
-    color: "#94A3B8",
-    comparison: "Within ±5%",
-  },
-  defisit_moderat: {
-    shortLabel: "Below",
-    fullLabel: "Below Distributed Electricity",
-    color: "#F59E0B",
-    comparison: "Distributed electricity comparison",
-  },
-  defisit_tinggi: {
-    shortLabel: "Far Below",
-    fullLabel: "Far Below Distributed Electricity",
-    color: "#EA580C",
-    comparison: "Distributed electricity comparison",
-  },
-  tidak_tersedia: {
-    shortLabel: "Unavailable",
-    fullLabel: "Unavailable",
-    color: "#64748B",
-    comparison: "Incomplete regional pair",
-  },
-};
 
 export const Route = createFileRoute("/ranking")({
   head: () => ({
@@ -75,8 +23,7 @@ export const Route = createFileRoute("/ranking")({
       },
       {
         name: "description",
-        content:
-          "National ranking of positive and negative regional accounting differences plus descriptive review flags for Indonesia's 34 harmonized modeling regions.",
+        content: `National ranking of positive and negative regional accounting differences plus descriptive review flags for Indonesia's ${DATASET_INFO.regionCount} harmonized modeling regions.`,
       },
     ],
   }),
@@ -97,15 +44,13 @@ function RankingPage() {
 function Inner() {
   const { filters } = useFilters();
 
-  // This page is intentionally national. Island and region selections from
-  // other tabs are preserved in global state but are not applied here.
   const rows = PROVINCE_DATA.map((region) => {
     const point = region.series.find((item) => item.year === filters.year)!;
 
     return {
       region,
       point,
-      category: classifyGap(point.gap_pct),
+      category: point.gapCategory ?? classifyGap(point.gap_pct),
     };
   });
 
@@ -125,9 +70,9 @@ function Inner() {
 
   const reviewRows = rows.filter(({ point }) => point.attention);
 
-  const categoryCounts = CATEGORY_ORDER.map((key) => ({
+  const categoryCounts = GAP_CATEGORY_ORDER.map((key) => ({
     key,
-    ...CATEGORY_META[key],
+    ...GAP_CATEGORY_META[key],
     count: rows.filter(({ category }) => category === key).length,
   }));
 
@@ -151,7 +96,7 @@ function Inner() {
 
       <Panel
         title="Accounting-Difference Category Distribution"
-        subtitle="Descriptive thresholds applied to 34 harmonized regions · not an operational adequacy classification"
+        subtitle={`Descriptive thresholds applied to ${DATASET_INFO.regionCount} harmonized regions · not an operational adequacy classification`}
       >
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
           {categoryCounts.map((item) => (
@@ -186,17 +131,18 @@ function Inner() {
         </div>
 
         <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-          Thresholds: far below &lt; −20% · below −20% to −5% · balanced −5% to +5% ·
-          above +5% to +20% · far above &gt; +20%.
+          Thresholds: far below ≤ −20% · below &gt; −20% to ≤ −5% · balanced
+          &gt; −5% to &lt; +5% · above ≥ +5% to &lt; +20% · far above ≥ +20%.
         </p>
       </Panel>
 
       <Panel title="Interpretation Safeguard">
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Rankings compare the administrative location of local generation with electricity
-          distributed in each harmonized region. Positive or negative accounting differences do
-          not indicate operational surplus, shortage, blackout risk, reserve margin, or idle
-          capacity because interregional electricity flows and operational system conditions are
+          Rankings compare the administrative location of local generation with
+          electricity distributed in each harmonized region. Positive or
+          negative accounting differences do not indicate operational surplus,
+          shortage, blackout risk, reserve margin, or idle capacity because
+          interregional electricity flows and operational system conditions are
           not included.
         </p>
       </Panel>
@@ -209,11 +155,11 @@ function Inner() {
           <table className="w-full min-w-[880px] table-fixed text-xs">
             <colgroup>
               <col className="w-[15%]" />
-              <col className="w-[15%]" />
-              <col className="w-[17%]" />
-              <col className="w-[13%]" />
-              <col className="w-[20%]" />
-              <col className="w-[20%]" />
+              <col className="w-[14%]" />
+              <col className="w-[16%]" />
+              <col className="w-[12%]" />
+              <col className="w-[21%]" />
+              <col className="w-[22%]" />
             </colgroup>
 
             <thead className="bg-background/50 text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -229,17 +175,23 @@ function Inner() {
 
             <tbody className="tabular-nums">
               {reviewRows.map(({ region, point, category }) => {
-                const meta = CATEGORY_META[category];
+                const meta = GAP_CATEGORY_META[category];
 
                 return (
                   <tr key={region.code} className="border-t border-border">
                     <td className="p-2 font-medium">{region.name}</td>
-                    <td className="p-2 text-muted-foreground">{region.island}</td>
+                    <td className="p-2 text-muted-foreground">
+                      {region.island}
+                    </td>
                     <td className="p-2 text-right text-foreground">
-                      {point.available ? `${fmt(point.gap_gwh)} GWh` : "N/A"}
+                      {point.available
+                        ? formatSignedEnergy(point.gap_gwh, true)
+                        : "N/A"}
                     </td>
                     <td className="p-2 text-right">
-                      {point.available ? fmtPercent(point.gap_pct) : "N/A"}
+                      {point.available
+                        ? formatSignedPercent(point.gap_pct)
+                        : "N/A"}
                     </td>
                     <td className="p-2">
                       <span
@@ -254,7 +206,7 @@ function Inner() {
                       </span>
                     </td>
                     <td className="p-2 text-muted-foreground">
-                      {reviewNote(point.gap_gwh, point.available)}
+                      {attentionLabel(point.attentionReason)}
                     </td>
                   </tr>
                 );
@@ -262,7 +214,10 @@ function Inner() {
 
               {reviewRows.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-muted-foreground">
+                  <td
+                    colSpan={6}
+                    className="p-6 text-center text-muted-foreground"
+                  >
                     No descriptive review flags for this year.
                   </td>
                 </tr>
@@ -275,16 +230,6 @@ function Inner() {
   );
 }
 
-function reviewNote(gapGwh: number, available: boolean): string {
-  if (!available || !Number.isFinite(gapGwh)) {
-    return "Regional pair unavailable";
-  }
-
-  return gapGwh >= 0
-    ? "Large positive accounting difference"
-    : "Large negative accounting difference";
-}
-
 function RankTable({
   rows,
   direction,
@@ -292,7 +237,7 @@ function RankTable({
   rows: {
     region: (typeof PROVINCE_DATA)[number];
     point: (typeof PROVINCE_DATA)[number]["series"][number];
-    category: CategoryKey;
+    category: GapCategory;
   }[];
   direction: "above" | "below";
 }) {
@@ -316,15 +261,12 @@ function RankTable({
             </div>
           </div>
 
-          <span
-            className="tabular-nums"
-            style={{ color: directionColor }}
-          >
-            {fmt(point.gap_gwh)} GWh
+          <span className="tabular-nums" style={{ color: directionColor }}>
+            {formatSignedEnergy(point.gap_gwh, true)}
           </span>
 
           <span className="w-16 text-right text-xs text-muted-foreground tabular-nums">
-            {fmtPercent(point.gap_pct)}
+            {formatSignedPercent(point.gap_pct)}
           </span>
         </li>
       ))}

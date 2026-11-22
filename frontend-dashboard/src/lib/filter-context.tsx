@@ -4,14 +4,12 @@ export interface Filters {
   year: number;
   province: string; // code or "All"
   island: string; // name or "All"
-  dataType: "historical" | "forecast" | "both";
 }
 
 const defaultFilters: Filters = {
   year: 2024,
   province: "All",
   island: "All",
-  dataType: "both",
 };
 
 const Ctx = createContext<{
@@ -21,12 +19,13 @@ const Ctx = createContext<{
 
 export function FilterProvider({ children }: { children: ReactNode }) {
   const [filters, setState] = useState<Filters>(defaultFilters);
-  const setFilters = (patch: Partial<Filters>) => setState((f) => ({ ...f, ...patch }));
+  const setFilters = (patch: Partial<Filters>) =>
+    setState((current) => ({ ...current, ...patch }));
   return <Ctx.Provider value={{ filters, setFilters }}>{children}</Ctx.Provider>;
 }
 
 export function useFilters() {
-  const c = useContext(Ctx);
-  if (!c) throw new Error("useFilters outside FilterProvider");
-  return c;
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("useFilters outside FilterProvider");
+  return ctx;
 }

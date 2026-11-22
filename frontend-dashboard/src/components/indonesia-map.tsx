@@ -3,11 +3,14 @@ import { geoMercator, geoPath } from "d3-geo";
 import type { MultiPolygon } from "geojson";
 import {
   PROVINCE_DATA,
-  MODEL_SUMMARY,
+  GAP_CATEGORY_META,
+  GAP_CATEGORY_ORDER,
   MapMetric,
   metricValue,
   classifyGap,
   fmt,
+  formatSignedPercent,
+  modelDisplayName,
   qualityLabel,
   ProvinceRecord,
 } from "@/lib/energy-data";
@@ -16,6 +19,7 @@ import geoRaw from "@/data/indonesia-provinces.json";
 interface Props {
   year: number;
   metric: MapMetric;
+  island?: string;
   onSelect?: (code: string) => void;
   selected?: string | null;
   compact?: boolean;
@@ -40,11 +44,17 @@ const GEO = {
     ...feature,
     properties: {
       ...feature.properties,
-      code: feature.properties.code || GEO_CODE_BY_NAME[feature.properties.name] || "",
+      code:
+        feature.properties.code ||
+        GEO_CODE_BY_NAME[feature.properties.name] ||
+        "",
     },
   })),
 };
 
+const PROVINCE_BY_CODE = new Map(
+  PROVINCE_DATA.map((province) => [province.code, province]),
+);
 
 const OCEAN = "#071521";
 const LAND = "#29475A";
@@ -100,56 +110,9 @@ export const MAP_METRIC_OPTIONS: {
   },
 ];
 
-type MapCategory = ReturnType<typeof classifyGap>;
-
-const MAP_CATEGORY_ORDER: MapCategory[] = [
-  "surplus_tinggi",
-  "surplus_moderat",
-  "relatif_seimbang",
-  "defisit_moderat",
-  "defisit_tinggi",
-  "tidak_tersedia",
-];
-
-const MAP_CATEGORY_META: Record<
-  MapCategory,
-  { label: string; color: string; description: string }
-> = {
-  surplus_tinggi: {
-    label: "Far above distributed electricity",
-    color: "#2563EB",
-    description: "Local generation is at least 20% above distributed electricity.",
-  },
-  surplus_moderat: {
-    label: "Above distributed electricity",
-    color: "#38BDF8",
-    description: "Local generation is 5% to below 20% above distributed electricity.",
-  },
-  relatif_seimbang: {
-    label: "Relatively balanced",
-    color: "#94A3B8",
-    description: "Local generation and distributed electricity differ by less than 5%.",
-  },
-  defisit_moderat: {
-    label: "Below distributed electricity",
-    color: "#F59E0B",
-    description: "Local generation is 5% to below 20% below distributed electricity.",
-  },
-  defisit_tinggi: {
-    label: "Far below distributed electricity",
-    color: "#EA580C",
-    description: "Local generation is at least 20% below distributed electricity.",
-  },
-  tidak_tersedia: {
-    label: "Unavailable",
-    color: "#64748B",
-    description:
-      "A complete distributed-electricity and local-generation pair is unavailable for this region and year.",
-  },
-};
-
 const metricMeta = (metric: MapMetric) =>
-  MAP_METRIC_OPTIONS.find((item) => item.value === metric) ?? MAP_METRIC_OPTIONS[0]!;
+  MAP_METRIC_OPTIONS.find((item) => item.value === metric) ??
+  MAP_METRIC_OPTIONS[0]!;
 
 const sizeMagnitude = (value: number, metric: MapMetric) => {
   if (!Number.isFinite(value)) return Number.NaN;
@@ -164,10 +127,7 @@ const formatLegendValue = (value: number, metric: MapMetric) => {
   return `${fmt(value)} ${meta.unit}`;
 };
 
-const formatPanelEnergy = (
-  value: number,
-  signed = false,
-): string => {
+const formatPanelEnergy = (value: number, signed = false): string => {
   if (!Number.isFinite(value)) return "N/A";
 
   const absolute = Math.abs(value);
@@ -177,30 +137,9 @@ const formatPanelEnergy = (
       : absolute.toFixed(1);
 
   const sign =
-    signed && value > 0
-      ? "+"
-      : signed && value < 0
-        ? "−"
-        : "";
+    signed && value > 0 ? "+" : signed && value < 0 ? "−" : "";
 
   return `${sign}${formatted} GWh`;
-};
-
-const formatSignedPercent = (value: number) => {
-  if (!Number.isFinite(value)) return "N/A";
-  const sign = value > 0 ? "+" : value < 0 ? "−" : "";
-  return `${sign}${Math.abs(value).toFixed(1)}%`;
-};
-
-const displayModelName = (side: "demand" | "supply") => {
-  const summary = MODEL_SUMMARY.find((item) => item.side === side);
-  if (!summary) return side === "demand" ? "Drift" : "Drift V1";
-  if (side === "supply" && summary.model_version.toLowerCase().includes("drift_v1")) {
-    return "Drift V1";
-  }
-  return summary.active_model.toLowerCase() === "drift"
-    ? "Drift"
-    : summary.active_model;
 };
 
 const regionalInterpretation = (gapPct: number, available: boolean) => {
@@ -220,6 +159,7 @@ const regionalInterpretation = (gapPct: number, available: boolean) => {
 export function IndonesiaMap({
   year,
   metric,
+  island = "All",
   onSelect,
   selected,
   compact,
@@ -241,6 +181,7 @@ export function IndonesiaMap({
 
   const width = 1000;
   const height = compact ? 380 : 480;
+  const hasIslandFilter = island !== "All";
 
   const { pathFn, project } = useMemo(() => {
     const projection = geoMercator().fitExtent(
@@ -267,7 +208,9 @@ export function IndonesiaMap({
       }),
     [year, metric],
   );
-  const finiteValues = values.map((item) => item.sizeValue).filter(Number.isFinite);
+  const finiteValues = values
+    .map((item) => item.sizeValue)
+    .filter(Number.isFinite);
   const min = finiteValues.length ? Math.min(...finiteValues) : 0;
   const max = finiteValues.length ? Math.max(...finiteValues) : 1;
 
@@ -277,7 +220,7 @@ export function IndonesiaMap({
     return 5 + Math.sqrt(Math.max(0, norm)) * (compact ? 16 : 22);
   };
 
-  // wheel zoom, anchored at cursor (native non-passive listener)
+  // Wheel zoom, anchored at cursor (native non-passive listener)
   const wheelRef = useRef<(e: WheelEvent) => void>(() => {});
   wheelRef.current = (e: WheelEvent) => {
     const el = containerRef.current;
@@ -304,19 +247,33 @@ export function IndonesiaMap({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
+  const zoomAtCenter = useCallback(
+    (factor: number) => {
+      const cx = width / 2;
+      const cy = height / 2;
+      const next = clamp(zoom * factor, MIN_ZOOM, MAX_ZOOM);
+      const k = next / zoom;
+      setOffset({ x: cx - (cx - offset.x) * k, y: cy - (cy - offset.y) * k });
+      setZoom(next);
+    },
+    [zoom, offset, width, height],
+  );
+
   const reset = useCallback(() => {
     setZoom(1);
     setOffset({ x: 0, y: 0 });
   }, []);
 
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
-    // Do not start map dragging when the pointer is pressed on an
-    // interactive province layer. Otherwise pointer capture on the SVG
-    // swallows the bubble click and the detail panel never receives onSelect.
     const target = e.target as Element;
     if (target.closest("[data-map-interactive='true']")) return;
 
-    dragRef.current = { x: e.clientX, y: e.clientY, ox: offset.x, oy: offset.y };
+    dragRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      ox: offset.x,
+      oy: offset.y,
+    };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent) => {
@@ -333,7 +290,9 @@ export function IndonesiaMap({
     dragRef.current = null;
   };
 
-  const hoverP = hover ? PROVINCE_DATA.find((p) => p.code === hover.code) : null;
+  const hoverP = hover
+    ? PROVINCE_DATA.find((p) => p.code === hover.code)
+    : null;
   const hoverY = hoverP?.series.find((s) => s.year === year);
   const activeCode = hover?.code ?? selected ?? null;
 
@@ -344,17 +303,32 @@ export function IndonesiaMap({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="w-full touch-none select-none rounded-lg border border-border"
-        style={{ background: OCEAN, cursor: dragRef.current ? "grabbing" : "grab" }}
+        style={{
+          background: OCEAN,
+          cursor: dragRef.current ? "grabbing" : "grab",
+        }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
       >
         <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
+          <pattern
+            id="grid"
+            width="40"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M40 0H0V40"
+              fill="none"
+              stroke="rgba(255,255,255,0.05)"
+              strokeWidth="0.5"
+            />
           </pattern>
-          <filter id="glow"><feGaussianBlur stdDeviation="4" /></filter>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" />
+          </filter>
         </defs>
 
         {/* 1 · ocean */}
@@ -365,13 +339,34 @@ export function IndonesiaMap({
           {GEO.features.map((f, i) => {
             const d = pathFn(f as never);
             if (!d) return null;
-            const isActive = !!f.properties.code && f.properties.code === selected;
+            const code = f.properties.code;
+            const regionMatch = code ? PROVINCE_BY_CODE.get(code) : undefined;
+            const isActive = !!code && code === selected;
+            const inIsland =
+              !hasIslandFilter || regionMatch?.island === island;
+            const canSelectPoly = !!regionMatch && !!onSelect;
+
             return (
               <path
                 key={`${f.properties.name}-${i}`}
                 d={d}
+                data-map-interactive={canSelectPoly ? "true" : undefined}
+                onPointerDown={
+                  canSelectPoly ? (e) => e.stopPropagation() : undefined
+                }
+                onClick={
+                  canSelectPoly
+                    ? (e) => {
+                        e.stopPropagation();
+                        onSelect(code);
+                      }
+                    : undefined
+                }
+                className={canSelectPoly ? "cursor-pointer" : undefined}
                 fill={isActive ? LAND_HL : LAND}
+                fillOpacity={inIsland ? 1 : 0.35}
                 stroke={isActive ? "#fff8c4" : PROV_BORDER}
+                strokeOpacity={inIsland ? 1 : 0.4}
                 strokeWidth={(isActive ? 1.6 : 0.5) / zoom}
                 vectorEffect="non-scaling-stroke"
               />
@@ -380,8 +375,10 @@ export function IndonesiaMap({
           {/* coastline emphasis */}
           <path
             d={
-              pathFn({ type: "FeatureCollection", features: GEO.features } as never) ??
-              undefined
+              pathFn({
+                type: "FeatureCollection",
+                features: GEO.features,
+              } as never) ?? undefined
             }
             fill="none"
             stroke={COASTLINE}
@@ -398,7 +395,7 @@ export function IndonesiaMap({
               <text
                 key={`lbl-${p.code}`}
                 x={x}
-                y={y - radius(sizeValue) - 4 / zoom}
+                y={y - (radius(sizeValue) + 4) / zoom}
                 textAnchor="middle"
                 fontSize={9 / zoom}
                 fill={p.code === activeCode ? "#fff" : "rgba(226,238,247,0.72)"}
@@ -415,12 +412,15 @@ export function IndonesiaMap({
 
           {/* 5 · bubbles */}
           {values.map(({ p, sizeValue }) => {
+            const y0 = p.series.find((s) => s.year === year);
+            if (!y0) return null;
             const { x, y } = project(p.lng, p.lat);
-            const y0 = p.series.find((s) => s.year === year)!;
-            const cat = classifyGap(y0.gap_pct);
-            const color = MAP_CATEGORY_META[cat].color;
+            const cat = y0.gapCategory ?? classifyGap(y0.gap_pct);
+            const color = GAP_CATEGORY_META[cat].color;
             const r = radius(sizeValue) / zoom;
             const isSel = selected === p.code;
+            const inIsland = !hasIslandFilter || p.island === island;
+
             return (
               <g
                 key={p.code}
@@ -429,14 +429,14 @@ export function IndonesiaMap({
                 tabIndex={0}
                 aria-label={`Select harmonized region ${p.name}`}
                 onPointerDown={(e) => {
-                  // Prevent the parent SVG from starting drag/pointer capture.
                   e.stopPropagation();
                 }}
                 onMouseEnter={() => {
-                  const el = containerRef.current;
-                  const rect = el?.getBoundingClientRect();
-                  void rect;
-                  setHover({ code: p.code, x: x * zoom + offset.x, y: y * zoom + offset.y });
+                  setHover({
+                    code: p.code,
+                    x: x * zoom + offset.x,
+                    y: y * zoom + offset.y,
+                  });
                 }}
                 onMouseLeave={() => setHover(null)}
                 onClick={(e) => {
@@ -456,7 +456,7 @@ export function IndonesiaMap({
                   cy={y}
                   r={r}
                   fill={color}
-                  opacity={0.2}
+                  opacity={inIsland ? 0.2 : 0.05}
                   filter="url(#glow)"
                 />
                 <circle
@@ -464,8 +464,14 @@ export function IndonesiaMap({
                   cy={y}
                   r={r}
                   fill={color}
-                  fillOpacity={0.8}
-                  stroke={isSel ? "#fff8c4" : "rgba(255,255,255,0.75)"}
+                  fillOpacity={inIsland ? 0.85 : 0.22}
+                  stroke={
+                    isSel
+                      ? "#fff8c4"
+                      : inIsland
+                        ? "rgba(255,255,255,0.75)"
+                        : "rgba(255,255,255,0.22)"
+                  }
                   strokeWidth={(isSel ? 2.5 : 1) / zoom}
                 />
                 {/* 6 · selection highlight */}
@@ -488,14 +494,14 @@ export function IndonesiaMap({
 
       <div className="absolute right-3 top-3 flex flex-col gap-1">
         <button
-          onClick={() => setZoom((z) => clamp(z * 1.4, MIN_ZOOM, MAX_ZOOM))}
+          onClick={() => zoomAtCenter(1.4)}
           className="h-7 w-7 rounded-md border border-white/20 bg-black/40 text-sm text-white/90 backdrop-blur hover:bg-black/60"
           aria-label="Zoom in"
         >
           +
         </button>
         <button
-          onClick={() => setZoom((z) => clamp(z / 1.4, MIN_ZOOM, MAX_ZOOM))}
+          onClick={() => zoomAtCenter(1 / 1.4)}
           className="h-7 w-7 rounded-md border border-white/20 bg-black/40 text-sm text-white/90 backdrop-blur hover:bg-black/60"
           aria-label="Zoom out"
         >
@@ -539,7 +545,11 @@ export function IndonesiaMap({
             />
             <Row
               label="Category"
-              value={MAP_CATEGORY_META[classifyGap(hoverY.gap_pct)].label}
+              value={
+                GAP_CATEGORY_META[
+                  hoverY.gapCategory ?? classifyGap(hoverY.gap_pct)
+                ].label
+              }
             />
             <Row label="Data Status" value={qualityLabel(hoverY.quality)} />
           </div>
@@ -559,7 +569,6 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
 
 export function MapLegend({
   metric,
@@ -587,7 +596,10 @@ export function MapLegend({
           </div>
           <div className="mt-2 flex flex-wrap items-end gap-4 text-muted-foreground">
             {examples.map((item, index) => (
-              <div key={`${item.value}-${index}`} className="flex items-center gap-1.5">
+              <div
+                key={`${item.value}-${index}`}
+                className="flex items-center gap-1.5"
+              >
                 <span
                   className={`inline-block rounded-full bg-muted-foreground/40 ${item.size}`}
                 />
@@ -598,8 +610,8 @@ export function MapLegend({
         </div>
 
         <div className="flex max-w-[760px] flex-wrap justify-end gap-x-3 gap-y-2">
-          {MAP_CATEGORY_ORDER.map((category) => {
-            const item = MAP_CATEGORY_META[category];
+          {GAP_CATEGORY_ORDER.map((category) => {
+            const item = GAP_CATEGORY_META[category];
             return (
               <div key={category} className="flex items-center gap-1.5">
                 <span
@@ -614,9 +626,10 @@ export function MapLegend({
       </div>
 
       <div className="mt-3 border-t border-border pt-2 text-[10px] leading-relaxed text-muted-foreground">
-        Category thresholds: far below &lt; −20% · below −20% to −5% · balanced −5% to +5% ·
-        above +5% to +20% · far above &gt; +20%. Bubble color indicates whether local generation
-        is above or below distributed electricity; bubble area indicates magnitude only.
+        Category thresholds: far below ≤ −20% · below &gt; −20% to ≤ −5% ·
+        balanced &gt; −5% to &lt; +5% · above ≥ +5% to &lt; +20% · far above ≥
+        +20%. Bubble color indicates whether local generation is above or below
+        distributed electricity; bubble area indicates magnitude only.
       </div>
     </div>
   );
@@ -631,14 +644,14 @@ export function ProvinceDetailPanel({
   year: number;
   onClose: () => void;
 }) {
-  const region = PROVINCE_DATA.find(
-    (item) => item.code === code,
-  ) as ProvinceRecord | undefined;
+  const region = PROVINCE_DATA.find((item) => item.code === code) as
+    | ProvinceRecord
+    | undefined;
   if (!region) return null;
   const point = region.series.find((item) => item.year === year);
   if (!point) return null;
-  const category = classifyGap(point.gap_pct);
-  const meta = MAP_CATEGORY_META[category];
+  const category = point.gapCategory ?? classifyGap(point.gap_pct);
+  const meta = GAP_CATEGORY_META[category];
   const perCapita =
     point.population != null && Number.isFinite(point.demand_gwh)
       ? (point.demand_gwh * 1_000_000) / point.population
@@ -647,10 +660,10 @@ export function ProvinceDetailPanel({
   const sourceOrModels = point.forecast ? (
     <span className="block space-y-1 leading-relaxed">
       <span className="block">
-        Demand · {displayModelName("demand")}
+        Demand · {modelDisplayName(point.demandModel, "demand")}
       </span>
       <span className="block">
-        Generation · {displayModelName("supply")}
+        Generation · {modelDisplayName(point.supplyModel, "supply")}
       </span>
     </span>
   ) : (
@@ -665,7 +678,9 @@ export function ProvinceDetailPanel({
             {region.island} · {year} ·{" "}
             {point.forecast ? "Production Forecast" : "Historical"}
           </div>
-          <h3 className="mt-1 font-display text-lg font-semibold">{region.name}</h3>
+          <h3 className="mt-1 font-display text-lg font-semibold">
+            {region.name}
+          </h3>
         </div>
         <button
           onClick={onClose}
@@ -707,7 +722,9 @@ export function ProvinceDetailPanel({
         />
         <Stat
           label="Local Generation / Distributed Electricity"
-          value={Number.isFinite(point.ratio) ? `${point.ratio.toFixed(2)}×` : "N/A"}
+          value={
+            Number.isFinite(point.ratio) ? `${point.ratio.toFixed(2)}×` : "N/A"
+          }
         />
         <Stat
           label={point.forecast ? "Projected Population" : "Population"}
@@ -723,9 +740,7 @@ export function ProvinceDetailPanel({
               ? "Projected Distributed Electricity per Capita"
               : "Distributed Electricity per Capita"
           }
-          value={
-            Number.isFinite(perCapita) ? `${fmt(perCapita)} kWh` : "N/A"
-          }
+          value={Number.isFinite(perCapita) ? `${fmt(perCapita)} kWh` : "N/A"}
         />
         <Stat label="Data Status" value={qualityLabel(point.quality)} />
         <Stat
