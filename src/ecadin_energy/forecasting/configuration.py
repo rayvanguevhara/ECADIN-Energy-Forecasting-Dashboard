@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -166,6 +167,25 @@ def load_production_config(
     return config
 
 
+def validate_interpolation_origin_guard(
+    interpolate_years: Iterable[int],
+    origins: Iterable[int],
+) -> str | None:
+    """Verify backtest origins strictly follow interpolated years and their neighbors."""
+    interp = [int(year) for year in interpolate_years]
+    origin_list = [int(origin) for origin in origins]
+    if not interp or not origin_list:
+        return None
+    max_interp = max(interp)
+    min_origin = min(origin_list)
+    if min_origin <= max_interp + 1:
+        return (
+            f"backtest origin {min_origin} risks interpolation leakage from "
+            f"year {max_interp} (requires min(origins) > {max_interp + 1})"
+        )
+    return None
+
+
 def validate_production_config(config: ProductionConfig) -> None:
     failures: list[str] = []
     if config.history_start_year >= config.history_end_year:
@@ -184,5 +204,15 @@ def validate_production_config(config: ProductionConfig) -> None:
         failures.append("recursive_max_horizon must be positive")
     if config.missing_data.allow_silent_fill:
         failures.append("allow_silent_fill must remain false")
+    all_origins = [
+        *(int(year) - 1 for year in config.one_step_target_years),
+        *(int(origin) for origin in config.recursive_origins),
+    ]
+    guard_error = validate_interpolation_origin_guard(
+        config.missing_data.interpolate_years,
+        all_origins,
+    )
+    if guard_error is not None:
+        failures.append(guard_error)
     if failures:
         raise ConfigurationError(" | ".join(failures))

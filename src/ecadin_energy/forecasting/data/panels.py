@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import asdict
-
 import numpy as np
 import pandas as pd
 
 from ecadin_energy.forecasting.configuration import (
     MissingDataPolicy,
     ProductionConfig,
+    validate_interpolation_origin_guard,
+    validate_production_config,
 )
 from ecadin_energy.forecasting.exceptions import ContractError
 
@@ -56,7 +56,15 @@ def build_modeling_panel(
     policy: MissingDataPolicy,
     history_start_year: int,
     history_end_year: int,
+    min_backtest_origin: int | None = None,
 ) -> pd.DataFrame:
+    if min_backtest_origin is not None:
+        guard_error = validate_interpolation_origin_guard(
+            policy.interpolate_years,
+            (int(min_backtest_origin),),
+        )
+        if guard_error is not None:
+            raise ContractError(f"Cannot build {domain} panel: {guard_error}")
     required_master = {"region_id", "year", target_column}
     missing_master = sorted(required_master - set(master.columns))
     if missing_master:
@@ -163,11 +171,20 @@ def build_modeling_panel(
     return result
 
 
+def _min_backtest_origin(config: ProductionConfig) -> int | None:
+    origins = [
+        *(int(year) - 1 for year in config.one_step_target_years),
+        *(int(origin) for origin in config.recursive_origins),
+    ]
+    return min(origins) if origins else None
+
+
 def build_demand_panel(
     master: pd.DataFrame,
     regions: pd.DataFrame,
     config: ProductionConfig,
 ) -> pd.DataFrame:
+    validate_production_config(config)
     return build_modeling_panel(
         master,
         regions,
@@ -177,6 +194,7 @@ def build_demand_panel(
         policy=config.missing_data,
         history_start_year=config.history_start_year,
         history_end_year=config.history_end_year,
+        min_backtest_origin=_min_backtest_origin(config),
     )
 
 
@@ -185,6 +203,7 @@ def build_supply_panel(
     regions: pd.DataFrame,
     config: ProductionConfig,
 ) -> pd.DataFrame:
+    validate_production_config(config)
     return build_modeling_panel(
         master,
         regions,
@@ -194,4 +213,5 @@ def build_supply_panel(
         policy=config.missing_data,
         history_start_year=config.history_start_year,
         history_end_year=config.history_end_year,
+        min_backtest_origin=_min_backtest_origin(config),
     )

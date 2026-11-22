@@ -23,11 +23,24 @@ def smape(actual: float, prediction: float) -> float:
 
 
 def mase_scale(history: pd.DataFrame) -> float:
-    values = history["target_gwh"].to_numpy(dtype=float)
-    if len(values) < 2:
+    """Compute naive 1-step in-sample MASE denominator over consecutive years only."""
+    if len(history) < 2:
         return float("nan")
-    scale = float(np.mean(np.abs(np.diff(values))))
-    return scale if np.isfinite(scale) and scale > 0 else float("nan")
+    ordered = (
+        history[["year", "target_gwh"]]
+        .dropna(subset=["year", "target_gwh"])
+        .sort_values("year")
+    )
+    if len(ordered) < 2:
+        return float("nan")
+    years = ordered["year"].to_numpy(dtype=int)
+    values = ordered["target_gwh"].to_numpy(dtype=float)
+    consecutive = np.diff(years) == 1
+    if not np.any(consecutive):
+        return float("nan")
+    diffs = np.abs(np.diff(values))[consecutive]
+    scale = float(np.mean(diffs))
+    return scale if np.isfinite(scale) and scale > 0.0 else float("nan")
 
 
 def build_forecast_record(

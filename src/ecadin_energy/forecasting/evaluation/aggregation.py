@@ -8,9 +8,9 @@ def metric_record(group: pd.DataFrame) -> dict[str, object]:
     error = group["error_gwh"].to_numpy(dtype=float)
     actual = group["actual_gwh"].to_numpy(dtype=float)
     prediction = group["prediction_gwh"].to_numpy(dtype=float)
-    by_region = group.groupby("region_id", sort=False)
-    region_smape = by_region["smape_percent"].mean()
-    region_mase = by_region["mase"].mean()
+    mase_numeric = pd.to_numeric(group["mase"], errors="coerce")
+    region_smape = group.groupby("region_id", sort=False)["smape_percent"].mean()
+    region_mase = mase_numeric.groupby(group["region_id"], sort=False).mean()
     aggregate_actual = float(np.sum(actual))
     aggregate_error = float(np.sum(error))
     return {
@@ -27,6 +27,8 @@ def metric_record(group: pd.DataFrame) -> dict[str, object]:
         "micro_mape_percent": float(group["ape_percent"].mean()),
         "macro_smape_percent": float(region_smape.mean()),
         "macro_mase": float(region_mase.mean()),
+        "mase_valid_prediction_count": int(mase_numeric.notna().sum()),
+        "mase_valid_region_count": int(region_mase.notna().sum()),
         "mean_bias_gwh": float(np.mean(error)),
         "aggregate_bias_gwh": aggregate_error,
         "aggregate_bias_percent": (
@@ -80,6 +82,7 @@ def metrics_by_region(predictions: pd.DataFrame) -> pd.DataFrame:
     for key, group in predictions.groupby(keys, sort=True):
         error = group["error_gwh"].to_numpy(dtype=float)
         actual_total = float(group["actual_gwh"].sum())
+        mase_numeric = pd.to_numeric(group["mase"], errors="coerce")
         rows.append(
             {
                 **dict(zip(keys, key)),
@@ -89,7 +92,8 @@ def metrics_by_region(predictions: pd.DataFrame) -> pd.DataFrame:
                 "smape_percent": float(
                     group["smape_percent"].mean()
                 ),
-                "mase": float(group["mase"].mean()),
+                "mase": float(mase_numeric.mean()),
+                "mase_valid_prediction_count": int(mase_numeric.notna().sum()),
                 "mean_bias_gwh": float(np.mean(error)),
                 "aggregate_bias_percent": (
                     np.nan

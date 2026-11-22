@@ -10,6 +10,8 @@ from ecadin_energy.forecasting.evaluation.aggregation import (
     metrics_summary,
 )
 from ecadin_energy.forecasting.evaluation.challenger import (
+    win_rate_by_horizon,
+    win_rate_by_regime,
     win_rate_vs_reference,
 )
 from ecadin_energy.forecasting.models.registry import create_models
@@ -80,6 +82,14 @@ def run_backtests(
         "metrics_by_horizon": metrics_by_horizon(predictions),
         "metrics_by_region": metrics_by_region(predictions),
         "win_rate": win_rate_vs_reference(
+            predictions,
+            reference_model=config.reference_baseline,
+        ),
+        "win_rate_by_horizon": win_rate_by_horizon(
+            predictions,
+            reference_model=config.reference_baseline,
+        ),
+        "win_rate_by_regime": win_rate_by_regime(
             predictions,
             reference_model=config.reference_baseline,
         ),

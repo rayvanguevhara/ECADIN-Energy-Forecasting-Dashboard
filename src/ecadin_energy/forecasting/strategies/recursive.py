@@ -37,45 +37,45 @@ def run_recursive_for_model(
 
         for horizon in range(1, max_horizon + 1):
             target_year = int(origin_year) + horizon
-            if not bool(eligible_lookup.get(target_year, False)):
-                continue
-            actual = actual_lookup.get(target_year)
-            if pd.isna(actual):
-                continue
-
             raw_prediction = model.predict_next(
                 recursive_history,
                 target_year,
             )
             prediction, _ = clip_nonnegative(raw_prediction)
-            record = build_forecast_record(
-                domain=domain,
-                model_version=model_version,
-                protocol="recursive_multi_step",
-                model=model.model_id,
-                reference_baseline=reference_baseline,
-                region_id=region_id,
-                region_name=region_name,
-                origin_year=int(origin_year),
-                forecast_year=target_year,
-                horizon=horizon,
-                history_for_scale=scale_history,
-                actual=float(actual),
-                raw_prediction=raw_prediction,
-            )
-            rows.append(record.as_dict())
-            recursive_history = pd.concat(
-                [
-                    recursive_history,
-                    pd.DataFrame(
-                        {
-                            "year": [target_year],
-                            "target_gwh": [prediction],
-                        }
-                    ),
-                ],
-                ignore_index=True,
-            )
+
+            is_eligible = bool(eligible_lookup.get(target_year, False))
+            actual = actual_lookup.get(target_year)
+            if is_eligible and pd.notna(actual):
+                record = build_forecast_record(
+                    domain=domain,
+                    model_version=model_version,
+                    protocol="recursive_multi_step",
+                    model=model.model_id,
+                    reference_baseline=reference_baseline,
+                    region_id=region_id,
+                    region_name=region_name,
+                    origin_year=int(origin_year),
+                    forecast_year=target_year,
+                    horizon=horizon,
+                    history_for_scale=scale_history,
+                    actual=float(actual),
+                    raw_prediction=raw_prediction,
+                )
+                rows.append(record.as_dict())
+
+            if pd.notna(prediction):
+                recursive_history = pd.concat(
+                    [
+                        recursive_history,
+                        pd.DataFrame(
+                            {
+                                "year": [target_year],
+                                "target_gwh": [prediction],
+                            }
+                        ),
+                    ],
+                    ignore_index=True,
+                )
     return rows
 
 

@@ -1,0 +1,883 @@
+Folder PATH listing for volume DATA
+Volume serial number is 34D6-DB5C
+D:\ECADIN_PROJECT_CLEAN
+|   .env.example
+|   .gitattributes
+|   .gitignore
+|   ECADIN_Kode_Preprocessing_Modelling_Evaluasi.zip
+|   ECADIN_Sumber_Data_CSV.zip
+|   frontend-dashboard.zip
+|   pyproject.toml
+|   README.md
+|   requirements.txt
+|   requirements_dashboard.txt
+|   requirements_forecasting.txt
+|   struktur_tree.txt
+|   
++---configs
+|   +---dashboard
+|   |       production.json
+|   |       
+|   \---forecasting
+|           production.json
+|           
++---data
+|   +---external
+|   |       .gitkeep
+|   |       
+|   +---interim
+|   |       .gitkeep
+|   |       
+|   +---processed
+|   |   +---demand
+|   |   |       distributed_electricity.csv
+|   |   |       electricity_customers_by_customer_group.csv
+|   |   |       electricity_customers_total.csv
+|   |   |       electricity_sold_by_customer_group.csv
+|   |   |       electricity_sold_total.csv
+|   |   |       
+|   |   +---geography
+|   |   |       .gitkeep
+|   |   |       
+|   |   +---master
+|   |   |       data_lineage.csv
+|   |   |       data_quality_flags.csv
+|   |   |       national_customer_group_master.csv
+|   |   |       regional_energy_master.csv
+|   |   |       
+|   |   +---modeling
+|   |   |       demand_modeling_panel.csv
+|   |   |       supply_modeling_panel.csv
+|   |   |       
+|   |   \---supply
+|   |           installed_capacity.csv
+|   |           local_generation.csv
+|   |           
+|   +---raw
+|   |   +---bps
+|   |   |   +---distributed_electricity
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2011.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2012.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2013.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2014.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2015.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2017.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2018.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2019.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2020.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2021.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2022.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2023.csv
+|   |   |   |       Listrik yang Didistribusikan Menurut Provinsi (GWh), 2024.csv
+|   |   |   |       
+|   |   |   +---electricity_customers
+|   |   |   |       Customers of Electricity State Company, 1995.csv
+|   |   |   |       Customers of Electricity State Company, 1996.csv
+|   |   |   |       Customers of Electricity State Company, 1997.csv
+|   |   |   |       Customers of Electricity State Company, 1998.csv
+|   |   |   |       Customers of Electricity State Company, 1999.csv
+|   |   |   |       Customers of Electricity State Company, 2000.csv
+|   |   |   |       Customers of Electricity State Company, 2001.csv
+|   |   |   |       Customers of Electricity State Company, 2002.csv
+|   |   |   |       Customers of Electricity State Company, 2003.csv
+|   |   |   |       Customers of Electricity State Company, 2004.csv
+|   |   |   |       Customers of Electricity State Company, 2005.csv
+|   |   |   |       Customers of Electricity State Company, 2006.csv
+|   |   |   |       Customers of Electricity State Company, 2007.csv
+|   |   |   |       Customers of Electricity State Company, 2008.csv
+|   |   |   |       Customers of Electricity State Company, 2009.csv
+|   |   |   |       Customers of Electricity State Company, 2010.csv
+|   |   |   |       Customers of Electricity State Company, 2011.csv
+|   |   |   |       Customers of Electricity State Company, 2012.csv
+|   |   |   |       Customers of Electricity State Company, 2013.csv
+|   |   |   |       Customers of Electricity State Company, 2014.csv
+|   |   |   |       Customers of Electricity State Company, 2015.csv
+|   |   |   |       Customers of Electricity State Company, 2017.csv
+|   |   |   |       Customers of Electricity State Company, 2018.csv
+|   |   |   |       Customers of Electricity State Company, 2019.csv
+|   |   |   |       Customers of Electricity State Company, 2020.csv
+|   |   |   |       Customers of Electricity State Company, 2021.csv
+|   |   |   |       Customers of Electricity State Company, 2022.csv
+|   |   |   |       Customers of Electricity State Company, 2023.csv
+|   |   |   |       Customers of Electricity State Company, 2024.csv
+|   |   |   |       
+|   |   |   +---electricity_sold
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 1995.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 1996.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 1997.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 1998.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 1999.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2000.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2001.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2002.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2003.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2004.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2005.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2006.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2007.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2008.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2009.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2010.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2011.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2012.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2013.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2014.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2015.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2017.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2018.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2019.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2020.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2021.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2022.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2023.csv
+|   |   |   |       Electricity Sold to Customers by Electricity State Company, 2024.csv
+|   |   |   |       
+|   |   |   +---installed_capacity
+|   |   |   |       Installed Capacity by Province , 2011.csv
+|   |   |   |       Installed Capacity by Province , 2012.csv
+|   |   |   |       Installed Capacity by Province , 2013.csv
+|   |   |   |       Installed Capacity by Province , 2014.csv
+|   |   |   |       Installed Capacity by Province , 2015.csv
+|   |   |   |       Installed Capacity by Province , 2017.csv
+|   |   |   |       Installed Capacity by Province , 2018.csv
+|   |   |   |       Installed Capacity by Province , 2019.csv
+|   |   |   |       Installed Capacity by Province , 2020.csv
+|   |   |   |       Installed Capacity by Province , 2021.csv
+|   |   |   |       Installed Capacity by Province , 2022.csv
+|   |   |   |       Installed Capacity by Province , 2023.csv
+|   |   |   |       Installed Capacity by Province , 2024.csv
+|   |   |   |       
+|   |   |   +---local_generation
+|   |   |   |       Electricity Generated by Province, 2011.csv
+|   |   |   |       Electricity Generated by Province, 2012.csv
+|   |   |   |       Electricity Generated by Province, 2013.csv
+|   |   |   |       Electricity Generated by Province, 2014.csv
+|   |   |   |       Electricity Generated by Province, 2015.csv
+|   |   |   |       Electricity Generated by Province, 2017.csv
+|   |   |   |       Electricity Generated by Province, 2018.csv
+|   |   |   |       Electricity Generated by Province, 2019.csv
+|   |   |   |       Electricity Generated by Province, 2020.csv
+|   |   |   |       Electricity Generated by Province, 2021.csv
+|   |   |   |       Electricity Generated by Province, 2022.csv
+|   |   |   |       Electricity Generated by Province, 2023.csv
+|   |   |   |       Electricity Generated by Province, 2024.csv
+|   |   |   |       
+|   |   |   \---statistik_listrik
+|   |   |           statistik-listrik-2004-2008.pdf
+|   |   |           statistik-listrik-2005-2009.pdf
+|   |   |           statistik-listrik-2006-2010.pdf
+|   |   |           statistik-listrik-2007-2011.pdf
+|   |   |           statistik-listrik-2011-2012.pdf
+|   |   |           statistik-listrik-2011-2013.pdf
+|   |   |           statistik-listrik-2011-2014.pdf
+|   |   |           statistik-listrik-2011-2015.pdf
+|   |   |           statistik-listrik-2012-2017.pdf
+|   |   |           statistik-listrik-2013-2018.pdf
+|   |   |           statistik-listrik-2014-2019.pdf
+|   |   |           statistik-listrik-2015-2020.pdf
+|   |   |           statistik-listrik-2017-2021.pdf
+|   |   |           statistik-listrik-2018-2022.pdf
+|   |   |           statistik-listrik-2019-2023.pdf
+|   |   |           statistik-listrik-2020-2024.pdf
+|   |   |           
+|   |   +---esdm
+|   |   |   +---electricity_statistics
+|   |   |   |       3f3e5-pembangkit-2007.pdf
+|   |   |   |       430e7-statistik-ketenagalistrikan-2011.pdf
+|   |   |   |       56364-statistik-ketenagalistrikan-2013.pdf
+|   |   |   |       72f25-web-publish-statistik-2022.pdf
+|   |   |   |       7ff0d-statistik-ketenagalistrikan-2014.pdf
+|   |   |   |       7ff5e-statistik-ketenagalistrikan-t.a.-2017.pdf
+|   |   |   |       83d90-statistik-ketenagalistrikan-2009.pdf
+|   |   |   |       91fa8-buku-statistik-ketenagalistrikan-2024.pdf
+|   |   |   |       92999-statistik-2018.pdf
+|   |   |   |       aed5d-pembangkit-2005.pdf
+|   |   |   |       b18c7-statistik-ketenagalistrikan-2014 (2).pdf
+|   |   |   |       c2fea-pengusahaan-2006.pdf
+|   |   |   |       c4053-statistik-2019-highres.pdf
+|   |   |   |       c4764-6e4c6-statistik-2021-rev-2-.pdf
+|   |   |   |       ccf8b-8f7e7-20211110-statistik-2020-rev03.pdf
+|   |   |   |       d1cd7-pengusahaan-2005.pdf
+|   |   |   |       d3bbb-statistik-ketenagalistrikan-t.a.-2015.pdf
+|   |   |   |       e6394-buku-statistik-ketenagalistrikan-2023-esdm-revised.pdf
+|   |   |   |       e6d5d-statistik-ketenagalistrikan-2008.pdf
+|   |   |   |       
+|   |   |   \---electrification_ratio
+|   |   |           Rasio Elektrifikasi, 2009.csv
+|   |   |           Rasio Elektrifikasi, 2010.csv
+|   |   |           Rasio Elektrifikasi, 2011.csv
+|   |   |           Rasio Elektrifikasi, 2012.csv
+|   |   |           Rasio Elektrifikasi, 2013.csv
+|   |   |           Rasio Elektrifikasi, 2014.csv
+|   |   |           Rasio Elektrifikasi, 2015.csv
+|   |   |           Rasio Elektrifikasi, 2016.csv
+|   |   |           Rasio Elektrifikasi, 2017.csv
+|   |   |           Rasio Elektrifikasi, 2018.csv
+|   |   |           Rasio Elektrifikasi, 2019.csv
+|   |   |           Rasio Elektrifikasi, 2020.csv
+|   |   |           Rasio Elektrifikasi, 2021.csv
+|   |   |           Rasio Elektrifikasi, 2022.csv
+|   |   |           
+|   |   +---pdrb
+|   |   |   \---publications
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industrial-origin-2007-2011.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industrial-origin-2008-2012.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industrial-origin-2009-2013.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industrial-origin-2010-2014.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2011-2015.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2012-2016.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2013-2017.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2014-2018.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2015-2019.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2016-2020.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2017-2021.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2018-2022.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2019-2023.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2020-2024.pdf
+|   |   |           gross-regional-domestic-product-of-provinces-in-indonesia-by-industry-2021-2025.pdf
+|   |   |           
+|   |   +---pln
+|   |   |       .gitkeep
+|   |   |       
+|   |   +---population
+|   |   |   \---bps
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2016.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2017.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2018.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2019.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2022.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2023.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2024.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2025.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Population Sex Ratio by Province, 2026.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Sex Ratio by Province, 2010.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Sex Ratio by Province, 2020.csv
+|   |   |           Population, Population Growth Rate, Percentage Distribution of Population, Population Density, and Sex Ratio by Province, 2021.csv
+|   |   |           
+|   |   \---ruptl
+|   |           .gitkeep
+|   |           
+|   \---reference
+|           customer_groups.csv
+|           reference_layer_contract.json
+|           regions.csv
+|           region_aliases.csv
+|           region_coordinates.csv
+|           source_registry.csv
+|           variable_dictionary.csv
+|           
++---docs
+|   |   architecture.md
+|   |   pipeline.md
+|   |   
+|   +---dashboard
+|   |       dashboard_pipeline.md
+|   |       
+|   +---data
+|   |       annual_province_series.md
+|   |       canonical_masters.md
+|   |       distributed_electricity.md
+|   |       electricity_customers.md
+|   |       electricity_sold.md
+|   |       installed_capacity.md
+|   |       local_generation.md
+|   |       statistik_listrik_bps.md
+|   |       
+|   \---modeling
+|           forecasting_core.md
+|           
++---frontend-dashboard
+|   |   components.json
+|   |   eslint.config.js
+|   |   package-lock.json
+|   |   package.json
+|   |   tsconfig.json
+|   |   vercel.json
+|   |   vite.config.ts
+|   |   
+|   +---public
+|   |       ecadin-logo.png
+|   |       ecadin-mark.png
+|   |       
+|   \---src
+|       |   router.tsx
+|       |   routeTree.gen.ts
+|       |   server.ts
+|       |   start.ts
+|       |   styles.css
+|       |   
+|       +---components
+|       |   |   app-shell.tsx
+|       |   |   indonesia-map.tsx
+|       |   |   panel.tsx
+|       |   |   
+|       |   \---ui
+|       |           accordion.tsx
+|       |           alert-dialog.tsx
+|       |           alert.tsx
+|       |           aspect-ratio.tsx
+|       |           avatar.tsx
+|       |           badge.tsx
+|       |           breadcrumb.tsx
+|       |           button.tsx
+|       |           calendar.tsx
+|       |           card.tsx
+|       |           carousel.tsx
+|       |           chart.tsx
+|       |           checkbox.tsx
+|       |           collapsible.tsx
+|       |           command.tsx
+|       |           context-menu.tsx
+|       |           dialog.tsx
+|       |           drawer.tsx
+|       |           dropdown-menu.tsx
+|       |           form.tsx
+|       |           hover-card.tsx
+|       |           input-otp.tsx
+|       |           input.tsx
+|       |           label.tsx
+|       |           menubar.tsx
+|       |           navigation-menu.tsx
+|       |           pagination.tsx
+|       |           popover.tsx
+|       |           progress.tsx
+|       |           radio-group.tsx
+|       |           resizable.tsx
+|       |           scroll-area.tsx
+|       |           select.tsx
+|       |           separator.tsx
+|       |           sheet.tsx
+|       |           sidebar.tsx
+|       |           skeleton.tsx
+|       |           slider.tsx
+|       |           sonner.tsx
+|       |           switch.tsx
+|       |           table.tsx
+|       |           tabs.tsx
+|       |           textarea.tsx
+|       |           toggle-group.tsx
+|       |           toggle.tsx
+|       |           tooltip.tsx
+|       |           
+|       +---data
+|       |       dashboard-production.json
+|       |       indonesia-provinces.json
+|       |       
+|       +---hooks
+|       |       use-mobile.tsx
+|       |       
+|       +---lib
+|       |       energy-data.ts
+|       |       error-capture.ts
+|       |       error-page.ts
+|       |       filter-context.tsx
+|       |       lovable-error-reporting.ts
+|       |       utils.ts
+|       |       
+|       \---routes
+|               index.tsx
+|               map.tsx
+|               methodology.tsx
+|               model.tsx
+|               province.tsx
+|               quality.tsx
+|               ranking.tsx
+|               README.md
+|               __root.tsx
+|               
++---mentor_exports
+|       ECADIN_Forecasting_Dashboard.zip
+|       ECADIN_Forecasting_Processed_Data.zip
+|       
++---outputs
+|   +---dashboard
+|   |   +---production
+|   |   |       dashboard-production.json
+|   |   |       dashboard_data_quality_review.csv
+|   |   |       dashboard_data_quality_summary.csv
+|   |   |       dashboard_input_hashes.csv
+|   |   |       dashboard_map_timeseries.csv
+|   |   |       dashboard_methodology.json
+|   |   |       dashboard_model_summary.csv
+|   |   |       dashboard_national_timeseries.csv
+|   |   |       dashboard_province_detail.csv
+|   |   |       dashboard_regional_ranking.csv
+|   |   |       dashboard_source_registry.json
+|   |   |       
+|   |   +---reports
+|   |   |       dashboard_production_checks.csv
+|   |   |       dashboard_promotion_summary.json
+|   |   |       dashboard_staging_checks.csv
+|   |   |       frontend_build_summary.json
+|   |   |       frontend_refresh_checks.csv
+|   |   |       frontend_refresh_summary.json
+|   |   |       frontend_release_checks.csv
+|   |   |       
+|   |   \---staging
+|   |           dashboard-production.json
+|   |           dashboard_data_quality_review.csv
+|   |           dashboard_data_quality_summary.csv
+|   |           dashboard_input_hashes.csv
+|   |           dashboard_map_timeseries.csv
+|   |           dashboard_methodology.json
+|   |           dashboard_model_summary.csv
+|   |           dashboard_national_timeseries.csv
+|   |           dashboard_province_detail.csv
+|   |           dashboard_regional_ranking.csv
+|   |           dashboard_source_registry.json
+|   |           dashboard_staging_summary.json
+|   |           
+|   +---experiments
+|   |       .gitkeep
+|   |       
+|   +---production
+|   |   +---accounting
+|   |   |       accounting_difference.csv
+|   |   |       
+|   |   +---backtests
+|   |   |       demand_predictions.csv
+|   |   |       supply_predictions.csv
+|   |   |       
+|   |   +---combined
+|   |   |       regional_energy_history_forecast.csv
+|   |   |       
+|   |   +---dashboard
+|   |   |       .gitkeep
+|   |   |       
+|   |   +---forecasts
+|   |   |       demand_forecast.csv
+|   |   |       demand_history_summary.csv
+|   |   |       supply_forecast.csv
+|   |   |       supply_history_summary.csv
+|   |   |       supply_uncertainty_calibration.csv
+|   |   |       
+|   |   +---frontend
+|   |   |       .gitkeep
+|   |   |       
+|   |   +---metrics
+|   |   |       demand_metrics_by_fold.csv
+|   |   |       demand_metrics_by_horizon.csv
+|   |   |       demand_metrics_by_region.csv
+|   |   |       demand_metrics_summary.csv
+|   |   |       demand_win_rate_vs_drift.csv
+|   |   |       production_model_summary.csv
+|   |   |       supply_metrics_by_fold.csv
+|   |   |       supply_metrics_by_horizon.csv
+|   |   |       supply_metrics_by_region.csv
+|   |   |       supply_metrics_summary.csv
+|   |   |       supply_win_rate_vs_drift.csv
+|   |   |       
+|   |   +---models
+|   |   |   +---demand
+|   |   |   |       .gitkeep
+|   |   |   |       
+|   |   |   \---supply
+|   |   |           .gitkeep
+|   |   |           
+|   |   +---pipeline
+|   |   |       .gitkeep
+|   |   |       
+|   |   \---reports
+|   |           production_contract_checks.csv
+|   |           production_input_hashes.csv
+|   |           production_run_summary.json
+|   |           
+|   \---reports
+|       +---data
+|       |       canonical_master_build_summary.json
+|       |       canonical_master_completeness.csv
+|       |       canonical_master_input_hashes.csv
+|       |       distributed_electricity_build_summary.json
+|       |       distributed_electricity_raw_audit.csv
+|       |       electricity_customers_build_summary.json
+|       |       electricity_customers_raw_audit.csv
+|       |       electricity_sold_build_summary.json
+|       |       electricity_sold_raw_audit.csv
+|       |       installed_capacity_build_summary.json
+|       |       installed_capacity_raw_audit.csv
+|       |       local_generation_build_summary.json
+|       |       local_generation_raw_audit.csv
+|       |       statistik_listrik_bps_build_summary.json
+|       |       statistik_listrik_national_totals.csv
+|       |       statistik_listrik_pdf_inventory.csv
+|       |       statistik_listrik_reconciliation.csv
+|       |       statistik_listrik_revision_summary.csv
+|       |       statistik_listrik_table_inventory.csv
+|       |       
+|       \---release
+|               data_validation_checks.csv
+|               full_pipeline_latest.json
+|               
++---scripts
+|       audit_statistik_listrik_bps.py
+|       build_canonical_masters.py
+|       build_dashboard_staging.py
+|       build_distributed_electricity.py
+|       build_electricity_customers.py
+|       build_electricity_sold.py
+|       build_installed_capacity.py
+|       build_local_generation.py
+|       ecadin.py
+|       refresh_frontend_data.py
+|       run_dashboard_pipeline.py
+|       run_production_forecast.py
+|       validate_canonical_masters.py
+|       validate_dashboard_staging.py
+|       validate_distributed_electricity.py
+|       validate_electricity_customers.py
+|       validate_electricity_sold.py
+|       validate_installed_capacity.py
+|       validate_local_generation.py
+|       validate_production_forecast.py
+|       validate_reference_layer.py
+|       validate_statistik_listrik_bps.py
+|       
++---src
+|   \---ecadin_energy
+|       |   cli.py
+|       |   config.py
+|       |   __init__.py
+|       |   
+|       +---dashboard
+|       |   |   configuration.py
+|       |   |   contracts.py
+|       |   |   data_quality.py
+|       |   |   energy_map.py
+|       |   |   frontend_payload.py
+|       |   |   frontend_refresh.py
+|       |   |   loaders.py
+|       |   |   methodology.py
+|       |   |   national_overview.py
+|       |   |   production_models.py
+|       |   |   promotion.py
+|       |   |   regional_ranking.py
+|       |   |   region_detail.py
+|       |   |   serializers.py
+|       |   |   staging.py
+|       |   |   validation.py
+|       |   |   __init__.py
+|       |   |   
+|       |   \---__pycache__
+|       |           configuration.cpython-314.pyc
+|       |           contracts.cpython-314.pyc
+|       |           data_quality.cpython-314.pyc
+|       |           energy_map.cpython-314.pyc
+|       |           frontend_payload.cpython-314.pyc
+|       |           frontend_refresh.cpython-314.pyc
+|       |           loaders.cpython-314.pyc
+|       |           methodology.cpython-314.pyc
+|       |           national_overview.cpython-314.pyc
+|       |           production_models.cpython-314.pyc
+|       |           promotion.cpython-314.pyc
+|       |           regional_ranking.cpython-314.pyc
+|       |           region_detail.cpython-314.pyc
+|       |           serializers.cpython-314.pyc
+|       |           staging.cpython-314.pyc
+|       |           validation.cpython-314.pyc
+|       |           __init__.cpython-314.pyc
+|       |           
+|       +---data_processing
+|       |   |   reference.py
+|       |   |   __init__.py
+|       |   |   
+|       |   +---audit
+|       |   |   |   statistik_listrik_bps.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           statistik_listrik_bps.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---cleaning
+|       |   |   |   annual_category_series.py
+|       |   |   |   annual_province_series.py
+|       |   |   |   distributed_electricity.py
+|       |   |   |   electricity_customers.py
+|       |   |   |   electricity_sold.py
+|       |   |   |   installed_capacity.py
+|       |   |   |   local_generation.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           annual_category_series.cpython-314.pyc
+|       |   |           annual_province_series.cpython-314.pyc
+|       |   |           distributed_electricity.cpython-314.pyc
+|       |   |           electricity_customers.cpython-314.pyc
+|       |   |           electricity_sold.cpython-314.pyc
+|       |   |           installed_capacity.cpython-314.pyc
+|       |   |           local_generation.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---extraction
+|       |   |       __init__.py
+|       |   |       
+|       |   +---harmonization
+|       |   |   |   regions.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           regions.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---master
+|       |   |       __init__.py
+|       |   |       
+|       |   +---mastering
+|       |   |   |   canonical_masters.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           canonical_masters.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---validation
+|       |   |       __init__.py
+|       |   |       
+|       |   \---__pycache__
+|       |           reference.cpython-314.pyc
+|       |           __init__.cpython-314.pyc
+|       |           
+|       +---experiments
+|       |   |   __init__.py
+|       |   |   
+|       |   +---demand
+|       |   |       __init__.py
+|       |   |       
+|       |   \---supply
+|       |           __init__.py
+|       |           
+|       +---forecasting
+|       |   |   configuration.py
+|       |   |   contracts.py
+|       |   |   exceptions.py
+|       |   |   __init__.py
+|       |   |   
+|       |   +---accounting
+|       |   |       __init__.py
+|       |   |       
+|       |   +---backtesting
+|       |   |   |   runner.py
+|       |   |   |   splits.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           runner.cpython-314.pyc
+|       |   |           splits.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---common
+|       |   |       __init__.py
+|       |   |       
+|       |   +---data
+|       |   |   |   loaders.py
+|       |   |   |   panels.py
+|       |   |   |   validation.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           loaders.cpython-314.pyc
+|       |   |           panels.cpython-314.pyc
+|       |   |           validation.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---demand
+|       |   |       __init__.py
+|       |   |       
+|       |   +---evaluation
+|       |   |   |   aggregation.py
+|       |   |   |   challenger.py
+|       |   |   |   metrics.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           aggregation.cpython-314.pyc
+|       |   |           challenger.cpython-314.pyc
+|       |   |           metrics.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---features
+|       |   |   |   lags.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           lags.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---models
+|       |   |   |   base.py
+|       |   |   |   baselines.py
+|       |   |   |   drift.py
+|       |   |   |   drift_v1.py
+|       |   |   |   registry.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           base.cpython-314.pyc
+|       |   |           baselines.cpython-314.pyc
+|       |   |           drift.cpython-314.pyc
+|       |   |           drift_v1.cpython-314.pyc
+|       |   |           registry.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---production
+|       |   |   |   accounting.py
+|       |   |   |   artifacts.py
+|       |   |   |   common.py
+|       |   |   |   demand.py
+|       |   |   |   supply.py
+|       |   |   |   validation.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           accounting.cpython-314.pyc
+|       |   |           artifacts.cpython-314.pyc
+|       |   |           common.cpython-314.pyc
+|       |   |           demand.cpython-314.pyc
+|       |   |           supply.cpython-314.pyc
+|       |   |           validation.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---strategies
+|       |   |   |   one_step.py
+|       |   |   |   recursive.py
+|       |   |   |   __init__.py
+|       |   |   |   
+|       |   |   \---__pycache__
+|       |   |           one_step.cpython-314.pyc
+|       |   |           recursive.cpython-314.pyc
+|       |   |           __init__.cpython-314.pyc
+|       |   |           
+|       |   +---supply
+|       |   |       __init__.py
+|       |   |       
+|       |   +---validation
+|       |   |       __init__.py
+|       |   |       
+|       |   \---__pycache__
+|       |           configuration.cpython-314.pyc
+|       |           contracts.cpython-314.pyc
+|       |           exceptions.cpython-314.pyc
+|       |           __init__.cpython-314.pyc
+|       |           
+|       +---pipeline
+|       |   |   dashboard.py
+|       |   |   data.py
+|       |   |   full.py
+|       |   |   production.py
+|       |   |   release.py
+|       |   |   validation.py
+|       |   |   __init__.py
+|       |   |   
+|       |   \---__pycache__
+|       |           dashboard.cpython-314.pyc
+|       |           data.cpython-314.pyc
+|       |           full.cpython-314.pyc
+|       |           production.cpython-314.pyc
+|       |           release.cpython-314.pyc
+|       |           validation.cpython-314.pyc
+|       |           __init__.cpython-314.pyc
+|       |           
+|       \---__pycache__
+|               cli.cpython-314.pyc
+|               config.cpython-314.pyc
+|               __init__.cpython-314.pyc
+|               
+\---tests
+    |   __init__.py
+    |   
+    +---contracts
+    |   |   test_dashboard_output_contract.py
+    |   |   test_forecasting_output_contract.py
+    |   |   test_portable_fixture_contract.py
+    |   |   __init__.py
+    |   |   
+    |   \---__pycache__
+    |           test_dashboard_output_contract.cpython-314.pyc
+    |           test_forecasting_output_contract.cpython-314.pyc
+    |           test_portable_fixture_contract.cpython-314.pyc
+    |           __init__.cpython-314.pyc
+    |           
+    +---fixtures
+    |   |   fixture_manifest.json
+    |   |   README.md
+    |   |   
+    |   +---forecasting
+    |   |       regional_energy_master.csv
+    |   |       
+    |   \---production
+    |       +---combined
+    |       |       regional_energy_history_forecast.csv
+    |       |       
+    |       +---forecasts
+    |       |       demand_forecast.csv
+    |       |       supply_forecast.csv
+    |       |       
+    |       +---metrics
+    |       |       production_model_summary.csv
+    |       |       
+    |       \---reports
+    |               production_contract_checks.csv
+    |               
+    +---helpers
+    |   |   project_fixture.py
+    |   |   __init__.py
+    |   |   
+    |   \---__pycache__
+    |           project_fixture.cpython-314.pyc
+    |           __init__.cpython-314.pyc
+    |           
+    +---integration
+    |   |   test_dashboard_pipeline.py
+    |   |   test_full_pipeline.py
+    |   |   test_production_forecasting_pipeline.py
+    |   |   __init__.py
+    |   |   
+    |   \---__pycache__
+    |           test_dashboard_pipeline.cpython-314.pyc
+    |           test_full_pipeline.cpython-314.pyc
+    |           test_production_forecasting_pipeline.cpython-314.pyc
+    |           __init__.cpython-314.pyc
+    |           
+    +---unit
+    |   |   test_annual_province_series.py
+    |   |   test_backtest_splits.py
+    |   |   test_canonical_masters.py
+    |   |   test_dashboard_frontend_payload.py
+    |   |   test_dashboard_national.py
+    |   |   test_dashboard_region_detail.py
+    |   |   test_distributed_electricity.py
+    |   |   test_drift_models.py
+    |   |   test_electricity_customers.py
+    |   |   test_electricity_sold.py
+    |   |   test_forecasting_panels.py
+    |   |   test_installed_capacity.py
+    |   |   test_lag_features.py
+    |   |   test_local_generation.py
+    |   |   test_metrics.py
+    |   |   test_recursive_forecast.py
+    |   |   test_statistik_listrik_bps.py
+    |   |   __init__.py
+    |   |   
+    |   \---__pycache__
+    |           test_annual_province_series.cpython-314.pyc
+    |           test_backtest_splits.cpython-314.pyc
+    |           test_canonical_masters.cpython-314.pyc
+    |           test_dashboard_frontend_payload.cpython-314.pyc
+    |           test_dashboard_national.cpython-314.pyc
+    |           test_dashboard_region_detail.cpython-314.pyc
+    |           test_distributed_electricity.cpython-314.pyc
+    |           test_drift_models.cpython-314.pyc
+    |           test_electricity_customers.cpython-314.pyc
+    |           test_electricity_sold.cpython-314.pyc
+    |           test_forecasting_panels.cpython-314.pyc
+    |           test_installed_capacity.cpython-314.pyc
+    |           test_lag_features.cpython-314.pyc
+    |           test_local_generation.cpython-314.pyc
+    |           test_metrics.cpython-314.pyc
+    |           test_recursive_forecast.cpython-314.pyc
+    |           test_statistik_listrik_bps.cpython-314.pyc
+    |           __init__.cpython-314.pyc
+    |           
+    \---__pycache__
+            __init__.cpython-314.pyc
+            

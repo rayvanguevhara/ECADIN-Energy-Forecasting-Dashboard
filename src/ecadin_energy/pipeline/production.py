@@ -77,6 +77,14 @@ def _output_paths(root: Path) -> dict[str, Path]:
         / "outputs/production/metrics/demand_win_rate_vs_drift.csv",
         "supply_win_rate": root
         / "outputs/production/metrics/supply_win_rate_vs_drift.csv",
+        "demand_win_rate_by_horizon": root
+        / "outputs/production/metrics/demand_win_rate_by_horizon_vs_drift.csv",
+        "supply_win_rate_by_horizon": root
+        / "outputs/production/metrics/supply_win_rate_by_horizon_vs_drift.csv",
+        "demand_win_rate_by_regime": root
+        / "outputs/production/metrics/demand_win_rate_by_regime_vs_drift.csv",
+        "supply_win_rate_by_regime": root
+        / "outputs/production/metrics/supply_win_rate_by_regime_vs_drift.csv",
         "model_summary": root
         / "outputs/production/metrics/production_model_summary.csv",
         "demand_forecast": root
@@ -276,6 +284,10 @@ def run_production_pipeline(
         ],
         "demand_win_rate": demand_backtests["win_rate"],
         "supply_win_rate": supply_backtests["win_rate"],
+        "demand_win_rate_by_horizon": demand_backtests["win_rate_by_horizon"],
+        "supply_win_rate_by_horizon": supply_backtests["win_rate_by_horizon"],
+        "demand_win_rate_by_regime": demand_backtests["win_rate_by_regime"],
+        "supply_win_rate_by_regime": supply_backtests["win_rate_by_regime"],
         "model_summary": model_summary,
         "demand_forecast": demand_forecast,
         "supply_forecast": supply_forecast,
