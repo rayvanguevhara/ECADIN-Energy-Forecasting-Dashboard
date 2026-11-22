@@ -23,6 +23,7 @@ from ecadin_energy.data_processing.cleaning.annual_category_series import (
 )
 from ecadin_energy.data_processing.cleaning.annual_province_series import (
     replace_dataset_rows as _replace_dataset_rows,
+    sha256_file as _sha256_file,
     write_csv as _write_csv,
 )
 
@@ -543,12 +544,18 @@ def validate_electricity_customers(
         for row in observed_detail
     ):
         failures.append("Negative electricity-customer value detected.")
+    if any(
+        int(row["electricity_customers_count"]) < 0
+        for row in observed_total
+    ):
+        failures.append("Negative electricity-customer total value detected.")
 
     detail_by_year: dict[int, int] = defaultdict(int)
+    detail_counts_by_year: dict[int, int] = defaultdict(int)
     for row in observed_detail:
-        detail_by_year[int(row["year"])] += int(
-            row["electricity_customers_count"]
-        )
+        year = int(row["year"])
+        detail_by_year[year] += int(row["electricity_customers_count"])
+        detail_counts_by_year[year] += 1
     total_by_year = {
         int(row["year"]): int(row["electricity_customers_count"])
         for row in observed_total
@@ -560,6 +567,54 @@ def validate_electricity_customers(
 
     if len(lineage_rows) != 29:
         failures.append(f"Expected 29 lineage rows, found {len(lineage_rows)}.")
+
+    raw_dir = root / "data/raw/bps/electricity_customers"
+    if not raw_dir.is_dir():
+        failures.append(f"Raw directory does not exist: {raw_dir}")
+    else:
+        raw_files = sorted(raw_dir.glob("*.csv"))
+        expected_source_files = {row["source_file"] for row in lineage_rows}
+        actual_raw_files = {path.name for path in raw_files}
+        if actual_raw_files != expected_source_files:
+            failures.append(
+                "Raw CSV files differ from data_lineage.csv source_file list."
+            )
+        for row in lineage_rows:
+            raw_path = raw_dir / row["source_file"]
+            if not raw_path.is_file():
+                failures.append(f"Missing raw file in lineage: {row['source_file']}")
+                continue
+            if _sha256_file(raw_path) != row["source_file_sha256"]:
+                failures.append(
+                    f"Raw source SHA-256 mismatch for {row['source_file']}."
+                )
+
+    expected_observed_years = expected_years - EXPECTED_MISSING_SOURCE_YEARS
+    lineage_years = {int(row["source_year"]) for row in lineage_rows}
+    if lineage_years != expected_observed_years:
+        failures.append(
+            f"Unexpected lineage source_year set: {sorted(lineage_years)}."
+        )
+    for row in lineage_rows:
+        year = int(row["source_year"])
+        if detail_counts_by_year.get(year, 0) != int(row["canonical_rows_with_value"]):
+            failures.append(
+                f"Lineage detail-count mismatch for {year}: "
+                f"processed={detail_counts_by_year.get(year, 0)}, "
+                f"lineage={row['canonical_rows_with_value']}."
+            )
+        if str(detail_by_year.get(year, 0)) != row["calculated_canonical_total"]:
+            failures.append(
+                f"Lineage calculated total mismatch for {year}: "
+                f"processed={detail_by_year.get(year, 0)}, "
+                f"lineage={row['calculated_canonical_total']}."
+            )
+        if year in total_by_year and str(total_by_year[year]) != row["reported_indonesia_total"]:
+            failures.append(
+                f"Lineage reported total mismatch for {year}: "
+                f"processed={total_by_year[year]}, "
+                f"lineage={row['reported_indonesia_total']}."
+            )
 
     if any(row["status"] != "valid" for row in lineage_rows):
         failures.append("Every observed source total must reconcile exactly.")
@@ -588,6 +643,22 @@ def validate_electricity_customers(
         (2024, "public"),
     }:
         failures.append(f"Unexpected YoY warning set: {warning_pairs}.")
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if (
+        summary.get("dataset_id") != DATASET_ID
+        or summary.get("detail_rows") != len(detail_rows)
+        or summary.get("detail_rows_with_value") != len(observed_detail)
+        or summary.get("detail_missing_rows") != len(detail_missing)
+        or summary.get("total_rows") != len(total_rows)
+        or summary.get("total_rows_with_value") != len(observed_total)
+        or summary.get("total_missing_rows") != len(total_missing)
+        or summary.get("source_files") != len(lineage_rows)
+        or summary.get("lineage_rows") != len(lineage_rows)
+        or summary.get("quality_flags") != len(quality_rows)
+        or summary.get("large_yoy_warning_flags") != issue_counts.get("large_consecutive_yoy_change", 0)
+    ):
+        failures.append("Build summary JSON does not match validated outputs.")
 
     if failures:
         raise ValueError(" | ".join(failures))

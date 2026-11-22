@@ -18,10 +18,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from ecadin_energy.config import PATHS
-from ecadin_energy.data_processing.harmonization.regions import (
-    load_regions,
-    resolve_region,
-)
+from ecadin_energy.data_processing.harmonization.regions import load_regions
 
 DATASET_ID = "demand_distributed_electricity"
 VARIABLE_NAME = "distributed_electricity_gwh"
@@ -512,6 +509,54 @@ def validate_distributed_electricity(
     if len(lineage_rows) != 13:
         failures.append(f"Expected 13 lineage rows, found {len(lineage_rows)}.")
 
+    raw_dir = root / "data/raw/bps/distributed_electricity"
+    if not raw_dir.is_dir():
+        failures.append(f"Raw directory does not exist: {raw_dir}")
+    else:
+        raw_files = sorted(raw_dir.glob("*.csv"))
+        expected_source_files = {row["source_file"] for row in lineage_rows}
+        actual_raw_files = {path.name for path in raw_files}
+        if actual_raw_files != expected_source_files:
+            failures.append(
+                "Raw CSV files differ from data_lineage.csv source_file list."
+            )
+        for row in lineage_rows:
+            raw_path = raw_dir / row["source_file"]
+            if not raw_path.is_file():
+                failures.append(f"Missing raw file in lineage: {row['source_file']}")
+                continue
+            if _sha256_file(raw_path) != row["source_file_sha256"]:
+                failures.append(
+                    f"Raw source SHA-256 mismatch for {row['source_file']}."
+                )
+
+    observed_by_year: dict[int, list[Decimal]] = defaultdict(list)
+    for row in data_rows:
+        if row["distributed_electricity_gwh"] != "":
+            observed_by_year[int(row["year"])].append(
+                Decimal(row["distributed_electricity_gwh"])
+            )
+    expected_observed_years = expected_years - EXPECTED_MISSING_SOURCE_YEARS
+    lineage_years = {int(row["source_year"]) for row in lineage_rows}
+    if lineage_years != expected_observed_years:
+        failures.append(
+            f"Unexpected lineage source_year set: {sorted(lineage_years)}."
+        )
+    for row in lineage_rows:
+        year = int(row["source_year"])
+        year_values = observed_by_year.get(year, [])
+        if len(year_values) != int(row["canonical_rows_with_value"]):
+            failures.append(
+                f"Lineage value-count mismatch for {year}: "
+                f"processed={len(year_values)}, lineage={row['canonical_rows_with_value']}."
+            )
+        calculated_total = _format_decimal(sum(year_values, Decimal("0")))
+        if calculated_total != row["calculated_canonical_total"]:
+            failures.append(
+                f"Lineage total mismatch for {year}: "
+                f"processed={calculated_total}, lineage={row['calculated_canonical_total']}."
+            )
+
     missing_year_flags = [
         row for row in quality_rows if row["issue_type"] == "missing_source_year"
     ]
@@ -530,16 +575,62 @@ def validate_distributed_electricity(
             f"found {len(missing_value_flags)}."
         )
 
+    issue_counts: dict[str, int] = defaultdict(int)
+    for row in quality_rows:
+        issue_counts[row["issue_type"]] += 1
+
+    expected_issue_counts = {
+        "missing_source_year": 34,
+        "missing_source_value": 2,
+        "large_consecutive_yoy_change": 7,
+    }
+    if dict(sorted(issue_counts.items())) != dict(sorted(expected_issue_counts.items())):
+        failures.append(f"Quality issue counts differ: {dict(issue_counts)}.")
+
     yoy_flags = [
         row
         for row in quality_rows
         if row["issue_type"] == "large_consecutive_yoy_change"
     ]
+    if len(yoy_flags) != 7:
+        failures.append(
+            f"Expected 7 large consecutive YoY warning flags, found {len(yoy_flags)}."
+        )
+    actual_warning_keys = {
+        (str(row["region_id"]), int(row["year"])) for row in yoy_flags
+    }
+    expected_warning_keys = {
+        ("JA", 2019),
+        ("KU", 2019),
+        ("KU", 2023),
+        ("KR", 2020),
+        ("KR", 2021),
+        ("MU", 2018),
+        ("MU", 2023),
+    }
+    if actual_warning_keys != expected_warning_keys:
+        failures.append(
+            f"Unexpected distributed-electricity YoY warning keys: {sorted(actual_warning_keys)}."
+        )
+
     zero_base_flags = [
         row
         for row in quality_rows
         if row["issue_type"] == "large_zero_base_jump"
     ]
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if (
+        summary.get("dataset_id") != DATASET_ID
+        or summary.get("canonical_rows") != len(data_rows)
+        or summary.get("canonical_rows_with_value") != len(nonmissing_values)
+        or summary.get("canonical_missing_rows") != len(missing_rows)
+        or summary.get("source_files") != len(lineage_rows)
+        or summary.get("quality_flags") != len(quality_rows)
+        or summary.get("large_yoy_warning_flags") != len(yoy_flags)
+        or summary.get("large_zero_base_jump_flags", 0) != len(zero_base_flags)
+    ):
+        failures.append("Build summary JSON does not match validated outputs.")
 
     if failures:
         raise ValueError(" | ".join(failures))

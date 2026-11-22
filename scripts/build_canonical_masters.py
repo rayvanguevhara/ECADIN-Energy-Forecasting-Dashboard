@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.mastering.canonical_masters import (
     build_canonical_masters,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Build canonical master tables.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    summary = build_canonical_masters()
+    args = build_parser().parse_args()
+    summary = build_canonical_masters(project_root=args.project_root)
     regional = summary["regional_master"]
     national = summary["national_customer_group_master"]
 

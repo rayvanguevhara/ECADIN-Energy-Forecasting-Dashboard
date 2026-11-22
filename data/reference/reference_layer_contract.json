@@ -38,6 +38,8 @@
     "regions.csv": "a4e4e520cec5b743d52e452b97fa0cf5315f6f66b0719cc4875fa98e9a07a4cc",
     "region_aliases.csv": "b1cd2dcf0905875b2d1f6f72e4c15bf4646049ad915ce1233bd67074f7a0cb4a",
     "region_coordinates.csv": "77f1b8f9b830d90b3c59780f1d70e4171392db46806e68c489e627e45095361a",
-    "variable_dictionary.csv": "209bd02e71d9655a93e09b34856ceabbe914210bc8fc420410d69b25921c4d00"
+    "variable_dictionary.csv": "209bd02e71d9655a93e09b34856ceabbe914210bc8fc420410d69b25921c4d00",
+    "customer_groups.csv": "363d34748473c98af0b3bae8e74fda40621a09ed177fd33d6ee8afbbb70d2327",
+    "source_registry.csv": "16a8c4f23d63a3df6305bfad9454d7ea1ff257c35de0a4b07e2c215218f959aa"
   }
 }

@@ -928,6 +928,33 @@ def validate_statistik_listrik_bps(
     ) != 14:
         failures.append("Expected fourteen province publications.")
 
+    raw_dir = root / "data/raw/bps/statistik_listrik"
+    verified_pdf_hashes = 0
+    if not raw_dir.is_dir():
+        failures.append(f"Raw PDF directory does not exist: {raw_dir}")
+    else:
+        actual_pdfs = {path.name for path in raw_dir.glob("*.pdf")}
+        expected_pdfs = {row["filename"] for row in pdf_inventory}
+        if actual_pdfs != expected_pdfs:
+            failures.append(
+                "PDF files on disk differ from statistik_listrik_pdf_inventory.csv."
+            )
+        for row in pdf_inventory:
+            pdf_path = raw_dir / row["filename"]
+            if not pdf_path.is_file():
+                failures.append(f"Missing PDF referenced in inventory: {row['filename']}")
+                continue
+            if pdf_path.stat().st_size != int(row["size_bytes"]):
+                failures.append(
+                    f"PDF size mismatch for {row['filename']}."
+                )
+            elif _sha256(pdf_path) != row["sha256"].strip().upper():
+                failures.append(
+                    f"PDF SHA-256 mismatch for {row['filename']}."
+                )
+            else:
+                verified_pdf_hashes += 1
+
     if len(table_inventory) != 57:
         failures.append(
             f"Expected 57 latest table rows, found {len(table_inventory)}."
@@ -1047,5 +1074,6 @@ def validate_statistik_listrik_bps(
         "national_revision_candidates": national_status_counts[
             "revision_candidate"
         ],
+        "pdf_hashes_verified": verified_pdf_hashes,
         "canonical_outputs_modified": False,
     }

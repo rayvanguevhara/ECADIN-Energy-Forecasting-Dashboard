@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.audit.statistik_listrik_bps import (
     validate_statistik_listrik_bps,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Validate BPS Statistik Listrik PDF audit outputs.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    result = validate_statistik_listrik_bps()
+    args = build_parser().parse_args()
+    result = validate_statistik_listrik_bps(project_root=args.project_root)
 
     print("ECADIN STATISTIK LISTRIK BPS VALIDATION: PASSED")
     print(f"PDF files               : {result['pdf_files']}")

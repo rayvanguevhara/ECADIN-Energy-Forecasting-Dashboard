@@ -758,6 +758,78 @@ def validate_canonical_masters(
                 f"Input hash mismatch: {row['relative_path']}"
             )
 
+    try:
+        expected_regional = [
+            {col: str(item[col]) for col in REGIONAL_COLUMNS}
+            for item in _build_regional_master(root)
+        ]
+        actual_regional_norm = [
+            {col: str(row.get(col, "")) for col in REGIONAL_COLUMNS}
+            for row in regional_rows
+        ]
+        if actual_regional_norm != expected_regional:
+            failures.append(
+                "Regional master cell values differ from canonical processed inputs."
+            )
+    except (FileNotFoundError, ValueError) as exc:
+        failures.append(f"Regional master cross-check failed: {exc}")
+
+    try:
+        expected_national = [
+            {col: str(item[col]) for col in NATIONAL_COLUMNS}
+            for item in _build_national_master(root)
+        ]
+        actual_national_norm = [
+            {col: str(row.get(col, "")) for col in NATIONAL_COLUMNS}
+            for row in national_rows
+        ]
+        if actual_national_norm != expected_national:
+            failures.append(
+                "National master cell values differ from canonical processed inputs."
+            )
+    except (FileNotFoundError, ValueError) as exc:
+        failures.append(f"National master cross-check failed: {exc}")
+
+    completeness_fields = [
+        "master_id",
+        "year",
+        "expected_rows",
+        "rows_present",
+        "complete_rows",
+        "incomplete_rows",
+        "missing_distributed_electricity_gwh",
+        "missing_local_generation_gwh",
+        "missing_installed_capacity_mw",
+        "missing_electricity_sold_gwh",
+        "missing_electricity_customers_count",
+        "status",
+    ]
+    expected_completeness = [
+        {col: str(item[col]) for col in completeness_fields}
+        for item in _build_completeness_rows(regional_rows, national_rows)
+    ]
+    actual_completeness_norm = [
+        {col: str(row.get(col, "")) for col in completeness_fields}
+        for row in completeness_rows
+    ]
+    if actual_completeness_norm != expected_completeness:
+        failures.append(
+            "Completeness table contents do not match canonical master tables."
+        )
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary_regional = summary.get("regional_master", {})
+    summary_national = summary.get("national_customer_group_master", {})
+    if (
+        summary_regional.get("rows") != len(regional_rows)
+        or summary_regional.get("complete_rows") != regional_complete_rows
+        or summary_national.get("rows") != len(national_rows)
+        or summary.get("imputation_performed") is not False
+    ):
+        failures.append(
+            "Canonical master build summary JSON does not match validated tables."
+        )
+
     if failures:
         raise ValueError(" | ".join(failures))
 

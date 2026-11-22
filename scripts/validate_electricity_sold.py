@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.cleaning.electricity_sold import (
     validate_electricity_sold,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Validate electricity sold outputs.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    result = validate_electricity_sold()
+    args = build_parser().parse_args()
+    result = validate_electricity_sold(project_root=args.project_root)
     print("ECADIN ELECTRICITY SOLD VALIDATION: PASSED")
     print(f"Geographic scope       : {result['geographic_scope']}")
     print(f"Detail rows            : {result['detail_rows']}")

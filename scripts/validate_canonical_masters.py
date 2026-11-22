@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.mastering.canonical_masters import (
     validate_canonical_masters,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Validate canonical master tables.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    result = validate_canonical_masters()
+    args = build_parser().parse_args()
+    result = validate_canonical_masters(project_root=args.project_root)
 
     print("ECADIN CANONICAL MASTERS VALIDATION: PASSED")
     print(f"Regional rows          : {result['regional_rows']}")

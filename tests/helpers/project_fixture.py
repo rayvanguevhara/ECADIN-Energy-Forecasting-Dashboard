@@ -41,6 +41,8 @@ class PortableProject:
             "region_aliases.csv",
             "region_coordinates.csv",
             "variable_dictionary.csv",
+            "customer_groups.csv",
+            "source_registry.csv",
             "reference_layer_contract.json",
         ):
             self._copy(

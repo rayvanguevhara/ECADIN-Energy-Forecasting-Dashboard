@@ -226,6 +226,8 @@ class RegionHarmonizationTest(unittest.TestCase):
                 "region_aliases.csv",
                 "region_coordinates.csv",
                 "variable_dictionary.csv",
+                "customer_groups.csv",
+                "source_registry.csv",
                 "reference_layer_contract.json",
             ):
                 shutil.copy2(SOURCE_REFERENCE / name, ref_dir / name)
@@ -255,6 +257,46 @@ class RegionHarmonizationTest(unittest.TestCase):
             )
 
             with self.assertRaisesRegex(ValueError, "Duplicate alias key detected"):
+                validate_reference_layer(project_root=root)
+
+    def test_validate_reference_layer_detects_tampered_customer_groups_and_source_registry(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ref_dir = root / "data" / "reference"
+            ref_dir.mkdir(parents=True, exist_ok=True)
+            for name in (
+                "regions.csv",
+                "region_aliases.csv",
+                "region_coordinates.csv",
+                "variable_dictionary.csv",
+                "customer_groups.csv",
+                "source_registry.csv",
+                "reference_layer_contract.json",
+            ):
+                shutil.copy2(SOURCE_REFERENCE / name, ref_dir / name)
+
+            result = validate_reference_layer(project_root=root)
+            self.assertEqual(result["customer_groups"], 5)
+            self.assertGreaterEqual(result["hashed_files"], 6)
+
+            cust_path = ref_dir / "customer_groups.csv"
+            orig_cust = cust_path.read_bytes()
+            cust_path.write_text(
+                cust_path.read_text(encoding="utf-8-sig").replace("Social,1,Social", "Social,1,Soc"),
+                encoding="utf-8-sig",
+            )
+            with self.assertRaisesRegex(ValueError, "SHA-256 mismatch for customer_groups.csv"):
+                validate_reference_layer(project_root=root)
+
+            cust_path.write_bytes(orig_cust)
+            reg_path = ref_dir / "source_registry.csv"
+            reg_path.write_text(
+                reg_path.read_text(encoding="utf-8-sig").replace("2010, 2012, 2016", "2016"),
+                encoding="utf-8-sig",
+            )
+            with self.assertRaisesRegex(ValueError, "SHA-256 mismatch for source_registry.csv"):
                 validate_reference_layer(project_root=root)
 
 

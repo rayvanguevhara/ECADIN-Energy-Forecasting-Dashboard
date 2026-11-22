@@ -10,6 +10,15 @@ from ecadin_energy.config import PATHS
 
 
 EXPECTED_REGION_COUNT = 34
+EXPECTED_CUSTOMER_GROUP_COUNT = 5
+REQUIRED_HASHED_FILES = (
+    "regions.csv",
+    "region_aliases.csv",
+    "region_coordinates.csv",
+    "variable_dictionary.csv",
+    "customer_groups.csv",
+    "source_registry.csv",
+)
 
 
 def _root(project_root: str | Path | None) -> Path:
@@ -40,6 +49,8 @@ def validate_reference_layer(
     aliases_path = reference / "region_aliases.csv"
     coordinates_path = reference / "region_coordinates.csv"
     variables_path = reference / "variable_dictionary.csv"
+    customer_groups_path = reference / "customer_groups.csv"
+    source_registry_path = reference / "source_registry.csv"
     contract_path = reference / "reference_layer_contract.json"
 
     paths = [
@@ -47,6 +58,8 @@ def validate_reference_layer(
         aliases_path,
         coordinates_path,
         variables_path,
+        customer_groups_path,
+        source_registry_path,
         contract_path,
     ]
     missing = [str(path) for path in paths if not path.is_file()]
@@ -58,6 +71,8 @@ def validate_reference_layer(
     regions = _read_csv(regions_path)
     aliases = _read_csv(aliases_path)
     coordinates = _read_csv(coordinates_path)
+    customer_groups = _read_csv(customer_groups_path)
+    source_registry = _read_csv(source_registry_path)
     contract = json.loads(contract_path.read_text(encoding="utf-8"))
 
     failures: list[str] = []
@@ -76,6 +91,24 @@ def validate_reference_layer(
         )
     if region_id_set != {row["region_id"] for row in coordinates}:
         failures.append("Coordinate region set does not match regions.csv.")
+
+    group_ids = [row.get("customer_group_id", "").strip() for row in customer_groups]
+    if len(customer_groups) != EXPECTED_CUSTOMER_GROUP_COUNT or len(set(group_ids)) != len(group_ids):
+        failures.append(
+            f"Expected {EXPECTED_CUSTOMER_GROUP_COUNT} unique customer groups in customer_groups.csv."
+        )
+    if any(
+        not row.get("customer_group_id", "").strip()
+        or not row.get("modeling_order", "").strip()
+        or not row.get("source_label", "").strip()
+        for row in customer_groups
+    ):
+        failures.append("Blank customer group field detected in customer_groups.csv.")
+
+    dataset_ids = [row.get("dataset_id", "").strip() for row in source_registry]
+    if not source_registry or any(not d for d in dataset_ids) or len(set(dataset_ids)) != len(dataset_ids):
+        failures.append("source_registry.csv must contain unique non-blank dataset_id rows.")
+
     if any(not row["normalized_alias"] for row in aliases):
         failures.append("Blank normalized alias detected.")
     if any(row["region_id"] not in region_id_set for row in aliases):
@@ -98,8 +131,18 @@ def validate_reference_layer(
             f"Expected {expected_alias_count} aliases, found {len(aliases)}."
         )
 
-    for filename, expected_hash in contract["file_hashes"].items():
-        actual = sha256_file(reference / filename)
+    file_hashes = contract.get("file_hashes", {})
+    missing_hashes = [name for name in REQUIRED_HASHED_FILES if name not in file_hashes]
+    if missing_hashes:
+        failures.append(
+            f"reference_layer_contract.json is missing hashes for: {missing_hashes}."
+        )
+    for filename, expected_hash in file_hashes.items():
+        target = reference / filename
+        if not target.is_file():
+            failures.append(f"Hashed reference file is missing: {filename}.")
+            continue
+        actual = sha256_file(target)
         if actual != expected_hash:
             failures.append(f"SHA-256 mismatch for {filename}.")
 
@@ -117,6 +160,9 @@ def validate_reference_layer(
         "regions": len(regions),
         "aliases": len(aliases),
         "coordinates": len(coordinates),
+        "customer_groups": len(customer_groups),
+        "source_registry_entries": len(source_registry),
+        "hashed_files": len(file_hashes),
         "bubble_only": bubble_only,
         "canonical_key": "region_id + year",
     }

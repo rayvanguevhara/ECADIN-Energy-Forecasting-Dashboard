@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.cleaning.distributed_electricity import (
     build_distributed_electricity,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Build canonical distributed electricity data.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    summary = build_distributed_electricity()
+    args = build_parser().parse_args()
+    summary = build_distributed_electricity(project_root=args.project_root)
     print("ECADIN DISTRIBUTED ELECTRICITY BUILD: COMPLETED")
     print(f"Source files       : {summary['source_files']}")
     print("Source coverage    : 2011-2015, 2017-2024")

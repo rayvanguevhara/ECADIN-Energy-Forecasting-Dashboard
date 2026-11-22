@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from ecadin_energy.data_processing.cleaning.electricity_customers import (
     validate_electricity_customers,
 )
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Validate electricity customers outputs.")
+    parser.add_argument("--project-root", type=Path, default=None)
+    return parser
+
+
 def main() -> int:
-    result = validate_electricity_customers()
+    args = build_parser().parse_args()
+    result = validate_electricity_customers(project_root=args.project_root)
     print("ECADIN ELECTRICITY CUSTOMERS VALIDATION: PASSED")
     print(f"Geographic scope       : {result['geographic_scope']}")
     print(f"Detail rows            : {result['detail_rows']}")

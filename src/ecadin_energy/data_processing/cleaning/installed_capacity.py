@@ -26,6 +26,7 @@ from ecadin_energy.data_processing.cleaning.annual_province_series import (
     parse_decimal as _parse_decimal,
     read_annual_province_file,
     replace_dataset_rows as _replace_dataset_rows,
+    sha256_file as _sha256_file,
     write_csv as _write_csv,
 )
 
@@ -562,6 +563,54 @@ def validate_installed_capacity(
     if len(lineage_rows) != 13:
         failures.append(f"Expected 13 lineage rows, found {len(lineage_rows)}.")
 
+    raw_dir = root / "data/raw/bps/installed_capacity"
+    if not raw_dir.is_dir():
+        failures.append(f"Raw directory does not exist: {raw_dir}")
+    else:
+        raw_files = sorted(raw_dir.glob("*.csv"))
+        expected_source_files = {row["source_file"] for row in lineage_rows}
+        actual_raw_files = {path.name for path in raw_files}
+        if actual_raw_files != expected_source_files:
+            failures.append(
+                "Raw CSV files differ from data_lineage.csv source_file list."
+            )
+        for row in lineage_rows:
+            raw_path = raw_dir / row["source_file"]
+            if not raw_path.is_file():
+                failures.append(f"Missing raw file in lineage: {row['source_file']}")
+                continue
+            if _sha256_file(raw_path) != row["source_file_sha256"]:
+                failures.append(
+                    f"Raw source SHA-256 mismatch for {row['source_file']}."
+                )
+
+    observed_by_year: dict[int, list[Decimal]] = defaultdict(list)
+    for row in data_rows:
+        if row["installed_capacity_mw"] != "":
+            observed_by_year[int(row["year"])].append(
+                Decimal(row["installed_capacity_mw"])
+            )
+    expected_observed_years = expected_years - EXPECTED_MISSING_SOURCE_YEARS
+    lineage_years = {int(row["source_year"]) for row in lineage_rows}
+    if lineage_years != expected_observed_years:
+        failures.append(
+            f"Unexpected lineage source_year set: {sorted(lineage_years)}."
+        )
+    for row in lineage_rows:
+        year = int(row["source_year"])
+        year_values = observed_by_year.get(year, [])
+        if len(year_values) != int(row["canonical_rows_with_value"]):
+            failures.append(
+                f"Lineage value-count mismatch for {year}: "
+                f"processed={len(year_values)}, lineage={row['canonical_rows_with_value']}."
+            )
+        calculated_total = _format_decimal(sum(year_values, Decimal("0")))
+        if calculated_total != row["calculated_canonical_total"]:
+            failures.append(
+                f"Lineage total mismatch for {year}: "
+                f"processed={calculated_total}, lineage={row['calculated_canonical_total']}."
+            )
+
     issue_counts: dict[str, int] = defaultdict(int)
     for row in quality_rows:
         issue_counts[row["issue_type"]] += 1
@@ -586,6 +635,20 @@ def validate_installed_capacity(
         failures.append(
             "National-total mismatch years must be exactly 2013 and 2017."
         )
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if (
+        summary.get("dataset_id") != DATASET_ID
+        or summary.get("canonical_rows") != len(data_rows)
+        or summary.get("canonical_rows_with_value") != len(nonmissing_values)
+        or summary.get("canonical_missing_rows") != len(missing_rows)
+        or summary.get("source_files") != len(lineage_rows)
+        or summary.get("quality_flags") != len(quality_rows)
+        or summary.get("national_total_mismatch_flags") != issue_counts.get("national_total_mismatch", 0)
+        or summary.get("large_yoy_warning_flags") != issue_counts.get("large_consecutive_yoy_change", 0)
+        or summary.get("large_zero_base_jump_flags", 0) != issue_counts.get("large_zero_base_jump", 0)
+    ):
+        failures.append("Build summary JSON does not match validated outputs.")
 
     if failures:
         raise ValueError(" | ".join(failures))

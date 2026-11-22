@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+import shutil
+import tempfile
 import unittest
 from decimal import Decimal
+from pathlib import Path
 
 from ecadin_energy.data_processing.cleaning.local_generation import (
     _build_quality_flags,
     _classify_total_difference,
     _parse_decimal,
+    validate_local_generation,
 )
+from ecadin_energy.data_processing.harmonization.regions import clear_reference_caches
+
+SOURCE_ROOT = Path(__file__).resolve().parents[2]
 
 
 class LocalGenerationCleanerTest(unittest.TestCase):
@@ -50,6 +57,36 @@ class LocalGenerationCleanerTest(unittest.TestCase):
         self.assertEqual(flag["observed_value"], "249.45")
         self.assertEqual(flag["comparison_value"], "0.00")
         self.assertEqual(flag["metric_value"], "249.45")
+
+    def test_validate_local_generation_detects_raw_sha256_tampering(self) -> None:
+        clear_reference_caches()
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                shutil.copytree(
+                    SOURCE_ROOT / "data/raw/bps/local_generation",
+                    root / "data/raw/bps/local_generation",
+                )
+                for rel in (
+                    "data/reference/regions.csv",
+                    "data/processed/supply/local_generation.csv",
+                    "data/processed/master/data_lineage.csv",
+                    "data/processed/master/data_quality_flags.csv",
+                    "outputs/reports/data/local_generation_build_summary.json",
+                ):
+                    dst = root / rel
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(SOURCE_ROOT / rel, dst)
+
+                result = validate_local_generation(project_root=root)
+                self.assertEqual(result["status"], "valid")
+
+                raw_sample = sorted((root / "data/raw/bps/local_generation").glob("*.csv"))[0]
+                raw_sample.write_bytes(raw_sample.read_bytes() + b"\n")
+                with self.assertRaisesRegex(ValueError, "Raw source SHA-256 mismatch"):
+                    validate_local_generation(project_root=root)
+        finally:
+            clear_reference_caches()
 
 
 if __name__ == "__main__":
