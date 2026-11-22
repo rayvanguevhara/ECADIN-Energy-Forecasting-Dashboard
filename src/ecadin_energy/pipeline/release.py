@@ -45,6 +45,7 @@ def validate_frontend_release(
     vercel_payload = json.loads(vercel_config.read_text(encoding="utf-8"))
     vite_text = vite_config.read_text(encoding="utf-8")
 
+    expected_rows = config.expected_regions * len(config.years)
     rows = [
         {
             "check_id": "frontend_dataset_hash",
@@ -58,15 +59,19 @@ def validate_frontend_release(
             "passed": (
                 frontend_payload.get("schema_version")
                 == config.frontend_schema_version
-                and frontend_payload.get("row_count") == 680
-                and frontend_payload.get("region_count") == 34
+                and frontend_payload.get("row_count") == expected_rows
+                and frontend_payload.get("region_count") == config.expected_regions
             ),
             "observed": [
                 frontend_payload.get("schema_version"),
                 frontend_payload.get("row_count"),
                 frontend_payload.get("region_count"),
             ],
-            "expected": [config.frontend_schema_version, 680, 34],
+            "expected": [
+                config.frontend_schema_version,
+                expected_rows,
+                config.expected_regions,
+            ],
             "details": "Frontend payload schema, rows, and regions are stable.",
         },
         {
@@ -132,6 +137,8 @@ def run_frontend_build(
         cwd=frontend,
         env=environment,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         check=False,

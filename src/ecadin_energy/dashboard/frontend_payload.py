@@ -5,8 +5,9 @@ from typing import Any
 import pandas as pd
 
 from ecadin_energy.dashboard.configuration import DashboardConfig
-from ecadin_energy.dashboard.methodology import frontend_metadata
-from ecadin_energy.dashboard.serializers import clean_scalar
+from ecadin_energy.dashboard.methodology import build_methodology, frontend_metadata
+from ecadin_energy.dashboard.serializers import clean_scalar, records
+from ecadin_energy.forecasting.configuration import ProductionConfig
 
 
 def _point(row: pd.Series) -> dict[str, Any]:
@@ -22,6 +23,7 @@ def _point(row: pd.Series) -> dict[str, Any]:
         "available": bool(row["available"]),
         "quality": str(row["quality"]),
         "quality_badge": str(row["quality_badge"]),
+        "gap_category": str(row["gap_category"]),
         "interpolated": bool(row["interpolated"]),
         "attention": bool(row["attention"]),
         "attention_reason": clean_scalar(row["attention_reason"]),
@@ -39,7 +41,14 @@ def build_frontend_payload(
     models: pd.DataFrame,
     source_hashes: dict[str, str],
     config: DashboardConfig,
+    *,
+    forecast_config: ProductionConfig | None = None,
+    quality_flags: pd.DataFrame | None = None,
+    quality_flags_summary: pd.DataFrame | None = None,
+    quality_flags_highlights: pd.DataFrame | None = None,
+    methodology: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Assemble frontend production JSON payload with additive V2/quality/methodology fields."""
     provinces: list[dict[str, Any]] = []
     for region_id, group in detail.groupby("region_id", sort=False):
         first = group.iloc[0]
@@ -71,14 +80,43 @@ def build_frontend_payload(
             "data_completeness": str(row["data_completeness"]),
             "demand_growth_yoy_percent": clean_scalar(row["demand_growth_yoy_percent"]),
             "supply_growth_yoy_percent": clean_scalar(row["supply_growth_yoy_percent"]),
+            "yoy_common_regions": clean_scalar(row["yoy_common_regions"]),
+            "yoy_basis": str(row["yoy_basis"]),
         }
         for _, row in national.iterrows()
     ]
-    metadata, metadata_v2 = frontend_metadata(config)
+    metadata, metadata_v2 = frontend_metadata(
+        config,
+        models=models,
+        forecast_config=forecast_config,
+    )
     metadata_v2["row_count"] = str(len(detail))
     metadata_v2["complete_gap_count"] = str(int(detail["available"].sum()))
     metadata_v2["historical_incomplete_gap_count"] = str(
         int((detail["data_type"].eq("historical") & ~detail["available"]).sum())
+    )
+
+    resolved_methodology = (
+        methodology
+        if methodology is not None
+        else build_methodology(config, models=models, forecast_config=forecast_config)
+    )
+    if quality_flags is not None:
+        quality_flags_total = int(len(quality_flags))
+    elif quality_flags_summary is not None and not quality_flags_summary.empty:
+        quality_flags_total = int(
+            pd.to_numeric(quality_flags_summary["flag_count"], errors="coerce").fillna(0).sum()
+        )
+    else:
+        quality_flags_total = 0
+
+    legacy_clarification = str(
+        resolved_methodology.get("contract_clarifications", {})
+        .get("legacy_ridge_used", {})
+        .get(
+            "meaning",
+            "False certifies that the pre-project legacy raw-level Ridge baseline is not reused.",
+        )
     )
 
     return {
@@ -98,10 +136,19 @@ def build_frontend_payload(
         ),
         "regional_uncertainty_display_allowed": config.regional_uncertainty_display_allowed,
         "legacy_ridge_used": config.legacy_model_reused,
+        "legacy_ridge_clarification": legacy_clarification,
         "source_hashes": source_hashes,
         "provinces": provinces,
         "national": national_rows,
-        "models": models.to_dict(orient="records"),
+        "models": records(models),
+        "quality_flags_total": quality_flags_total,
+        "quality_flags_summary": (
+            records(quality_flags_summary) if quality_flags_summary is not None else []
+        ),
+        "quality_flags_highlights": (
+            records(quality_flags_highlights) if quality_flags_highlights is not None else []
+        ),
+        "methodology": resolved_methodology,
         "metadata": metadata,
         "metadata_v2": metadata_v2,
     }

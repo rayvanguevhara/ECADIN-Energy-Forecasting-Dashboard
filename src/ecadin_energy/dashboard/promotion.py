@@ -1,11 +1,16 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
 from ecadin_energy.dashboard.configuration import load_dashboard_config
-from ecadin_energy.dashboard.serializers import atomic_copy, sha256_file, write_json
+from ecadin_energy.dashboard.serializers import (
+    atomic_copy,
+    relative_posix_path,
+    sha256_file,
+    write_json,
+)
 from ecadin_energy.dashboard.staging import DETERMINISTIC_FILES
 from ecadin_energy.dashboard.validation import validate_dashboard_directory
 
@@ -39,7 +44,7 @@ def promote_dashboard_staging(
         "files": len(DETERMINISTIC_FILES),
         "checks_passed": int(checks["passed"].sum()),
         "checks_total": int(len(checks)),
-        "archive": str(archive) if archive else None,
+        "archive": relative_posix_path(archive, paths.root) if archive else None,
         "production_hashes": {
             name: sha256_file(paths.production / name) for name in DETERMINISTIC_FILES
         },

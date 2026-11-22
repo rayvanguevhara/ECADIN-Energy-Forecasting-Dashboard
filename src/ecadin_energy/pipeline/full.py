@@ -7,7 +7,7 @@ from typing import Any, Callable
 
 from ecadin_energy.config import PATHS
 from ecadin_energy.dashboard.validation import validate_dashboard_production
-from ecadin_energy.forecasting.production.artifacts import write_json
+from ecadin_energy.forecasting.production.artifacts import relative_posix_path, write_json
 from ecadin_energy.pipeline.dashboard import run_dashboard_pipeline
 from ecadin_energy.pipeline.data import run_data_pipeline, validate_data_pipeline
 from ecadin_energy.pipeline.production import run_production_pipeline
@@ -119,7 +119,7 @@ def run_full_pipeline(
         "schema_version": "ecadin_full_pipeline_v1",
         "status": "running",
         "started_at_utc": _utc_now(),
-        "project_root": str(root),
+        "project_root": relative_posix_path(root, root),
         "start_at": start_at,
         "frontend_build_requested": run_frontend_production_build,
         "frontend_build_target": frontend_build_target,

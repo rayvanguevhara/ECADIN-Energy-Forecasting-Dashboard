@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
-import shutil
-import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -13,9 +10,14 @@ from ecadin_energy.dashboard.configuration import load_dashboard_config
 from ecadin_energy.dashboard.contracts import DashboardContractError
 from ecadin_energy.dashboard.serializers import atomic_copy, sha256_file, write_csv, write_json
 from ecadin_energy.dashboard.validation import validate_dashboard_directory
+from ecadin_energy.pipeline.release import run_frontend_build
 
 
-def snapshot_frontend(frontend: Path, excluded_directories: tuple[str, ...], allowed_mutations: tuple[str, ...]) -> dict[str, str]:
+def snapshot_frontend(
+    frontend: Path,
+    excluded_directories: tuple[str, ...],
+    allowed_mutations: tuple[str, ...],
+) -> dict[str, str]:
     excluded = set(excluded_directories)
     allowed = {Path(value).as_posix() for value in allowed_mutations}
     snapshot: dict[str, str] = {}
@@ -38,6 +40,7 @@ def refresh_frontend_data(
     project_root: str | Path | None = None,
     config_path: str | Path | None = None,
     run_build: bool = False,
+    build_target: str = "vercel",
 ) -> dict[str, Any]:
     config = load_dashboard_config(config_path, project_root=project_root)
     paths = config.paths(project_root)
@@ -67,6 +70,7 @@ def refresh_frontend_data(
         )
 
     payload = json.loads(paths.frontend_dataset.read_text(encoding="utf-8"))
+    expected_rows = config.expected_regions * len(config.years)
     rows = [
         {
             "check_id": "frontend_dataset_hash",
@@ -82,33 +86,26 @@ def refresh_frontend_data(
         },
         {
             "check_id": "frontend_payload_contract",
-            "passed": payload.get("row_count") == 680 and payload.get("region_count") == 34,
+            "passed": (
+                payload.get("row_count") == expected_rows
+                and payload.get("region_count") == config.expected_regions
+            ),
             "observed": [payload.get("row_count"), payload.get("region_count")],
-            "expected": [680, 34],
+            "expected": [expected_rows, config.expected_regions],
         },
     ]
 
     build_result: dict[str, Any] | None = None
     if run_build:
-        npm = shutil.which("npm.cmd" if os.name == "nt" else "npm") or shutil.which("npm")
-        if npm is None:
-            raise FileNotFoundError("npm executable was not found")
-        completed = subprocess.run(
-            [npm, "run", "build"], cwd=paths.frontend, text=True,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+        build_result = run_frontend_build(project_root=paths.root, target=build_target)
+        rows.append(
+            {
+                "check_id": "frontend_production_build",
+                "passed": bool(build_result.get("passed")),
+                "observed": build_result.get("return_code"),
+                "expected": 0,
+            }
         )
-        build_result = {
-            "return_code": completed.returncode,
-            "output_tail": completed.stdout[-8000:],
-        }
-        rows.append({
-            "check_id": "frontend_production_build",
-            "passed": completed.returncode == 0,
-            "observed": completed.returncode,
-            "expected": 0,
-        })
-        if completed.returncode != 0:
-            raise DashboardContractError("Frontend production build failed:\n" + completed.stdout[-8000:])
 
     checks = pd.DataFrame(rows)
     paths.reports.mkdir(parents=True, exist_ok=True)

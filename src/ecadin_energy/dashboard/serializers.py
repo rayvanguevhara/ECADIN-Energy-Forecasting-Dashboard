@@ -19,7 +19,7 @@ def sha256_file(path: Path) -> str:
 
 
 def clean_scalar(value: Any) -> Any:
-    if value is None:
+    if value is None or value is pd.NA:
         return None
     if isinstance(value, (np.bool_, bool)):
         return bool(value)
@@ -30,6 +30,28 @@ def clean_scalar(value: Any) -> Any:
     if pd.isna(value):
         return None
     return value
+
+
+def relative_posix_path(path: Path, root: Path) -> str:
+    """Return path relative to root formatted as a normalized POSIX string."""
+    resolved_path = path.resolve()
+    resolved_root = root.resolve()
+    if resolved_path == resolved_root:
+        return "."
+    return resolved_path.relative_to(resolved_root).as_posix()
+
+
+def is_relative_posix_path(value: object) -> bool:
+    """Validate that value is a non-empty normalized relative POSIX path."""
+    if not isinstance(value, str) or not value:
+        return False
+    if "\\" in value or value.startswith("/"):
+        return False
+    if len(value) >= 2 and value[1] == ":":
+        return False
+    if Path(value).is_absolute():
+        return False
+    return ".." not in Path(value).parts
 
 
 def records(frame: pd.DataFrame) -> list[dict[str, Any]]:

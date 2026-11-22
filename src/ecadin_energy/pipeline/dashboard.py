@@ -15,6 +15,7 @@ def run_dashboard_pipeline(
     config_path: str | Path | None = None,
     refresh_frontend: bool = True,
     run_frontend_build: bool = False,
+    frontend_build_target: str = "vercel",
 ) -> dict[str, Any]:
     staging = build_dashboard_staging(project_root=project_root, config_path=config_path)
     staging_checks = validate_dashboard_staging(project_root=project_root, config_path=config_path)
@@ -26,6 +27,7 @@ def run_dashboard_pipeline(
             project_root=project_root,
             config_path=config_path,
             run_build=run_frontend_build,
+            build_target=frontend_build_target,
         )
     return {
         "staging": staging["summary"],

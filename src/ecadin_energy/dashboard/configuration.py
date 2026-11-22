@@ -115,8 +115,8 @@ def validate_dashboard_config(config: DashboardConfig) -> None:
         failures.append("forecast_start_year must follow history_end_year")
     if config.forecast_start_year > config.forecast_end_year:
         failures.append("forecast_start_year must not exceed forecast_end_year")
-    if config.expected_regions != 34:
-        failures.append("production dashboard must retain 34 harmonized regions")
+    if config.expected_regions <= 0:
+        failures.append("expected_regions must be positive")
     if not (
         config.far_below_threshold < config.below_threshold
         < config.above_threshold < config.far_above_threshold

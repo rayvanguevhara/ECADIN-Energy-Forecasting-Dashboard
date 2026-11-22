@@ -35,6 +35,7 @@
                                                    ".vite",
                                                    ".cache",
                                                    "coverage",
-                                                   ".git"
+                                                   ".git",
+                                                   ".vercel"
                                                ]
 }

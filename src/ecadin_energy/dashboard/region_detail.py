@@ -7,18 +7,40 @@ from ecadin_energy.dashboard.configuration import DashboardConfig
 from ecadin_energy.dashboard.contracts import DashboardContractError, DETAIL_COLUMNS
 
 
+VALID_GAP_CATEGORIES = (
+    "jauh_di_atas_demand",
+    "di_atas_demand",
+    "relatif_seimbang",
+    "di_bawah_demand",
+    "jauh_di_bawah_demand",
+    "tidak_tersedia",
+)
+ATTENTION_GAP_CATEGORIES = frozenset(
+    {
+        "jauh_di_bawah_demand",
+        "jauh_di_atas_demand",
+        "tidak_tersedia",
+    }
+)
+ATTENTION_REASON_MAP = {
+    "jauh_di_bawah_demand": "jauh_di_bawah_demand_perlu_konteks_interkoneksi",
+    "jauh_di_atas_demand": "jauh_di_atas_demand_perlu_konteks_interkoneksi",
+    "tidak_tersedia": "gap_tidak_lengkap",
+}
+
+
 def classify_accounting_difference(value: float | None, config: DashboardConfig) -> str:
     if value is None or not np.isfinite(value):
         return "tidak_tersedia"
     if value >= config.far_above_threshold:
-        return "surplus_tinggi"
+        return "jauh_di_atas_demand"
     if value >= config.above_threshold:
-        return "surplus_moderat"
+        return "di_atas_demand"
     if value > config.below_threshold:
         return "relatif_seimbang"
     if value > config.far_below_threshold:
-        return "defisit_moderat"
-    return "defisit_tinggi"
+        return "di_bawah_demand"
+    return "jauh_di_bawah_demand"
 
 
 def build_region_detail(
@@ -90,16 +112,8 @@ def build_region_detail(
         classify_accounting_difference(value, config)
         for value in detail["difference_to_demand_percent"]
     ]
-    detail["attention"] = detail["gap_category"].isin(
-        {"defisit_tinggi", "surplus_tinggi", "tidak_tersedia"}
-    )
-    detail["attention_reason"] = detail["gap_category"].map(
-        {
-            "defisit_tinggi": "defisit_tinggi",
-            "surplus_tinggi": "surplus_tinggi_perlu_interpretasi_interkoneksi",
-            "tidak_tersedia": "gap_tidak_lengkap",
-        }
-    )
+    detail["attention"] = detail["gap_category"].isin(ATTENTION_GAP_CATEGORIES)
+    detail["attention_reason"] = detail["gap_category"].map(ATTENTION_REASON_MAP)
     detail["population_jiwa"] = np.nan
     detail["demand_model"] = np.where(
         detail["data_type"].eq("forecast"), detail["demand_model_id"], "historical_series"
