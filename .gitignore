@@ -60,3 +60,9 @@ outputs/dashboard/
 frontend-dashboard/.env
 frontend-dashboard/.env.*
 !frontend-dashboard/.env.example
+
+# Local mentor exports & zip archives
+mentor_exports/
+*.zip
+struktur_tree.txt
+ECADIN_Kode_Preprocessing_Modelling_Evalua*

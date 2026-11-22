@@ -27,3 +27,5 @@
 *.docx binary
 *.parquet binary
 *.pkl binary
+
+*.json text eol=lf
