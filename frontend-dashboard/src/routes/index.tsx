@@ -163,16 +163,25 @@ function NationalYoyTooltip({
   );
 }
 
-function renderPartialOverlapDot(color: string) {
+function renderPartialOverlapDot(color: string, mode: "level" | "yoy") {
   return (props: {
     cx?: number;
     cy?: number;
     index?: number;
-    payload?: { dataCompleteness?: string; yoyBasis?: string };
+    payload?: {
+      completeRegions?: number;
+      totalRegions?: number;
+      dataCompleteness?: string;
+      yoyBasis?: string;
+    };
   }) => {
     const isPartial =
-      props.payload?.dataCompleteness === "partial_overlap" ||
-      props.payload?.yoyBasis === "partial_overlap_matched";
+      mode === "level"
+        ? props.payload?.dataCompleteness === "partial_overlap" ||
+          (props.payload?.completeRegions != null &&
+            props.payload?.totalRegions != null &&
+            props.payload.completeRegions < props.payload.totalRegions)
+        : props.payload?.yoyBasis === "partial_overlap_matched";
     if (!isPartial || props.cx == null || props.cy == null) {
       return (
         <circle
@@ -287,8 +296,10 @@ function Inner() {
       </div>
 
       <p className="-mt-2 text-right text-xs text-muted-foreground">
-        {regionsRelativelyBalanced} regions are relatively balanced and{" "}
-        {regionsUnavailable} are unavailable in {current.year} (
+        {regionsRelativelyBalanced}{" "}
+        {regionsRelativelyBalanced === 1 ? "region is" : "regions are"}{" "}
+        relatively balanced and {regionsUnavailable}{" "}
+        {regionsUnavailable === 1 ? "is" : "are"} unavailable in {current.year} (
         {DATASET_INFO.regionCount} total regions).
       </p>
 
@@ -352,7 +363,7 @@ function Inner() {
                 dataKey="demand_gwh"
                 stroke="var(--chart-demand)"
                 strokeWidth={2}
-                dot={renderPartialOverlapDot("var(--chart-demand)")}
+                dot={renderPartialOverlapDot("var(--chart-demand)", "level")}
                 name="Demand"
               />
               <Line
@@ -360,7 +371,7 @@ function Inner() {
                 dataKey="supply_gwh"
                 stroke="var(--chart-supply)"
                 strokeWidth={2}
-                dot={renderPartialOverlapDot("var(--chart-supply)")}
+                dot={renderPartialOverlapDot("var(--chart-supply)", "level")}
                 name="Local Generation"
               />
             </LineChart>
@@ -485,7 +496,7 @@ function Inner() {
                   dataKey="demandYoy"
                   stroke="var(--chart-demand)"
                   strokeWidth={2}
-                  dot={renderPartialOverlapDot("var(--chart-demand)")}
+                  dot={renderPartialOverlapDot("var(--chart-demand)", "yoy")}
                   connectNulls={false}
                   name="Demand YoY"
                 />
@@ -494,7 +505,7 @@ function Inner() {
                   dataKey="supplyYoy"
                   stroke="var(--chart-supply)"
                   strokeWidth={2}
-                  dot={renderPartialOverlapDot("var(--chart-supply)")}
+                  dot={renderPartialOverlapDot("var(--chart-supply)", "yoy")}
                   connectNulls={false}
                   name="Local Generation YoY"
                 />

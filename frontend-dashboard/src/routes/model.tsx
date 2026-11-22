@@ -7,7 +7,6 @@ import {
   FORECAST_START,
   MODEL_SUMMARY,
   ModelSummary,
-  fmt,
   formatSignedPercent,
   modelDisplayName,
 } from "@/lib/energy-data";
@@ -153,7 +152,12 @@ function ModelPage() {
                       {row.mase != null ? row.mase.toFixed(3) : "N/A"}
                     </td>
                     <td className="p-2.5 text-right">
-                      {row.rmse != null ? fmt(row.rmse) : "N/A"}
+                      {row.rmse != null
+                        ? row.rmse.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })
+                        : "N/A"}
                     </td>
                     <td className="p-2.5 text-right">
                       {row.bias != null ? formatSignedPercent(row.bias, 2) : "N/A"}
