@@ -219,7 +219,7 @@ class ProductionValidationTest(unittest.TestCase):
             )
             self.assertTrue(
                 supply_fc["model_version"]
-                .eq("supply_production_drift_v1")
+                .eq(config.supply.production_model_id)
                 .all()
             )
 
@@ -228,7 +228,10 @@ class ProductionValidationTest(unittest.TestCase):
             )
             self.assertEqual(
                 set(model_summary["production_model_id"]),
-                {"demand_production_drift", "supply_production_drift_v1"},
+                {
+                    config.demand.production_model_id,
+                    config.supply.production_model_id,
+                },
             )
             self.assertEqual(
                 set(model_summary["model_label"]),

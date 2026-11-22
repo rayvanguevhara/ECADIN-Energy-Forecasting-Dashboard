@@ -134,8 +134,12 @@ class SupplyCalibrationTest(unittest.TestCase):
             config,
         )
         self.assertEqual(len(forecast), 204)
+        self.assertEqual(
+            config.supply.production_model_id,
+            "supply_production_national_reconciled_v2",
+        )
         self.assertTrue(
-            forecast["model_id"].eq("supply_production_drift_v1").all()
+            forecast["model_id"].eq(config.supply.production_model_id).all()
         )
         for column in (
             "forecast_lower_80_gwh",

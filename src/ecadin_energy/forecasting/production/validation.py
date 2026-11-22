@@ -54,6 +54,8 @@ def _to_bool_series(series: pd.Series) -> pd.Series:
 def _expected_backtest_rows(
     panel: pd.DataFrame,
     config: ProductionConfig,
+    *,
+    domain: str | None = None,
 ) -> int:
     """Compute expected backtest prediction count from panel eligibility and config."""
     eligible = panel.loc[
@@ -68,7 +70,12 @@ def _expected_backtest_rows(
         for origin in config.recursive_origins
         for horizon in range(1, config.recursive_max_horizon + 1)
     )
-    return len(config.baseline_models) * (one_step_rows + recursive_rows)
+    model_count = (
+        len(config.evaluated_models_for_domain(domain))
+        if domain is not None
+        else len(config.baseline_models)
+    )
+    return model_count * (one_step_rows + recursive_rows)
 
 
 def _expected_historical_missing(
@@ -311,7 +318,12 @@ def validate_production_frames(
         ),
     )
 
-    expected_demand_predictions = _expected_backtest_rows(demand_panel, config)
+    demand_models = config.evaluated_models_for_domain("demand")
+    expected_demand_predictions = _expected_backtest_rows(
+        demand_panel,
+        config,
+        domain="demand",
+    )
     demand_backtest_ok = (
         len(demand_backtest) == expected_demand_predictions
         and not demand_backtest.duplicated(
@@ -332,13 +344,18 @@ def validate_production_frames(
         observed=len(demand_backtest),
         expected=expected_demand_predictions,
         details=(
-            f"{len(config.baseline_models)} baselines; rolling "
+            f"{len(demand_models)} evaluated models; rolling "
             f"{min(config.one_step_target_years)}-{max(config.one_step_target_years)} "
             f"and recursive origins {min(config.recursive_origins)}-{max(config.recursive_origins)}."
         ),
     )
 
-    expected_supply_predictions = _expected_backtest_rows(supply_panel, config)
+    supply_models = config.evaluated_models_for_domain("supply")
+    expected_supply_predictions = _expected_backtest_rows(
+        supply_panel,
+        config,
+        domain="supply",
+    )
     supply_backtest_ok = (
         len(supply_backtest) == expected_supply_predictions
         and not supply_backtest.duplicated(
@@ -359,7 +376,8 @@ def validate_production_frames(
         observed=len(supply_backtest),
         expected=expected_supply_predictions,
         details=(
-            "Validation-eligible panel targets match configured backtest grid "
+            f"{len(supply_models)} evaluated models; validation-eligible "
+            "panel targets match configured backtest grid "
             "(missing targets excluded from evaluation rows)."
         ),
     )

@@ -6,11 +6,30 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from ecadin_energy.config import PATHS
 from ecadin_energy.dashboard.configuration import load_dashboard_config
 from ecadin_energy.dashboard.contracts import DashboardContractError
 from ecadin_energy.dashboard.region_detail import classify_accounting_difference
 from ecadin_energy.dashboard.serializers import sha256_file, write_csv
 from ecadin_energy.dashboard.staging import DETERMINISTIC_FILES
+from ecadin_energy.forecasting.configuration import load_production_config
+
+
+def _allowed_production_models(
+    project_root: str | Path | None,
+) -> tuple[set[str], set[str]]:
+    root = Path(project_root).resolve() if project_root else PATHS.root
+    allowed_demand = {"demand_production_drift"}
+    allowed_supply = {
+        "supply_production_drift_v1",
+        "supply_production_national_reconciled_v2",
+    }
+    cfg_path = root / "configs/forecasting/production.json"
+    if cfg_path.is_file():
+        forecast_cfg = load_production_config(cfg_path, project_root=root)
+        allowed_demand.add(forecast_cfg.demand.production_model_id)
+        allowed_supply.add(forecast_cfg.supply.production_model_id)
+    return allowed_demand, allowed_supply
 
 
 def validate_dashboard_directory(
@@ -49,8 +68,19 @@ def validate_dashboard_directory(
     add("completeness_contract", int(complete.sum()) == 671 and int((historical & ~complete).sum()) == 9 and int((forecast & ~complete).sum()) == 0,
         f"complete={complete.sum()}, historical_missing={(historical & ~complete).sum()}, forecast_missing={(forecast & ~complete).sum()}",
         "complete=671, historical_missing=9, forecast_missing=0", "Missing historical pairs stay explicit.")
-    add("production_model_contract", len(models) == 2 and set(models["model_version"]) == {"demand_production_drift", "supply_production_drift_v1"},
-        sorted(models["model_version"].tolist()), ["demand_production_drift", "supply_production_drift_v1"],
+    allowed_demand, allowed_supply = _allowed_production_models(project_root)
+    demand_rows = models.loc[models["side"].eq("demand"), "model_version"].astype(str)
+    supply_rows = models.loc[models["side"].eq("supply"), "model_version"].astype(str)
+    model_contract_ok = (
+        len(models) == 2
+        and len(demand_rows) == 1
+        and len(supply_rows) == 1
+        and demand_rows.iloc[0] in allowed_demand
+        and supply_rows.iloc[0] in allowed_supply
+    )
+    add("production_model_contract", model_contract_ok,
+        sorted(models["model_version"].tolist()),
+        sorted(allowed_demand | allowed_supply),
         "Only validated production models are published.")
     add("frontend_payload_contract", payload.get("schema_version") == config.frontend_schema_version and payload.get("row_count") == 680 and len(payload.get("provinces", [])) == 34,
         [payload.get("schema_version"), payload.get("row_count"), len(payload.get("provinces", []))],

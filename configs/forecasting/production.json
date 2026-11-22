@@ -42,15 +42,23 @@
     "target_column": "distributed_electricity_gwh",
     "dataset_id": "demand_distributed_electricity",
     "production_model_id": "demand_production_drift",
+    "model_name": "drift",
     "model_label": "Drift",
     "output_value_column": "forecast_gwh"
   },
   "supply": {
     "target_column": "local_generation_gwh",
     "dataset_id": "supply_local_generation",
-    "production_model_id": "supply_production_drift_v1",
-    "model_label": "Drift",
-    "output_value_column": "forecast_gwh"
+    "production_model_id": "supply_production_national_reconciled_v2",
+    "model_name": "national_reconciled_supply",
+    "model_label": "National Reconciled Supply (Drift National -> Step Intervention Damped)",
+    "output_value_column": "forecast_gwh",
+    "model_params": {
+      "break_year": 2021,
+      "ridge_lambda": 25.0,
+      "damping_phi": 0.85,
+      "national_start_year": 2013
+    }
   },
   "accounting_difference_label": "local_generation_minus_distributed_electricity",
   "accounting_disclaimer": "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy."

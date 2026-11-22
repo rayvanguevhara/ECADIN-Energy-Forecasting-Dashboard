@@ -122,8 +122,13 @@ def _model_summary(
         ("supply", supply_metrics, config.supply),
     ):
         selected = metrics.loc[
-            metrics["model"].eq(config.reference_baseline)
+            metrics["model"].eq(domain_config.model_name)
         ]
+        if selected.empty:
+            raise ValueError(
+                f"Production model '{domain_config.model_name}' missing from "
+                f"{domain} metrics_summary"
+            )
         for record in selected.to_dict("records"):
             rows.append(
                 {

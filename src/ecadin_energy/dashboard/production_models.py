@@ -17,10 +17,19 @@ def build_model_summary(models: pd.DataFrame, config: DashboardConfig) -> pd.Dat
         if len(model_ids) != 1:
             raise DashboardContractError(f"Multiple production model IDs for {side}: {model_ids}")
         model_id = model_ids[0]
+        if side == "demand":
+            active_model = "drift"
+            note = "Distributed-electricity production forecast from validated Drift outputs."
+        elif model_id == "supply_production_national_reconciled_v2":
+            active_model = "national_reconciled_supply"
+            note = "Local-generation production forecast from validated National Reconciled Supply (v2) outputs."
+        else:
+            active_model = "drift"
+            note = "Local-generation production forecast from validated Drift V1 outputs."
         rows.append(
             {
                 "side": side,
-                "active_model": "drift",
+                "active_model": active_model,
                 "model_version": model_id,
                 "status": "production",
                 "forecast_period": f"{config.forecast_start_year}-{config.forecast_end_year}",
@@ -28,11 +37,7 @@ def build_model_summary(models: pd.DataFrame, config: DashboardConfig) -> pd.Dat
                 "selection_basis": "validated production contract",
                 "legacy_model_reused": config.legacy_model_reused,
                 "regional_uncertainty_display_allowed": config.regional_uncertainty_display_allowed,
-                "note": (
-                    "Distributed-electricity production forecast from validated Drift outputs."
-                    if side == "demand"
-                    else "Local-generation production forecast from validated Drift V1 outputs."
-                ),
+                "note": note,
             }
         )
     return pd.DataFrame(rows)

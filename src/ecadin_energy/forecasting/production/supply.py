@@ -6,7 +6,12 @@ import numpy as np
 import pandas as pd
 
 from ecadin_energy.forecasting.configuration import ProductionConfig
+from ecadin_energy.forecasting.evaluation.metrics import clip_nonnegative
 from ecadin_energy.forecasting.models.drift_v1 import SupplyDriftV1Model
+from ecadin_energy.forecasting.models.registry import (
+    create_panel_model,
+    is_panel_model,
+)
 from ecadin_energy.forecasting.production.common import (
     history_summary,
     training_history,
@@ -16,7 +21,7 @@ from ecadin_energy.forecasting.strategies.recursive import (
 )
 
 
-SUPPLY_MODEL_VERSION = "supply_production_drift_v1"
+SUPPLY_MODEL_VERSION = "supply_production_national_reconciled_v2"
 SCALE_FLOOR_GWH = 100.0
 LOG_SHIFT_GWH = 10.0
 STRUCTURAL_BREAK_YEAR = 2021
@@ -94,6 +99,7 @@ def _calibrate_group(
     scope: str,
     bucket: str,
     history_span: int,
+    model_name: str = "drift",
 ) -> list[dict[str, object]]:
     """Compute monotone empirical and Drift-extrapolated quantiles for a group."""
     rows: list[dict[str, object]] = []
@@ -189,9 +195,9 @@ def _calibrate_group(
                     )
 
             source = (
-                "empirical_recursive_drift_regime_consistent"
+                f"empirical_recursive_{model_name}_regime_consistent"
                 if scope == "regional"
-                else "empirical_recursive_drift_backtest"
+                else f"empirical_recursive_{model_name}_backtest"
             )
             prev_abs_80 = q80_abs
             prev_l80 = q80_l
@@ -275,13 +281,30 @@ def _calibrate_group(
 def calibrate_uncertainty(
     panel: pd.DataFrame,
     backtest_predictions: pd.DataFrame,
+    *,
+    model_name: str | None = None,
+    break_year: int = STRUCTURAL_BREAK_YEAR,
 ) -> pd.DataFrame:
     """Calibrate asymmetric log-scale supply prediction intervals."""
-    drift = backtest_predictions.loc[
+    if model_name is not None:
+        selected_model = str(model_name)
+    else:
+        available_models = set(backtest_predictions["model"].astype(str))
+        selected_model = (
+            "national_reconciled_supply"
+            if "national_reconciled_supply" in available_models
+            else "drift"
+        )
+
+    residuals = backtest_predictions.loc[
         backtest_predictions["protocol"].eq("recursive_multi_step")
-        & backtest_predictions["model"].eq("drift")
+        & backtest_predictions["model"].eq(selected_model)
         & backtest_predictions["horizon"].isin([1, 2, 3])
     ].copy()
+    if residuals.empty:
+        raise ValueError(
+            f"Empty recursive backtest residuals for uncertainty calibration: {selected_model}"
+        )
 
     lookup: dict[str, tuple[np.ndarray, np.ndarray]] = {}
     eligible = panel.loc[
@@ -301,7 +324,7 @@ def calibrate_uncertainty(
 
     origin_values: list[float] = []
     target_last_values: list[float] = []
-    for row in drift.itertuples(index=False):
+    for row in residuals.itertuples(index=False):
         years, values = lookup[str(row.region_id)]
         valid = np.flatnonzero(years <= int(row.origin_year))
         origin_values.append(
@@ -309,43 +332,46 @@ def calibrate_uncertainty(
         )
         target_last_values.append(float(values[-1]) if len(values) else np.nan)
 
-    drift["origin_target_gwh"] = origin_values
-    drift["target_last_gwh"] = target_last_values
-    if drift["origin_target_gwh"].isna().any():
+    residuals["origin_target_gwh"] = origin_values
+    residuals["target_last_gwh"] = target_last_values
+    if residuals["origin_target_gwh"].isna().any():
         raise ValueError(
             "Missing origin target during supply uncertainty calibration"
         )
 
-    drift["abs_scaled_error"] = (
-        (drift["prediction_gwh"] - drift["actual_gwh"]).abs()
-        / drift["origin_target_gwh"].abs().clip(lower=SCALE_FLOOR_GWH)
+    residuals["abs_scaled_error"] = (
+        (residuals["prediction_gwh"] - residuals["actual_gwh"]).abs()
+        / residuals["origin_target_gwh"].abs().clip(lower=SCALE_FLOOR_GWH)
     )
-    drift["log_error"] = np.log(
-        (drift["actual_gwh"].clip(lower=0.0) + LOG_SHIFT_GWH)
-        / (drift["prediction_gwh"].clip(lower=0.0) + LOG_SHIFT_GWH)
+    residuals["log_error"] = np.log(
+        (residuals["actual_gwh"].clip(lower=0.0) + LOG_SHIFT_GWH)
+        / (residuals["prediction_gwh"].clip(lower=0.0) + LOG_SHIFT_GWH)
     )
-    drift["origin_size_bucket"] = _size_bucket_series(
-        drift["origin_target_gwh"]
+    residuals["origin_size_bucket"] = _size_bucket_series(
+        residuals["origin_target_gwh"]
     )
-    drift["target_size_bucket"] = _size_bucket_series(drift["target_last_gwh"])
-    drift["crosses_structural_break"] = (
-        drift["origin_year"].lt(STRUCTURAL_BREAK_YEAR)
-        & drift["forecast_year"].ge(STRUCTURAL_BREAK_YEAR)
+    residuals["target_size_bucket"] = _size_bucket_series(
+        residuals["target_last_gwh"]
+    )
+    residuals["crosses_structural_break"] = (
+        residuals["origin_year"].lt(int(break_year))
+        & residuals["forecast_year"].ge(int(break_year))
     )
 
     rows: list[dict[str, object]] = []
     for bucket in ("small", "medium", "large"):
-        frames = _select_regional_bucket_frames(drift, bucket)
+        frames = _select_regional_bucket_frames(residuals, bucket)
         rows.extend(
             _calibrate_group(
                 frames,
                 scope="regional",
                 bucket=bucket,
                 history_span=history_span,
+                model_name=selected_model,
             )
         )
 
-    national = drift.groupby(
+    national = residuals.groupby(
         ["origin_year", "forecast_year", "horizon"],
         as_index=False,
     ).agg(
@@ -371,6 +397,7 @@ def calibrate_uncertainty(
             scope="national",
             bucket="all",
             history_span=history_span,
+            model_name=selected_model,
         )
     )
     return pd.DataFrame(rows).sort_values(
@@ -383,10 +410,17 @@ def build_supply_forecast(
     backtest_predictions: pd.DataFrame,
     config: ProductionConfig,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Generate production supply Drift V1 forecasts with calibrated intervals."""
+    """Generate production supply forecasts with calibrated K-3 uncertainty intervals."""
+    break_year = (
+        config.supply.model_params.break_year
+        if config.supply.model_params is not None
+        else STRUCTURAL_BREAK_YEAR
+    )
     calibration = calibrate_uncertainty(
         panel,
         backtest_predictions,
+        model_name=config.supply.model_name,
+        break_year=break_year,
     )
     regional_calibration = (
         calibration.loc[calibration["calibration_scope"].eq("regional")]
@@ -394,28 +428,72 @@ def build_supply_forecast(
         .to_dict("index")
     )
 
-    model = SupplyDriftV1Model()
     summaries = history_summary(panel)
     value_column = config.supply.output_value_column
     model_version = config.supply.production_model_id
-    rows: list[dict[str, object]] = []
+    use_panel = is_panel_model(config.supply.model_name)
 
-    for _, group in panel.groupby("region_id", sort=False):
-        history = training_history(group)
-        future = recursive_forecast_without_actuals(
-            history,
-            model=model,
-            forecast_years=config.forecast_years,
+    reconciled_map: dict[tuple[str, int], float] | None = None
+    series_model: SupplyDriftV1Model | None = None
+    if use_panel:
+        panel_model = create_panel_model(
+            config.supply.model_name,
+            params=config.supply.model_params,
+            model_label=config.supply.model_label,
         )
-        summary = summaries.loc[
-            summaries["region_id"].eq(group.iloc[0]["region_id"])
-        ].iloc[0]
+        region_ids = tuple(
+            panel["region_id"].drop_duplicates().astype(str).tolist()
+        )
+        reconciled_map = panel_model.forecast_panel(
+            panel,
+            int(config.history_end_year),
+            config.forecast_years,
+            region_ids,
+        )
+        forecast_type = "national_reconciled_supply_forecast"
+    else:
+        series_model = SupplyDriftV1Model()
+        forecast_type = "recursive_drift_forecast"
+
+    rows: list[dict[str, object]] = []
+    for _, group in panel.groupby("region_id", sort=False):
+        region_id = str(group.iloc[0]["region_id"])
+        summary = summaries.loc[summaries["region_id"].eq(region_id)].iloc[0]
         last = float(summary["history_last_gwh"])
         scale = max(abs(last), SCALE_FLOOR_GWH)
         bucket = _classify_size_bucket(last)
         previous = last
 
-        for record in future.to_dict("records"):
+        if use_panel:
+            assert reconciled_map is not None
+            origin_year = int(summary["history_last_year"])
+            future_records = []
+            for horizon, target_year in enumerate(
+                config.forecast_years, start=1
+            ):
+                raw_val = float(reconciled_map[(region_id, int(target_year))])
+                point_val, was_clipped = clip_nonnegative(raw_val)
+                future_records.append(
+                    {
+                        "origin_year": origin_year,
+                        "year": int(target_year),
+                        "horizon": horizon,
+                        "raw_prediction_gwh": raw_val,
+                        "prediction_gwh": point_val,
+                        "was_clipped_nonnegative": was_clipped,
+                    }
+                )
+        else:
+            assert series_model is not None
+            history = training_history(group)
+            future = recursive_forecast_without_actuals(
+                history,
+                model=series_model,
+                forecast_years=config.forecast_years,
+            )
+            future_records = future.to_dict("records")
+
+        for record in future_records:
             horizon = int(record["horizon"])
             point = float(record["prediction_gwh"])
             raw = float(record["raw_prediction_gwh"])
@@ -455,7 +533,7 @@ def build_supply_forecast(
             )
             rows.append(
                 {
-                    "region_id": str(group.iloc[0]["region_id"]),
+                    "region_id": region_id,
                     "region_name": str(group.iloc[0]["region_name"]),
                     "modeling_order": int(
                         group.iloc[0]["modeling_order"]
@@ -472,7 +550,7 @@ def build_supply_forecast(
                     "model_id": config.supply.production_model_id,
                     "model_label": config.supply.model_label,
                     "model_version": model_version,
-                    "forecast_type": "recursive_drift_forecast",
+                    "forecast_type": forecast_type,
                     "origin_year": int(record["origin_year"]),
                     "horizon": horizon,
                     "was_clipped_nonnegative": bool(

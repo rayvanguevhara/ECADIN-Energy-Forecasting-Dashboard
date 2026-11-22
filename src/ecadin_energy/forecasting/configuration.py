@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,12 +20,22 @@ class MissingDataPolicy:
 
 
 @dataclass(frozen=True)
+class SupplyModelParams:
+    break_year: int
+    ridge_lambda: float
+    damping_phi: float
+    national_start_year: int
+
+
+@dataclass(frozen=True)
 class DomainConfig:
     target_column: str
     dataset_id: str
     production_model_id: str
     model_label: str
     output_value_column: str
+    model_name: str = "drift"
+    model_params: SupplyModelParams | None = None
 
 
 @dataclass(frozen=True)
@@ -54,6 +65,20 @@ class ProductionConfig:
     def historical_years(self) -> tuple[int, ...]:
         return tuple(range(self.history_start_year, self.history_end_year + 1))
 
+    def domain_config(self, domain: str) -> DomainConfig:
+        if domain == "demand":
+            return self.demand
+        if domain == "supply":
+            return self.supply
+        raise ConfigurationError(f"Unknown forecasting domain: {domain}")
+
+    def evaluated_models_for_domain(self, domain: str) -> tuple[str, ...]:
+        models = list(self.baseline_models)
+        active_model = self.domain_config(domain).model_name
+        if active_model not in models:
+            models.append(active_model)
+        return tuple(models)
+
 
 def _require(mapping: dict[str, Any], key: str, context: str) -> Any:
     if key not in mapping:
@@ -63,6 +88,30 @@ def _require(mapping: dict[str, Any], key: str, context: str) -> Any:
 
 def _domain(mapping: dict[str, Any], name: str) -> DomainConfig:
     block = _require(mapping, name, "root")
+    model_name = str(_require(block, "model_name", name))
+    raw_params = block.get("model_params")
+    params: SupplyModelParams | None = None
+    if raw_params is not None:
+        if not isinstance(raw_params, dict):
+            raise ConfigurationError(
+                f"Invalid configuration type: {name}.model_params must be an object"
+            )
+        params = SupplyModelParams(
+            break_year=int(
+                _require(raw_params, "break_year", f"{name}.model_params")
+            ),
+            ridge_lambda=float(
+                _require(raw_params, "ridge_lambda", f"{name}.model_params")
+            ),
+            damping_phi=float(
+                _require(raw_params, "damping_phi", f"{name}.model_params")
+            ),
+            national_start_year=int(
+                _require(
+                    raw_params, "national_start_year", f"{name}.model_params"
+                )
+            ),
+        )
     return DomainConfig(
         target_column=str(_require(block, "target_column", name)),
         dataset_id=str(_require(block, "dataset_id", name)),
@@ -73,6 +122,8 @@ def _domain(mapping: dict[str, Any], name: str) -> DomainConfig:
         output_value_column=str(
             _require(block, "output_value_column", name)
         ),
+        model_name=model_name,
+        model_params=params,
     )
 
 
@@ -204,6 +255,53 @@ def validate_production_config(config: ProductionConfig) -> None:
         failures.append("recursive_max_horizon must be positive")
     if config.missing_data.allow_silent_fill:
         failures.append("allow_silent_fill must remain false")
+    for domain_name, domain_cfg in (
+        ("demand", config.demand),
+        ("supply", config.supply),
+    ):
+        if not str(domain_cfg.model_name).strip():
+            failures.append(f"{domain_name}.model_name must not be empty")
+        if (
+            domain_cfg.model_name == "national_reconciled_supply"
+            and domain_cfg.model_params is None
+        ):
+            failures.append(
+                f"{domain_name}.model_params is required for national_reconciled_supply"
+            )
+        if domain_cfg.model_params is not None:
+            params = domain_cfg.model_params
+            if not (
+                config.history_start_year
+                <= params.break_year
+                <= config.history_end_year
+            ):
+                failures.append(
+                    f"{domain_name}.model_params.break_year must lie within "
+                    f"[{config.history_start_year}, {config.history_end_year}]"
+                )
+            if not (
+                math.isfinite(params.ridge_lambda)
+                and params.ridge_lambda > 0.0
+            ):
+                failures.append(
+                    f"{domain_name}.model_params.ridge_lambda must be > 0"
+                )
+            if not (
+                math.isfinite(params.damping_phi)
+                and 0.0 < params.damping_phi <= 1.0
+            ):
+                failures.append(
+                    f"{domain_name}.model_params.damping_phi must lie in (0, 1]"
+                )
+            if not (
+                config.history_start_year
+                <= params.national_start_year
+                < config.history_end_year
+            ):
+                failures.append(
+                    f"{domain_name}.model_params.national_start_year must lie within "
+                    f"[{config.history_start_year}, {config.history_end_year})"
+                )
     all_origins = [
         *(int(year) - 1 for year in config.one_step_target_years),
         *(int(origin) for origin in config.recursive_origins),
