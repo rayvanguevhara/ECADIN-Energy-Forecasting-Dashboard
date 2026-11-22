@@ -65,10 +65,16 @@ def _classify_total_difference(difference: Decimal) -> str:
     return "warning_source_total_mismatch"
 
 
-def _read_source_file(path: Path) -> ParsedSourceFile:
+def _read_source_file(
+    path: Path,
+    *,
+    project_root: Path | None = None,
+) -> ParsedSourceFile:
     return read_annual_province_file(
         path,
         expected_source_rows=EXPECTED_SOURCE_PROVINCE_ROWS,
+        expected_unit_token="(Mega Watt)",
+        project_root=project_root,
     )
 
 
@@ -170,15 +176,36 @@ def _build_quality_flags(
                 and previous_value is not None
                 and previous_year is not None
                 and year - previous_year == 1
-                and previous_value != 0
             ):
-                yoy_pct = ((value / previous_value) - Decimal("1")) * Decimal("100")
-                absolute_change = abs(value - previous_value)
+                if previous_value != 0:
+                    yoy_pct = ((value / previous_value) - Decimal("1")) * Decimal("100")
+                    absolute_change = abs(value - previous_value)
 
-                if (
-                    abs(yoy_pct) >= LARGE_YOY_WARNING_THRESHOLD_PCT
-                    and absolute_change >= LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW
-                ):
+                    if (
+                        abs(yoy_pct) >= LARGE_YOY_WARNING_THRESHOLD_PCT
+                        and absolute_change >= LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW
+                    ):
+                        flags.append(
+                            {
+                                "dataset_id": DATASET_ID,
+                                "region_id": region_id,
+                                "year": year,
+                                "variable_name": VARIABLE_NAME,
+                                "quality_status": "warning",
+                                "issue_type": "large_consecutive_yoy_change",
+                                "observed_value": _format_decimal(value),
+                                "comparison_value": _format_decimal(previous_value),
+                                "metric_value": _format_decimal(yoy_pct),
+                                "treatment": "retained_as_reported",
+                                "note": (
+                                    "Absolute consecutive year-on-year change is at "
+                                    f"least {LARGE_YOY_WARNING_THRESHOLD_PCT}% and "
+                                    f"{LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW} MW. "
+                                    "The source value is not modified."
+                                ),
+                            }
+                        )
+                elif value >= LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW:
                     flags.append(
                         {
                             "dataset_id": DATASET_ID,
@@ -186,15 +213,15 @@ def _build_quality_flags(
                             "year": year,
                             "variable_name": VARIABLE_NAME,
                             "quality_status": "warning",
-                            "issue_type": "large_consecutive_yoy_change",
+                            "issue_type": "large_zero_base_jump",
                             "observed_value": _format_decimal(value),
                             "comparison_value": _format_decimal(previous_value),
-                            "metric_value": _format_decimal(yoy_pct),
+                            "metric_value": _format_decimal(value - previous_value),
                             "treatment": "retained_as_reported",
                             "note": (
-                                "Absolute consecutive year-on-year change is at "
-                                f"least {LARGE_YOY_WARNING_THRESHOLD_PCT}% and "
-                                f"{LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW} MW. "
+                                "Consecutive jump from zero baseline is at least "
+                                f"{LARGE_YOY_MIN_ABSOLUTE_CHANGE_MW} MW "
+                                "(percentage YoY is undefined). "
                                 "The source value is not modified."
                             ),
                         }
@@ -228,7 +255,9 @@ def build_installed_capacity(
     if not source_files:
         raise FileNotFoundError(f"No CSV source files found in: {raw_dir}")
 
-    parsed_files = [_read_source_file(path) for path in source_files]
+    parsed_files = [
+        _read_source_file(path, project_root=root) for path in source_files
+    ]
     by_year = {item.year: item for item in parsed_files}
     if len(by_year) != len(parsed_files):
         raise ValueError("Duplicate source year detected.")
@@ -247,7 +276,7 @@ def build_installed_capacity(
         raise ValueError(f"Unexpected source years: {sorted(unexpected_years)}")
 
     regions = sorted(
-        load_regions().values(),
+        load_regions(project_root=root).values(),
         key=lambda row: int(row["modeling_order"]),
     )
     if len(regions) != EXPECTED_MODEL_REGIONS:
@@ -425,6 +454,11 @@ def build_installed_capacity(
             for row in quality_rows
             if row["issue_type"] == "large_consecutive_yoy_change"
         ),
+        "large_zero_base_jump_flags": sum(
+            1
+            for row in quality_rows
+            if row["issue_type"] == "large_zero_base_jump"
+        ),
         "output_file": str(output_path.relative_to(root)),
         "lineage_file": str(lineage_path.relative_to(root)),
         "quality_file": str(quality_path.relative_to(root)),
@@ -485,7 +519,7 @@ def validate_installed_capacity(
     if len(set(keys)) != len(keys):
         failures.append("Duplicate region_id-year key detected.")
 
-    expected_region_ids = set(load_regions())
+    expected_region_ids = set(load_regions(project_root=root))
     actual_region_ids = {row["region_id"] for row in data_rows}
     if actual_region_ids != expected_region_ids:
         failures.append("Canonical region set does not match regions.csv.")
@@ -571,4 +605,7 @@ def validate_installed_capacity(
         "large_yoy_warning_flags": issue_counts[
             "large_consecutive_yoy_change"
         ],
+        "large_zero_base_jump_flags": issue_counts.get(
+            "large_zero_base_jump", 0
+        ),
     }

@@ -39,15 +39,12 @@ A037,population_pdrb_and_modern_province_sources,PAPUA SELATAN,PAPUA SELATAN,PA,
 A038,population_pdrb_and_modern_province_sources,PAPUA TENGAH,PAPUA TENGAH,PA,PAPUA,aggregate_to_model_region,sum_by_region_id_year,False,95,,,Provinsi baru Papua digabungkan ke wilayah model legacy agar seri tahunan 2011–2024 konsisten.
 A039,all_sources,BANGKA BELITUNG,BANGKA BELITUNG,BB,KEPULAUAN BANGKA BELITUNG,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A040,all_sources,D.I. YOGYAKARTA,D I YOGYAKARTA,YO,DI YOGYAKARTA,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
-A041,all_sources,D I YOGYAKARTA,D I YOGYAKARTA,YO,DI YOGYAKARTA,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A042,all_sources,DAERAH ISTIMEWA YOGYAKARTA,DAERAH ISTIMEWA YOGYAKARTA,YO,DI YOGYAKARTA,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A043,all_sources,DKI JAKARTA RAYA,DKI JAKARTA RAYA,JK,DKI JAKARTA,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
-A044,all_sources,KEP BANGKA BELITUNG,KEP BANGKA BELITUNG,BB,KEPULAUAN BANGKA BELITUNG,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A045,all_sources,KEP. BANGKA BELITUNG,KEP BANGKA BELITUNG,BB,KEPULAUAN BANGKA BELITUNG,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
-A046,all_sources,KEP RIAU,KEP RIAU,KR,KEPULAUAN RIAU,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A047,all_sources,KEP. RIAU,KEP RIAU,KR,KEPULAUAN RIAU,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
 A048,all_sources,NANGGROE ACEH DARUSSALAM,NANGGROE ACEH DARUSSALAM,AC,ACEH,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
-A049,all_sources,PAPUA BARATDAYA,PAPUA BARATDAYA,PB,PAPUA BARAT,rename,none,True,90,,,Alias ditemukan pada normalizer pipeline production lama.
+A049,all_sources,PAPUA BARATDAYA,PAPUA BARATDAYA,PB,PAPUA BARAT,aggregate_to_model_region,sum_by_region_id_year,False,90,,,Varian tanpa spasi dari Papua Barat Daya; digabungkan ke Papua Barat konsisten dengan A035.
 A050,frontend_geojson,Bangka Belitung,BANGKA BELITUNG,BB,KEPULAUAN BANGKA BELITUNG,geometry_alias,none,True,80,,,Nama feature pada GeoJSON frontend lama.
 A051,frontend_geojson,Daerah Istimewa Yogyakarta,DAERAH ISTIMEWA YOGYAKARTA,YO,DI YOGYAKARTA,geometry_alias,none,True,80,,,Nama feature pada GeoJSON frontend lama.
 A052,frontend_geojson,Di. Aceh,DI ACEH,AC,ACEH,geometry_alias,none,True,80,,,Nama feature pada GeoJSON frontend lama.

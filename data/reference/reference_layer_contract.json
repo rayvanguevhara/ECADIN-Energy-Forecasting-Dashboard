@@ -2,7 +2,7 @@
   "schema_version": "ecadin_reference_layer_v1",
   "modeling_geography": "34_harmonized_modeling_regions",
   "region_count": 34,
-  "alias_count": 58,
+  "alias_count": 55,
   "coordinate_count": 34,
   "identity_key": "region_id",
   "canonical_row_key": [
@@ -36,8 +36,8 @@
   },
   "file_hashes": {
     "regions.csv": "a4e4e520cec5b743d52e452b97fa0cf5315f6f66b0719cc4875fa98e9a07a4cc",
-    "region_aliases.csv": "b88ad081af389ee083e018d920bc82511dba274ed21aed1de1a2d6cf1cf223a8",
+    "region_aliases.csv": "b1cd2dcf0905875b2d1f6f72e4c15bf4646049ad915ce1233bd67074f7a0cb4a",
     "region_coordinates.csv": "77f1b8f9b830d90b3c59780f1d70e4171392db46806e68c489e627e45095361a",
-    "variable_dictionary.csv": "5e39d1ead2c22dfe8ad21e2b27be70dd1e1115af3ae779d48610561d747a4583"
+    "variable_dictionary.csv": "209bd02e71d9655a93e09b34856ceabbe914210bc8fc420410d69b25921c4d00"
   }
 }

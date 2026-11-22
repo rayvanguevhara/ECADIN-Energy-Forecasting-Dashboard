@@ -3,11 +3,11 @@ year,Year,key,primary_key,year,integer,canonical_master,True,True,False,confirme
 region_id,Region ID,key,primary_key,code,string,canonical_master,True,True,False,confirmed,References data/reference/regions.csv.
 distributed_electricity_gwh,Distributed Electricity,demand,production_target,GWh,float,canonical_master,True,False,True,confirmed,Missing historical observations remain explicit in the canonical layer.
 local_generation_gwh,Local Electricity Generation,supply,production_target,GWh,float,canonical_master,False,True,True,confirmed,Generation occurring within the region; not total electricity availability.
-electricity_sold_gwh,Electricity Sold,demand,supporting_feature,GWh,float,canonical_master,True,False,True,confirmed,
-electricity_customers_count,Electricity Customers,demand,supporting_feature,customers,float,canonical_master,True,False,True,confirmed,
+electricity_sold_gwh,Electricity Sold,demand,supporting_feature,GWh,float,national_customer_group_master,False,False,True,confirmed,Stored in national_customer_group_master.csv (national customer-group grain; not part of regional_energy_master.csv).
+electricity_customers_count,Electricity Customers,demand,supporting_feature,customers,integer,national_customer_group_master,False,False,True,confirmed,Stored in national_customer_group_master.csv as non-negative integer counts (national customer-group grain; not part of regional_energy_master.csv).
 installed_capacity_mw,Installed Capacity,supply,supporting_feature,MW,float,canonical_master,False,True,True,confirmed,
-population_count,Population,exogenous,supporting_feature,persons,float,canonical_master,True,False,True,confirmed,Modern Papua provinces are aggregated through region_aliases.csv.
-electrification_ratio_pct,Electrification Ratio,demand,supporting_feature,percent,float,canonical_master,True,False,True,confirmed,
+population_count,Population,exogenous,supporting_feature,persons,float,not_yet_final,False,False,True,pending_population_source_audit,Not yet integrated into canonical master (2011-2015 missing in raw BPS files); modern Papua provinces will be aggregated through region_aliases.csv once audited.
+electrification_ratio_pct,Electrification Ratio,demand,supporting_feature,percent,float,not_yet_final,False,False,True,national_reference_only,"Not included in canonical regional master; raw ESDM source covers national aggregate only (2009-2022, near 100% saturation)."
 grdp_value_tbd,Gross Regional Domestic Product,exogenous,supporting_feature,TBD after source audit,float,not_yet_final,False,False,True,pending_pdrb_source_audit,Final column name must encode price basis and unit. It will not be added to the canonical master until the PDRB publications are audited.
 source_dataset_id,Source Dataset ID,lineage,lineage,code,string,data_lineage_table,False,False,False,confirmed,Not repeated in every canonical master row.
 quality_status,Quality Status,quality,quality_flag,category,string,data_quality_flags_table,False,False,False,confirmed,Kept outside the compact canonical master.

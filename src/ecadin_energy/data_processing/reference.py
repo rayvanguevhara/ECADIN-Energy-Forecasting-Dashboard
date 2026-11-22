@@ -85,9 +85,18 @@ def validate_reference_layer(
     for row in aliases:
         key = (row["source_scope"], row["normalized_alias"])
         previous = alias_keys.get(key)
-        if previous is not None and previous != row["region_id"]:
-            failures.append(f"Conflicting alias mapping: {key}.")
+        if previous is not None:
+            if previous != row["region_id"]:
+                failures.append(f"Conflicting alias mapping: {key}.")
+            else:
+                failures.append(f"Duplicate alias key detected: {key}.")
         alias_keys[key] = row["region_id"]
+
+    expected_alias_count = contract.get("alias_count")
+    if expected_alias_count is not None and len(aliases) != int(expected_alias_count):
+        failures.append(
+            f"Expected {expected_alias_count} aliases, found {len(aliases)}."
+        )
 
     for filename, expected_hash in contract["file_hashes"].items():
         actual = sha256_file(reference / filename)

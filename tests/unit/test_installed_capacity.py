@@ -7,6 +7,7 @@ from ecadin_energy.data_processing.cleaning.annual_province_series import (
     ParsedAnnualProvinceFile,
 )
 from ecadin_energy.data_processing.cleaning.installed_capacity import (
+    _build_quality_flags,
     _classify_total_difference,
     _parse_decimal,
 )
@@ -49,6 +50,21 @@ class InstalledCapacityCleanerTest(unittest.TestCase):
             item.reported_indonesia_total_gwh,
             item.reported_indonesia_total,
         )
+
+    def test_large_zero_base_jump_detection(self) -> None:
+        canonical_rows = [
+            {"region_id": "XX", "year": 2020, "installed_capacity_mw": "0.00"},
+            {"region_id": "XX", "year": 2021, "installed_capacity_mw": "150.00"},
+            {"region_id": "YY", "year": 2020, "installed_capacity_mw": "0.00"},
+            {"region_id": "YY", "year": 2021, "installed_capacity_mw": "99.99"},
+        ]
+        flags = _build_quality_flags(canonical_rows, parsed_files=[])
+        zero_jump_flags = [
+            row for row in flags if row["issue_type"] == "large_zero_base_jump"
+        ]
+        self.assertEqual(len(zero_jump_flags), 1)
+        self.assertEqual(zero_jump_flags[0]["region_id"], "XX")
+        self.assertEqual(zero_jump_flags[0]["metric_value"], "150.00")
 
 
 if __name__ == "__main__":

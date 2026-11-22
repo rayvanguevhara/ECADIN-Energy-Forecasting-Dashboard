@@ -36,6 +36,7 @@ EXPECTED_MODEL_REGIONS = 34
 
 NATIONAL_TOTAL_TOLERANCE_GWH = Decimal("0.02")
 LARGE_YOY_WARNING_THRESHOLD_PCT = Decimal("35")
+LARGE_YOY_MIN_ABSOLUTE_CHANGE_GWH = Decimal("100")
 
 
 from ecadin_energy.data_processing.cleaning.annual_province_series import (
@@ -51,10 +52,16 @@ from ecadin_energy.data_processing.cleaning.annual_province_series import (
 )
 
 
-def _read_source_file(path: Path) -> ParsedSourceFile:
+def _read_source_file(
+    path: Path,
+    *,
+    project_root: Path | None = None,
+) -> ParsedSourceFile:
     return read_annual_province_file(
         path,
         expected_source_rows=EXPECTED_SOURCE_PROVINCE_ROWS,
+        expected_unit_token="(GWh)",
+        project_root=project_root,
     )
 
 
@@ -112,12 +119,33 @@ def _build_quality_flags(
             if (
                 value is not None
                 and previous_value is not None
-                and previous_value != 0
                 and previous_year is not None
                 and year - previous_year == 1
             ):
-                yoy_pct = ((value / previous_value) - Decimal("1")) * Decimal("100")
-                if abs(yoy_pct) >= LARGE_YOY_WARNING_THRESHOLD_PCT:
+                if previous_value != 0:
+                    yoy_pct = ((value / previous_value) - Decimal("1")) * Decimal("100")
+                    if abs(yoy_pct) >= LARGE_YOY_WARNING_THRESHOLD_PCT:
+                        flags.append(
+                            {
+                                "dataset_id": DATASET_ID,
+                                "region_id": region_id,
+                                "year": year,
+                                "variable_name": VARIABLE_NAME,
+                                "quality_status": "warning",
+                                "issue_type": "large_consecutive_yoy_change",
+                                "observed_value": _format_decimal(value),
+                                "comparison_value": _format_decimal(previous_value),
+                                "metric_value": _format_decimal(yoy_pct),
+                                "treatment": "retained_as_reported",
+                                "note": (
+                                    "Absolute consecutive year-on-year change is at "
+                                    f"least {LARGE_YOY_WARNING_THRESHOLD_PCT}%. "
+                                    "Review against official publication; no value "
+                                    "was modified."
+                                ),
+                            }
+                        )
+                elif value >= LARGE_YOY_MIN_ABSOLUTE_CHANGE_GWH:
                     flags.append(
                         {
                             "dataset_id": DATASET_ID,
@@ -125,14 +153,15 @@ def _build_quality_flags(
                             "year": year,
                             "variable_name": VARIABLE_NAME,
                             "quality_status": "warning",
-                            "issue_type": "large_consecutive_yoy_change",
+                            "issue_type": "large_zero_base_jump",
                             "observed_value": _format_decimal(value),
                             "comparison_value": _format_decimal(previous_value),
-                            "metric_value": _format_decimal(yoy_pct),
+                            "metric_value": _format_decimal(value - previous_value),
                             "treatment": "retained_as_reported",
                             "note": (
-                                "Absolute consecutive year-on-year change is at "
-                                f"least {LARGE_YOY_WARNING_THRESHOLD_PCT}%. "
+                                "Consecutive jump from zero baseline is at least "
+                                f"{LARGE_YOY_MIN_ABSOLUTE_CHANGE_GWH} GWh "
+                                "(percentage YoY is undefined). "
                                 "Review against official publication; no value "
                                 "was modified."
                             ),
@@ -171,7 +200,9 @@ def build_distributed_electricity(
     if not source_files:
         raise FileNotFoundError(f"No CSV source files found in: {raw_dir}")
 
-    parsed_files = [_read_source_file(path) for path in source_files]
+    parsed_files = [
+        _read_source_file(path, project_root=root) for path in source_files
+    ]
     by_year = {item.year: item for item in parsed_files}
     if len(by_year) != len(parsed_files):
         raise ValueError("Duplicate source year detected.")
@@ -190,7 +221,7 @@ def build_distributed_electricity(
         raise ValueError(f"Unexpected source years: {sorted(unexpected_years)}")
 
     regions = sorted(
-        load_regions().values(),
+        load_regions(project_root=root).values(),
         key=lambda row: int(row["modeling_order"]),
     )
     if len(regions) != EXPECTED_MODEL_REGIONS:
@@ -382,6 +413,11 @@ def build_distributed_electricity(
             for row in quality_rows
             if row["issue_type"] == "large_consecutive_yoy_change"
         ),
+        "large_zero_base_jump_flags": sum(
+            1
+            for row in quality_rows
+            if row["issue_type"] == "large_zero_base_jump"
+        ),
         "output_file": str(output_path.relative_to(root)),
         "lineage_file": str(lineage_path.relative_to(root)),
         "quality_file": str(quality_path.relative_to(root)),
@@ -439,7 +475,7 @@ def validate_distributed_electricity(
     if len(set(keys)) != len(keys):
         failures.append("Duplicate region_id-year key detected.")
 
-    expected_region_ids = set(load_regions())
+    expected_region_ids = set(load_regions(project_root=root))
     actual_region_ids = {row["region_id"] for row in data_rows}
     if actual_region_ids != expected_region_ids:
         failures.append("Canonical region set does not match regions.csv.")
@@ -499,6 +535,11 @@ def validate_distributed_electricity(
         for row in quality_rows
         if row["issue_type"] == "large_consecutive_yoy_change"
     ]
+    zero_base_flags = [
+        row
+        for row in quality_rows
+        if row["issue_type"] == "large_zero_base_jump"
+    ]
 
     if failures:
         raise ValueError(" | ".join(failures))
@@ -513,4 +554,5 @@ def validate_distributed_electricity(
         "lineage_rows": len(lineage_rows),
         "quality_flags": len(quality_rows),
         "large_yoy_warning_flags": len(yoy_flags),
+        "large_zero_base_jump_flags": len(zero_base_flags),
     }

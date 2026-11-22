@@ -157,7 +157,7 @@ def _build_regional_master(root: Path) -> list[dict[str, object]]:
     )
 
     regions = sorted(
-        load_regions().values(),
+        load_regions(project_root=root).values(),
         key=lambda row: int(row["modeling_order"]),
     )
     if len(regions) != EXPECTED_REGIONS:
@@ -609,7 +609,7 @@ def validate_canonical_masters(
     if len(set(regional_keys)) != len(regional_keys):
         failures.append("Duplicate region_id-year key detected.")
 
-    expected_region_ids = set(load_regions())
+    expected_region_ids = set(load_regions(project_root=root))
     actual_region_ids = {row["region_id"] for row in regional_rows}
     if actual_region_ids != expected_region_ids:
         failures.append("Regional master region set differs from regions.csv.")

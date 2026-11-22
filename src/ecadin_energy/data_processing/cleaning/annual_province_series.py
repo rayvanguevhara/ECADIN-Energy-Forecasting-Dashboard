@@ -19,11 +19,13 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from ecadin_energy.data_processing.harmonization.regions import (
+    RegionMatch,
     load_regions,
     resolve_region,
 )
 
-MISSING_VALUE_MARKERS = {"", "-", "–", "—"}
+MISSING_VALUE_MARKERS = {"", "-", "–", "—", "...", "…"}
+ALLOWED_AGGREGATION_RULES = {"none", "sum_by_region_id_year"}
 
 
 @dataclass(frozen=True)
@@ -90,6 +92,8 @@ def read_annual_province_file(
     expected_source_rows: int,
     source_scope: str = "population_pdrb_and_modern_province_sources",
     national_row_name: str = "INDONESIA",
+    expected_unit_token: str | None = None,
+    project_root: Path | None = None,
 ) -> ParsedAnnualProvinceFile:
     """Parse one annual province file and aggregate aliases to model regions."""
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
@@ -97,6 +101,16 @@ def read_annual_province_file(
 
     if len(rows) < 4:
         raise ValueError(f"Source file is too short: {path}")
+
+    if expected_unit_token is not None:
+        header_unit_text = " ".join(
+            cell.strip() for cell in rows[1] if cell.strip()
+        )
+        if expected_unit_token not in header_unit_text:
+            raise ValueError(
+                f"Expected unit token {expected_unit_token!r} in header row 2 of "
+                f"{path.name}, found {rows[1]!r}."
+            )
 
     if len(rows[2]) < 2:
         raise ValueError(f"Source year row is malformed: {path}")
@@ -115,6 +129,7 @@ def read_annual_province_file(
 
     values_by_region_id: dict[str, Decimal] = defaultdict(lambda: Decimal("0"))
     contributors_by_region_id: dict[str, int] = defaultdict(int)
+    matches_by_region_id: dict[str, list[RegionMatch]] = defaultdict(list)
     source_names: set[str] = set()
     missing_source_names: list[str] = []
     reported_total: Decimal | None = None
@@ -145,12 +160,34 @@ def read_annual_province_file(
             continue
 
         source_rows += 1
-        match = resolve_region(source_name, source_scope=source_scope)
+        match = resolve_region(
+            source_name,
+            source_scope=source_scope,
+            project_root=project_root,
+        )
 
         if value is None:
             missing_source_names.append(source_name)
             continue
 
+        if (
+            match.effective_start_year is not None
+            and content_year < match.effective_start_year
+        ):
+            raise ValueError(
+                f"Region alias {source_name!r} is not active in year {content_year} "
+                f"(effective_start_year={match.effective_start_year}) in {path.name}."
+            )
+        if (
+            match.effective_end_year is not None
+            and content_year > match.effective_end_year
+        ):
+            raise ValueError(
+                f"Region alias {source_name!r} expired before year {content_year} "
+                f"(effective_end_year={match.effective_end_year}) in {path.name}."
+            )
+
+        matches_by_region_id[match.region_id].append(match)
         values_by_region_id[match.region_id] += value
         contributors_by_region_id[match.region_id] += 1
 
@@ -162,7 +199,40 @@ def read_annual_province_file(
     if reported_total is None:
         raise ValueError(f"Indonesia total row is missing in {path.name}.")
 
-    region_ids = set(load_regions())
+    for region_id, contributing_matches in matches_by_region_id.items():
+        unsupported_rules = [
+            m.aggregation_rule
+            for m in contributing_matches
+            if m.aggregation_rule not in ALLOWED_AGGREGATION_RULES
+        ]
+        if unsupported_rules:
+            raise ValueError(
+                f"Unsupported aggregation rule(s) {unsupported_rules} for canonical "
+                f"region {region_id} in {path.name}."
+            )
+        if len(contributing_matches) > 1:
+            non_sum_matches = [
+                m
+                for m in contributing_matches
+                if m.aggregation_rule != "sum_by_region_id_year"
+            ]
+            invalid_non_parent = [
+                m
+                for m in non_sum_matches
+                if not (m.mapping_type == "identity" and m.aggregation_rule == "none")
+            ]
+            if invalid_non_parent or len(non_sum_matches) > 1:
+                rule_summary = [
+                    (m.source_name, m.mapping_type, m.aggregation_rule)
+                    for m in contributing_matches
+                ]
+                raise ValueError(
+                    f"Multiple source rows map to canonical region {region_id} in "
+                    f"{path.name} without valid sum_by_region_id_year rules: "
+                    f"{rule_summary}"
+                )
+
+    region_ids = set(load_regions(project_root=project_root))
     unknown = set(values_by_region_id) - region_ids
     if unknown:
         raise ValueError(f"Unknown canonical region IDs in {path.name}: {unknown}")
