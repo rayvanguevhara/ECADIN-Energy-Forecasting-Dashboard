@@ -28,6 +28,7 @@ from ecadin_energy.forecasting.production.accounting import (
     build_combined_history_forecast,
 )
 from ecadin_energy.forecasting.production.artifacts import (
+    relative_posix_path,
     sha256_file,
     write_csv_deterministic,
     write_json,
@@ -116,17 +117,19 @@ def _model_summary(
     config: ProductionConfig,
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
-    for domain, metrics, production_model_id in (
-        ("demand", demand_metrics, config.demand.production_model_id),
-        ("supply", supply_metrics, config.supply.production_model_id),
+    for domain, metrics, domain_config in (
+        ("demand", demand_metrics, config.demand),
+        ("supply", supply_metrics, config.supply),
     ):
-        drift = metrics.loc[metrics["model"].eq("drift")]
-        for record in drift.to_dict("records"):
+        selected = metrics.loc[
+            metrics["model"].eq(config.reference_baseline)
+        ]
+        for record in selected.to_dict("records"):
             rows.append(
                 {
                     "domain": domain,
-                    "production_model_id": production_model_id,
-                    "model_label": "Drift",
+                    "production_model_id": domain_config.production_model_id,
+                    "model_label": domain_config.model_label,
                     "protocol": record["protocol"],
                     "prediction_count": record["prediction_count"],
                     "macro_smape_percent": record[
@@ -164,10 +167,7 @@ def _input_hashes(
         rows.append(
             {
                 "input_id": input_id,
-                "relative_path": str(path.relative_to(root)).replace(
-                    "\\",
-                    "/",
-                ),
+                "relative_path": relative_posix_path(path, root),
                 "sha256": sha256_file(path),
                 "size_bytes": path.stat().st_size,
             }
@@ -313,7 +313,7 @@ def run_production_pipeline(
         "generated_at_utc": datetime.now(timezone.utc)
         .replace(microsecond=0)
         .isoformat(),
-        "project_root": str(root),
+        "project_root": relative_posix_path(root, root),
         "demand_panel_contract": demand_panel_contract,
         "supply_panel_contract": supply_panel_contract,
         "demand_backtest_rows": len(
@@ -346,7 +346,7 @@ def run_production_pipeline(
         "accounting_disclaimer": config.accounting_disclaimer,
         "deterministic_output_hashes": deterministic_hashes,
         "output_files": {
-            key: str(path.relative_to(root)).replace("\\", "/")
+            key: relative_posix_path(path, root)
             for key, path in paths.items()
         },
     }

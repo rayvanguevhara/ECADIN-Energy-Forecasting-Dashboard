@@ -396,6 +396,8 @@ def build_supply_forecast(
 
     model = SupplyDriftV1Model()
     summaries = history_summary(panel)
+    value_column = config.supply.output_value_column
+    model_version = config.supply.production_model_id
     rows: list[dict[str, object]] = []
 
     for _, group in panel.groupby("region_id", sort=False):
@@ -459,7 +461,7 @@ def build_supply_forecast(
                         group.iloc[0]["modeling_order"]
                     ),
                     "year": int(record["year"]),
-                    "forecast_gwh": point,
+                    value_column: point,
                     "raw_prediction_gwh": raw,
                     "forecast_lower_80_gwh": lower_80,
                     "forecast_upper_80_gwh": upper_80,
@@ -469,7 +471,7 @@ def build_supply_forecast(
                     "cumulative_growth_from_origin_percent": cumulative,
                     "model_id": config.supply.production_model_id,
                     "model_label": config.supply.model_label,
-                    "model_version": SUPPLY_MODEL_VERSION,
+                    "model_version": model_version,
                     "forecast_type": "recursive_drift_forecast",
                     "origin_year": int(record["origin_year"]),
                     "horizon": horizon,
@@ -499,6 +501,6 @@ def build_supply_forecast(
             previous = point
 
     forecast = pd.DataFrame(rows).sort_values(
-        ["year", "modeling_order"]
+        ["modeling_order", "year"]
     ).reset_index(drop=True)
     return forecast, calibration, summaries

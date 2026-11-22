@@ -13,7 +13,7 @@ from ecadin_energy.forecasting.strategies.recursive import (
 )
 
 
-DEMAND_MODEL_VERSION = "demand_production_drift_v1"
+DEMAND_MODEL_VERSION = "demand_production_drift"
 
 
 def build_demand_forecast(
@@ -22,6 +22,8 @@ def build_demand_forecast(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     model = DriftModel()
     summaries = history_summary(panel)
+    value_column = config.demand.output_value_column
+    model_version = config.demand.production_model_id
     rows: list[dict[str, object]] = []
 
     for _, group in panel.groupby("region_id", sort=False):
@@ -43,13 +45,13 @@ def build_demand_forecast(
                         group.iloc[0]["modeling_order"]
                     ),
                     "year": int(record["year"]),
-                    "forecast_gwh": float(record["prediction_gwh"]),
+                    value_column: float(record["prediction_gwh"]),
                     "raw_prediction_gwh": float(
                         record["raw_prediction_gwh"]
                     ),
                     "model_id": config.demand.production_model_id,
                     "model_label": config.demand.model_label,
-                    "model_version": DEMAND_MODEL_VERSION,
+                    "model_version": model_version,
                     "forecast_type": "recursive_drift_forecast",
                     "origin_year": int(record["origin_year"]),
                     "horizon": int(record["horizon"]),

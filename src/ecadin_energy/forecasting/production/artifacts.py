@@ -17,6 +17,15 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest().upper()
 
 
+def relative_posix_path(path: Path, root: Path) -> str:
+    """Return path relative to root formatted as a normalized POSIX string."""
+    resolved_path = path.resolve()
+    resolved_root = root.resolve()
+    if resolved_path == resolved_root:
+        return "."
+    return resolved_path.relative_to(resolved_root).as_posix()
+
+
 def write_csv_deterministic(
     frame: pd.DataFrame,
     path: Path,

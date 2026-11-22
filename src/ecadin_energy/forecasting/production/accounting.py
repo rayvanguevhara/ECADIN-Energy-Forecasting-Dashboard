@@ -11,18 +11,20 @@ def build_accounting_difference(
     supply_forecast: pd.DataFrame,
     config: ProductionConfig,
 ) -> pd.DataFrame:
+    demand_value_col = config.demand.output_value_column
+    supply_value_col = config.supply.output_value_column
     demand = demand_forecast[
         [
             "region_id",
             "region_name",
             "modeling_order",
             "year",
-            "forecast_gwh",
+            demand_value_col,
             "model_id",
         ]
     ].rename(
         columns={
-            "forecast_gwh": "demand_gwh",
+            demand_value_col: "demand_gwh",
             "model_id": "demand_model_id",
         }
     )
@@ -30,12 +32,12 @@ def build_accounting_difference(
         [
             "region_id",
             "year",
-            "forecast_gwh",
+            supply_value_col,
             "model_id",
         ]
     ].rename(
         columns={
-            "forecast_gwh": "supply_gwh",
+            supply_value_col: "supply_gwh",
             "model_id": "supply_model_id",
         }
     )

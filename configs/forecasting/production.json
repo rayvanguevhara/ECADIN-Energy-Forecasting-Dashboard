@@ -43,14 +43,14 @@
     "dataset_id": "demand_distributed_electricity",
     "production_model_id": "demand_production_drift",
     "model_label": "Drift",
-    "output_value_column": "forecast_distributed_electricity_gwh"
+    "output_value_column": "forecast_gwh"
   },
   "supply": {
     "target_column": "local_generation_gwh",
     "dataset_id": "supply_local_generation",
     "production_model_id": "supply_production_drift_v1",
     "model_label": "Drift",
-    "output_value_column": "forecast_local_generation_gwh"
+    "output_value_column": "forecast_gwh"
   },
   "accounting_difference_label": "local_generation_minus_distributed_electricity",
   "accounting_disclaimer": "This accounting difference compares local generation with distributed electricity. Interregional electricity flows are omitted, so it must not be interpreted as shortage, surplus, or adequacy."

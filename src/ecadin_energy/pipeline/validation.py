@@ -15,6 +15,7 @@ def validate_production_pipeline(
     *,
     project_root: str | Path | None = None,
     config_path: str | Path | None = None,
+    verify_hashes: bool = True,
 ):
     root = Path(project_root).resolve() if project_root else PATHS.root
     config = load_production_config(
@@ -24,4 +25,5 @@ def validate_production_pipeline(
     return validate_written_outputs(
         project_root=root,
         config=config,
+        verify_hashes=verify_hashes,
     )
